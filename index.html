@@ -1,20 +1,18 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-
     <!-- Giúp giao diện hiển thị tốt trên máy tính và điện thoại -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Tên hiển thị trên tab trình duyệt -->
     <title>Quản lý thiết bị nha khoa</title>
+
+    <!-- Thư viện Supabase JS SDK (bản nhẹ chạy trực tiếp trên trình duyệt) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
         /* ==============================
            1. THIẾT LẬP CHUNG CHO GIAO DIỆN
            ============================== */
-
         * {
             box-sizing: border-box;
         }
@@ -34,10 +32,87 @@
             cursor: pointer;
         }
 
+        /* KHUNG ĐĂNG NHẬP */
+        .man-hinh-dang-nhap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #17365d;
+            padding: 20px;
+        }
+
+        .the-dang-nhap {
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .the-dang-nhap h2 {
+            margin-top: 0;
+            color: #17365d;
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .the-dang-nhap p {
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 24px;
+        }
+
+        .nhom-o-nhap {
+            margin-bottom: 16px;
+        }
+
+        .nhom-o-nhap label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #334155;
+        }
+
+        .nhom-o-nhap input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        .nhom-o-nhap input:focus {
+            border-color: #245b9e;
+        }
+
+        .nut-dang-nhap {
+            width: 100%;
+            padding: 12px;
+            background: #245b9e;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .nut-dang-nhap:hover {
+            background: #173f73;
+        }
+
+        .thong-bao-loi {
+            color: #dc2626;
+            font-size: 13px;
+            margin-top: 12px;
+            display: none;
+        }
+
         /* ==============================
            2. THANH MENU BÊN TRÁI
            ============================== */
-
         .thanh-ben {
             width: 250px;
             min-height: 100vh;
@@ -47,6 +122,9 @@
             top: 0;
             left: 0;
             padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .ten-phan-mem {
@@ -84,17 +162,43 @@
             font-size: 14px;
         }
 
-        /* Màu của mục menu đang được chọn */
         .muc-menu:hover,
         .muc-menu.dang-chon {
             background: #2a507d;
             color: white;
         }
 
+        /* KHU VỰC THÔNG TIN TÀI KHOẢN TRÊN MENU */
+        .khu-vuc-tai-khoan {
+            border-top: 1px solid #2a507d;
+            padding-top: 16px;
+            margin-top: 20px;
+        }
+
+        .email-tai-khoan {
+            font-size: 12px;
+            color: #cbd8e8;
+            margin-bottom: 8px;
+            word-break: break-all;
+        }
+
+        .nut-dang-xuat {
+            width: 100%;
+            padding: 8px;
+            background: #334155;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .nut-dang-xuat:hover {
+            background: #475569;
+        }
+
         /* ==============================
            3. KHU VỰC NỘI DUNG CHÍNH
            ============================== */
-
         .noi-dung {
             margin-left: 250px;
             padding: 30px;
@@ -131,7 +235,6 @@
         /* ==============================
            4. CÁC THẺ SỐ LIỆU TỔNG QUAN
            ============================== */
-
         .luoi-the {
             display: grid;
             grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -168,7 +271,6 @@
         /* ==============================
            5. CÁC KHUNG NỘI DUNG
            ============================== */
-
         .khung {
             background: white;
             border: 1px solid #e5eaf1;
@@ -216,7 +318,6 @@
         /* ==============================
            6. BẢNG DANH SÁCH SỰ CỐ
            ============================== */
-
         .vung-bang {
             overflow-x: auto;
         }
@@ -240,33 +341,9 @@
             font-weight: bold;
         }
 
-        .trang-thai {
-            display: inline-block;
-            padding: 6px 9px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: bold;
-        }
-
-        .dang-xu-ly {
-            background: #fff1d6;
-            color: #946200;
-        }
-
-        .cho-xac-nhan {
-            background: #e8eaff;
-            color: #4844a0;
-        }
-
-        .da-ket-thuc {
-            background: #dff6e8;
-            color: #207044;
-        }
-
         /* ==============================
            7. KHU VỰC TÌM KIẾM
            ============================== */
-
         .o-tim-kiem {
             width: 100%;
             max-width: 360px;
@@ -281,9 +358,8 @@
         }
 
         /* ==============================
-           8. MÀN HÌNH NHỎ
+           8. MÀN HÌNH NHỎ & ẨN HIỆN
            ============================== */
-
         @media (max-width: 1000px) {
             .luoi-the {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -311,7 +387,6 @@
             }
         }
 
-        /* Ẩn các trang chưa được chọn */
         .trang {
             display: none;
         }
@@ -319,309 +394,271 @@
         .trang.dang-hien {
             display: block;
         }
+
+        .an {
+            display: none !important;
+        }
     </style>
 </head>
 
 <body>
 
     <!-- ==============================
-         MENU ĐIỀU HƯỚNG BÊN TRÁI
-         Bấm từng mục để chuyển khu vực làm việc
+         MÀN HÌNH ĐĂNG NHẬP
          ============================== -->
+    <div id="man-hinh-dang-nhap" class="man-hinh-dang-nhap">
+        <div class="the-dang-nhap">
+            <h2>Dental Service</h2>
+            <p>Đăng nhập hệ thống quản lý thiết bị nha khoa</p>
 
-    <aside class="thanh-ben">
-        <div class="ten-phan-mem">Dental Service</div>
-        <div class="mo-ta-phan-mem">
-            Hệ thống quản lý kỹ thuật nha khoa
+            <form id="form-dang-nhap">
+                <div class="nhom-o-nhap">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required placeholder="nhap-email@domain.com">
+                </div>
+
+                <div class="nhom-o-nhap">
+                    <label for="mat-khau">Mật khẩu</label>
+                    <input type="password" id="mat-khau" required placeholder="••••••••">
+                </div>
+
+                <button type="submit" class="nut-dang-nhap" id="nut-dang-nhap">Đăng nhập</button>
+                <div id="thong-bao-loi" class="thong-bao-loi"></div>
+            </form>
         </div>
-
-        <div class="nhan-menu">Tổng quan</div>
-
-        <button class="muc-menu dang-chon"
-                data-trang="tong-quan">
-            ▦ &nbsp; Bảng điều khiển
-        </button>
-
-        <div class="nhan-menu">Quản lý dữ liệu</div>
-
-        <button class="muc-menu" data-trang="thiet-bi">
-            ▣ &nbsp; Thiết bị nha khoa
-        </button>
-
-        <button class="muc-menu" data-trang="yeu-cau">
-            ▤ &nbsp; Yêu cầu dịch vụ
-        </button>
-
-        <button class="muc-menu" data-trang="su-co">
-            ⚙ &nbsp; Hồ sơ sự cố
-        </button>
-
-        <div class="nhan-menu">Hỗ trợ kỹ thuật</div>
-
-        <button class="muc-menu" data-trang="ca-tuong-tu">
-            ⌕ &nbsp; Tra cứu ca tương tự
-        </button>
-
-        <button class="muc-menu" data-trang="kien-thuc">
-            ▧ &nbsp; Tài liệu kỹ thuật
-        </button>
-    </aside>
-
+    </div>
 
     <!-- ==============================
-         KHU VỰC NỘI DUNG CHÍNH
-         Nội dung từng trang đặt bên trong đây
+         GIAO DIỆN CHÍNH (Chỉ hiện khi đã đăng nhập)
          ============================== -->
+    <div id="giao-dien-chinh" class="an">
 
-    <main class="noi-dung">
-
-        <header class="dau-trang">
+        <!-- MENU BÊN TRÁI -->
+        <aside class="thanh-ben">
             <div>
-                <h1 id="tieu-de-trang">Bảng điều khiển</h1>
-                <div class="phu-de">
-                    Theo dõi thiết bị và hoạt động hỗ trợ kỹ thuật
+                <div class="ten-phan-mem">Dental Service</div>
+                <div class="mo-ta-phan-mem">Hệ thống quản lý kỹ thuật nha khoa</div>
+
+                <div class="nhan-menu">Tổng quan</div>
+                <button class="muc-menu dang-chon" data-trang="tong-quan">▦ &nbsp; Bảng điều khiển</button>
+
+                <div class="nhan-menu">Quản lý dữ liệu</div>
+                <button class="muc-menu" data-trang="thiet-bi">▣ &nbsp; Thiết bị nha khoa</button>
+                <button class="muc-menu" data-trang="yeu-cau">▤ &nbsp; Yêu cầu dịch vụ</button>
+                <button class="muc-menu" data-trang="su-co">⚙ &nbsp; Hồ sơ sự cố</button>
+
+                <div class="nhan-menu">Hỗ trợ kỹ thuật</div>
+                <button class="muc-menu" data-trang="ca-tuong-tu">⌕ &nbsp; Tra cứu ca tương tự</button>
+                <button class="muc-menu" data-trang="kien-thuc">▧ &nbsp; Tài liệu kỹ thuật</button>
+            </div>
+
+            <div class="khu-vuc-tai-khoan">
+                <div id="email-nguoi-dung" class="email-tai-khoan">...</div>
+                <button id="nut-dang-xuat" class="nut-dang-xuat">Đăng xuất</button>
+            </div>
+        </aside>
+
+        <!-- NỘI DUNG CHÍNH -->
+        <main class="noi-dung">
+            <header class="dau-trang">
+                <div>
+                    <h1 id="tieu-de-trang">Bảng điều khiển</h1>
+                    <div class="phu-de">Theo dõi thiết bị và hoạt động hỗ trợ kỹ thuật</div>
                 </div>
-            </div>
+                <div class="nhan-phien-ban">PHIÊN BẢN THỬ NGHIỆM</div>
+            </header>
 
-            <div class="nhan-phien-ban">
-                PHIÊN BẢN THỬ NGHIỆM
-            </div>
-        </header>
-
-
-        <!-- TRANG 1: TỔNG QUAN -->
-
-        <section class="trang dang-hien" id="tong-quan">
-
-            <div class="luoi-the">
-
-                <div class="the">
-                    <div class="ten-the">Tổng số thiết bị</div>
-                    <div class="so-lieu">0</div>
-                    <div class="ghi-chu-the">
-                        Thiết bị đã được ghi nhận trong hệ thống
+            <!-- TRANG 1: TỔNG QUAN -->
+            <section class="trang dang-hien" id="tong-quan">
+                <div class="luoi-the">
+                    <div class="the">
+                        <div class="ten-the">Tổng số thiết bị</div>
+                        <div class="so-lieu">0</div>
+                        <div class="ghi-chu-the">Thiết bị đã được ghi nhận trong hệ thống</div>
+                    </div>
+                    <div class="the">
+                        <div class="ten-the">Yêu cầu dịch vụ</div>
+                        <div class="so-lieu">0</div>
+                        <div class="ghi-chu-the">Yêu cầu lắp đặt, bảo trì và hỗ trợ</div>
+                    </div>
+                    <div class="the">
+                        <div class="ten-the">Sự cố đang xử lý</div>
+                        <div class="so-lieu">0</div>
+                        <div class="ghi-chu-the">Hồ sơ chưa hoàn tất xử lý</div>
+                    </div>
+                    <div class="the">
+                        <div class="ten-the">Ca đã xác nhận nguyên nhân</div>
+                        <div class="so-lieu">0</div>
+                        <div class="ghi-chu-the">Chỉ tính ca đã được kỹ sư xác nhận</div>
                     </div>
                 </div>
 
-                <div class="the">
-                    <div class="ten-the">Yêu cầu dịch vụ</div>
-                    <div class="so-lieu">0</div>
-                    <div class="ghi-chu-the">
-                        Yêu cầu lắp đặt, bảo trì và hỗ trợ
+                <div class="khung">
+                    <div class="tieu-de-khung">
+                        <h2>Các khu vực làm việc</h2>
+                    </div>
+                    <p class="phu-de">
+                        Chọn một mục ở menu bên trái để bắt đầu. Dữ liệu sẽ được bổ sung khi chúng ta xây dựng các chức năng quản lý.
+                    </p>
+                </div>
+
+                <div class="khung">
+                    <div class="tieu-de-khung">
+                        <h2>Hồ sơ sự cố gần đây</h2>
+                        <button class="nut nut-phu" data-chuyen-trang="su-co">Xem hồ sơ sự cố</button>
+                    </div>
+                    <div class="vung-bang">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Mã hồ sơ</th>
+                                    <th>Thiết bị</th>
+                                    <th>Triệu chứng</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="4">Chưa có dữ liệu. Đây là giao diện mẫu.</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+            </section>
 
-                <div class="the">
-                    <div class="ten-the">Sự cố đang xử lý</div>
-                    <div class="so-lieu">0</div>
-                    <div class="ghi-chu-the">
-                        Hồ sơ chưa hoàn tất xử lý
+            <!-- TRANG 2: THIẾT BỊ -->
+            <section class="trang" id="thiet-bi">
+                <div class="khung">
+                    <div class="tieu-de-khung">
+                        <h2>Danh sách thiết bị nha khoa</h2>
+                        <button class="nut" onclick="thongBaoChuaCoChucNang()">+ Thêm thiết bị</button>
                     </div>
+                    <p>Tại đây sẽ quản lý tên phòng khám, địa chỉ, loại thiết bị, model, số serial, ngày lắp đặt, cấu hình máy tính và lịch sử bảo trì.</p>
                 </div>
+            </section>
 
-                <div class="the">
-                    <div class="ten-the">Ca đã xác nhận nguyên nhân</div>
-                    <div class="so-lieu">0</div>
-                    <div class="ghi-chu-the">
-                        Chỉ tính ca đã được kỹ sư xác nhận
+            <!-- TRANG 3: YÊU CẦU DỊCH VỤ -->
+            <section class="trang" id="yeu-cau">
+                <div class="khung">
+                    <div class="tieu-de-khung">
+                        <h2>Quản lý yêu cầu dịch vụ</h2>
+                        <button class="nut" onclick="thongBaoChuaCoChucNang()">+ Tạo yêu cầu</button>
                     </div>
+                    <p>Quản lý yêu cầu cài đặt phần mềm, lắp đặt thiết bị, bảo trì định kỳ và kiểm tra tổng quát.</p>
                 </div>
+            </section>
 
-            </div>
-
-
-            <div class="khung">
-                <div class="tieu-de-khung">
-                    <h2>Các khu vực làm việc</h2>
+            <!-- TRANG 4: HỒ SƠ SỰ CỐ -->
+            <section class="trang" id="su-co">
+                <div class="khung">
+                    <div class="tieu-de-khung">
+                        <h2>Hồ sơ xử lý sự cố</h2>
+                        <button class="nut" onclick="thongBaoChuaCoChucNang()">+ Tạo hồ sơ sự cố</button>
+                    </div>
+                    <p>Mỗi hồ sơ sẽ lưu phòng khám, thiết bị, ngày xảy ra, triệu chứng, mã lỗi, kết quả kiểm tra, hình ảnh hoặc video và lịch sử xử lý.</p>
                 </div>
+            </section>
 
-                <p class="phu-de">
-                    Chọn một mục ở menu bên trái để bắt đầu.
-                    Dữ liệu sẽ được bổ sung khi chúng ta xây dựng
-                    các chức năng quản lý.
-                </p>
-            </div>
-
-
-            <div class="khung">
-                <div class="tieu-de-khung">
-                    <h2>Hồ sơ sự cố gần đây</h2>
-                    <button class="nut nut-phu"
-                            data-chuyen-trang="su-co">
-                        Xem hồ sơ sự cố
-                    </button>
+            <!-- TRANG 5: TRA CỨU CA TƯƠNG TỰ -->
+            <section class="trang" id="ca-tuong-tu">
+                <div class="khung">
+                    <div class="tieu-de-khung">
+                        <h2>Tra cứu ca sự cố tương tự</h2>
+                    </div>
+                    <input class="o-tim-kiem" type="search" placeholder="Ví dụ: Bright CT, lỗi Panorama..." aria-label="Nhập thông tin cần tìm">
                 </div>
+            </section>
 
-                <div class="vung-bang">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Mã hồ sơ</th>
-                                <th>Thiết bị</th>
-                                <th>Triệu chứng</th>
-                                <th>Trạng thái</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr>
-                                <td colspan="4">
-                                    Chưa có dữ liệu. Đây là giao diện mẫu.
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <!-- TRANG 6: TÀI LIỆU KỸ THUẬT -->
+            <section class="trang" id="kien-thuc">
+                <div class="khung">
+                    <div class="tieu-de-khung">
+                        <h2>Thư viện kiến thức kỹ thuật</h2>
+                    </div>
+                    <p>Tập hợp tài liệu hãng, hướng dẫn xử lý lỗi, quy trình kiểm tra và các nguồn kiến thức tham khảo.</p>
                 </div>
-            </div>
+            </section>
+        </main>
+    </div>
 
-        </section>
-
-
-        <!-- TRANG 2: QUẢN LÝ THIẾT BỊ -->
-
-        <section class="trang" id="thiet-bi">
-            <div class="khung">
-                <div class="tieu-de-khung">
-                    <h2>Danh sách thiết bị nha khoa</h2>
-                    <button class="nut"
-                            onclick="thongBaoChuaCoChucNang()">
-                        + Thêm thiết bị
-                    </button>
-                </div>
-
-                <p>
-                    Tại đây sẽ quản lý tên phòng khám, địa chỉ,
-                    loại thiết bị, model, số serial, ngày lắp đặt,
-                    cấu hình máy tính và lịch sử bảo trì.
-                </p>
-
-                <p class="phu-de">
-                    Chức năng thêm, sửa, tìm kiếm và lưu thiết bị
-                    sẽ được lập trình ở bước tiếp theo.
-                </p>
-            </div>
-        </section>
-
-
-        <!-- TRANG 3: YÊU CẦU DỊCH VỤ -->
-
-        <section class="trang" id="yeu-cau">
-            <div class="khung">
-                <div class="tieu-de-khung">
-                    <h2>Quản lý yêu cầu dịch vụ</h2>
-                    <button class="nut"
-                            onclick="thongBaoChuaCoChucNang()">
-                        + Tạo yêu cầu
-                    </button>
-                </div>
-
-                <p>
-                    Quản lý yêu cầu cài đặt phần mềm, lắp đặt thiết bị,
-                    bảo trì định kỳ và kiểm tra tổng quát.
-                </p>
-
-                <p class="phu-de">
-                    Yêu cầu dịch vụ được quản lý riêng với hồ sơ sự cố.
-                    Một yêu cầu dịch vụ không đồng nghĩa với việc
-                    thiết bị đang có lỗi.
-                </p>
-            </div>
-        </section>
-
-
-        <!-- TRANG 4: HỒ SƠ SỰ CỐ -->
-
-        <section class="trang" id="su-co">
-            <div class="khung">
-                <div class="tieu-de-khung">
-                    <h2>Hồ sơ xử lý sự cố</h2>
-                    <button class="nut"
-                            onclick="thongBaoChuaCoChucNang()">
-                        + Tạo hồ sơ sự cố
-                    </button>
-                </div>
-
-                <p>
-                    Mỗi hồ sơ sẽ lưu phòng khám, thiết bị, ngày xảy ra,
-                    triệu chứng, mã lỗi, kết quả kiểm tra,
-                    hình ảnh hoặc video và lịch sử xử lý.
-                </p>
-
-                <p>
-                    <strong>Nguyên tắc:</strong>
-                    AI có thể đề xuất nguyên nhân và bước kiểm tra,
-                    nhưng kỹ sư là người xác nhận nguyên nhân cuối cùng.
-                </p>
-
-                <p class="phu-de">
-                    Chức năng lưu hồ sơ và cập nhật kết quả sẽ được
-                    xây dựng sau khi hoàn thành giao diện.
-                </p>
-            </div>
-        </section>
-
-
-        <!-- TRANG 5: TRA CỨU CA TƯƠNG TỰ -->
-
-        <section class="trang" id="ca-tuong-tu">
-            <div class="khung">
-                <div class="tieu-de-khung">
-                    <h2>Tra cứu ca sự cố tương tự</h2>
-                </div>
-
-                <p>
-                    Tìm các trường hợp trước đây có cùng model,
-                    triệu chứng, mã lỗi và kết quả kiểm tra.
-                </p>
-
-                <input class="o-tim-kiem"
-                       type="search"
-                       placeholder="Ví dụ: Bright CT, lỗi Panorama..."
-                       aria-label="Nhập thông tin cần tìm">
-
-                <p class="phu-de">
-                    Công cụ tìm kiếm sẽ được kết nối với dữ liệu hồ sơ
-                    khi hệ thống lưu trữ được xây dựng.
-                </p>
-            </div>
-        </section>
-
-
-        <!-- TRANG 6: TÀI LIỆU KỸ THUẬT -->
-
-        <section class="trang" id="kien-thuc">
-            <div class="khung">
-                <div class="tieu-de-khung">
-                    <h2>Thư viện kiến thức kỹ thuật</h2>
-                </div>
-
-                <p>
-                    Tập hợp tài liệu hãng, hướng dẫn xử lý lỗi,
-                    quy trình kiểm tra và các nguồn kiến thức tham khảo.
-                </p>
-
-                <p class="phu-de">
-                    Việc tích hợp NotebookLM hoặc công cụ AI khác
-                    sẽ được đánh giá và thực hiện ở giai đoạn sau.
-                </p>
-            </div>
-        </section>
-
-    </main>
-
-
+    <!-- ==============================
+         KỊCH BẢN JAVASCRIPT XỬ LÝ KẾT NỐI & DỮ LIỆU
+         ============================== -->
     <script>
-        // ==============================
-        // 9. CHUYỂN ĐỔI GIỮA CÁC TRANG
-        // Đoạn code này giúp menu hoạt động
-        // mà chưa cần tải lại website.
-        // ==============================
+        // 1. Cấu hình Supabase bằng URL và Key công khai
+        const SUPABASE_URL = "https://vmwagxhzmnpkrhebbuih.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_oVApKGbKNKcDSlHaFEhPIQ_ZuOMmgbI";
 
+        // Khởi tạo đối tượng supabase
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Các phần tử giao diện
+        const manHinhDangNhap = document.getElementById("man-hinh-dang-nhap");
+        const giaoDienChinh = document.getElementById("giao-dien-chinh");
+        const formDangNhap = document.getElementById("form-dang-nhap");
+        const nutDangNhap = document.getElementById("nut-dang-nhap");
+        const thongBaoLoi = document.getElementById("thong-bao-loi");
+        const emailNguoiDung = document.getElementById("email-nguoi-dung");
+        const nutDangXuat = document.getElementById("nut-dang-xuat");
+
+        // 2. Kiểm tra trạng thái đăng nhập khi vừa mở trang
+        async function kiemTraPhienDangNhap() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            capNhatGiaoDien(session);
+        }
+
+        // Lắng nghe thay đổi trạng thái đăng nhập/đăng xuất
+        supabaseClient.auth.onAuthStateChange((_event, session) => {
+            capNhatGiaoDien(session);
+        });
+
+        // Đổi màn hình tùy thuộc vào việc người dùng đã đăng nhập hay chưa
+        function capNhatGiaoDien(session) {
+            if (session) {
+                manHinhDangNhap.classList.add("an");
+                giaoDienChinh.classList.remove("an");
+                emailNguoiDung.textContent = session.user.email;
+            } else {
+                manHinhDangNhap.classList.remove("an");
+                giaoDienChinh.classList.add("an");
+            }
+        }
+
+        // 3. Xử lý khi nhấn nút Đăng nhập
+        formDangNhap.addEventListener("submit", async function (e) {
+            e.preventDefault();
+            thongBaoLoi.style.display = "none";
+            nutDangNhap.disabled = true;
+            nutDangNhap.textContent = "Đang xử lý...";
+
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("mat-khau").value;
+
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
+                email: email,
+                password: password,
+            });
+
+            if (error) {
+                thongBaoLoi.textContent = "Đăng nhập thất bại: " + error.message;
+                thongBaoLoi.style.display = "block";
+            }
+
+            nutDangNhap.disabled = false;
+            nutDangNhap.textContent = "Đăng nhập";
+        });
+
+        // 4. Xử lý khi nhấn nút Đăng xuất
+        nutDangXuat.addEventListener("click", async function () {
+            await supabaseClient.auth.signOut();
+        });
+
+        // 5. Chuyển đổi giữa các trang menu
         const cacNutMenu = document.querySelectorAll(".muc-menu");
         const cacTrang = document.querySelectorAll(".trang");
         const tieuDeTrang = document.getElementById("tieu-de-trang");
 
-        // Tên hiển thị tương ứng với từng trang
         const tenCacTrang = {
             "tong-quan": "Bảng điều khiển",
             "thiet-bi": "Quản lý thiết bị nha khoa",
@@ -631,50 +668,36 @@
             "kien-thuc": "Tài liệu kỹ thuật"
         };
 
-        // Hàm mở trang được chọn
         function moTrang(maTrang) {
             cacTrang.forEach(function(trang) {
-                trang.classList.toggle(
-                    "dang-hien",
-                    trang.id === maTrang
-                );
+                trang.classList.toggle("dang-hien", trang.id === maTrang);
             });
 
             cacNutMenu.forEach(function(nut) {
-                nut.classList.toggle(
-                    "dang-chon",
-                    nut.dataset.trang === maTrang
-                );
+                nut.classList.toggle("dang-chon", nut.dataset.trang === maTrang);
             });
 
-            // Cập nhật tiêu đề ở đầu trang
-            tieuDeTrang.textContent =
-                tenCacTrang[maTrang] || "Quản lý thiết bị nha khoa";
+            tieuDeTrang.textContent = tenCacTrang[maTrang] || "Quản lý thiết bị nha khoa";
         }
 
-        // Gắn sự kiện bấm cho từng mục menu
         cacNutMenu.forEach(function(nut) {
             nut.addEventListener("click", function() {
                 moTrang(nut.dataset.trang);
             });
         });
 
-        // Các nút điều hướng nằm bên trong nội dung
-        document.querySelectorAll("[data-chuyen-trang]")
-            .forEach(function(nut) {
-                nut.addEventListener("click", function() {
-                    moTrang(nut.dataset.chuyenTrang);
-                });
+        document.querySelectorAll("[data-chuyen-trang]").forEach(function(nut) {
+            nut.addEventListener("click", function() {
+                moTrang(nut.dataset.chuyenTrang);
             });
+        });
 
-        // Thông báo cho những nút chưa có chức năng thật
         function thongBaoChuaCoChucNang() {
-            alert(
-                "Chức năng này chưa được lập trình. " +
-                "Chúng ta sẽ xây dựng ở bước tiếp theo."
-            );
+            alert("Chức năng này chưa được lập trình. Chúng ta sẽ xây dựng ở bước tiếp theo.");
         }
-    </script>
 
+        // Chạy kiểm tra đăng nhập khi trang tải xong
+        kiemTraPhienDangNhap();
+    </script>
 </body>
 </html>
