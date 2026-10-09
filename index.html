@@ -152,7 +152,7 @@
             <!-- KHUNG CẤP GEMINI API KEY -->
             <div class="khung" style="background: #fffbe0; border-color: #fce788; padding: 14px 20px; margin-bottom: 20px;">
                 <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                    <label for="gemini-api-key" style="font-weight: bold; font-size: 13px; color: #854d0e;">🔑 Cấu hình Gemini API Key (Đồ thật 100%):</label>
+                    <label for="gemini-api-key" style="font-weight: bold; font-size: 13px; color: #854d0e;">🔑 Cấu hình Gemini API Key:</label>
                     <input type="password" id="gemini-api-key" style="flex: 1; min-width: 250px; padding: 6px 10px; border: 1px solid #facc15; border-radius: 6px;" placeholder="Dán Gemini API Key dạng AIzaSy... vào đây">
                     <button class="nut" style="background: #ca8a04;" onclick="luuApiKey()">Lưu API Key</button>
                 </div>
@@ -212,11 +212,11 @@
                 <div class="khung">
                     <div class="tieu-de-khung"><h2>Thêm phòng khám mới</h2></div>
                     <form id="form-them-phong-kham" class="luoi-form">
-                        <div class="nhom-o-nhap"><label for="pk-ten">Tên phòng khám (*)</label><input type="text" id="pk-ten" required placeholder="Ví dụ: Nha Khoa SGBT Gia Lai"></div>
-                        <div class="nhom-o-nhap"><label for="pk-sdt">Số điện thoại</label><input type="text" id="pk-sdt" placeholder="Ví dụ: 0912345678"></div>
-                        <div class="nhom-o-nhap"><label for="pk-nguoi-lien-he">Người liên hệ</label><input type="text" id="pk-nguoi-lien-he" placeholder="Ví dụ: Bs Tair"></div>
-                        <div class="nhom-o-nhap"><label for="pk-dia-chi">Địa chỉ</label><input type="text" id="pk-dia-chi" placeholder="Ví dụ: Gia Lai"></div>
-                        <div class="nhom-o-nhap rong-toan-bo"><label for="pk-ghi-chu">Ghi chú</label><textarea id="pk-ghi-chu" rows="2" placeholder="Ghi chú thêm nếu có..."></textarea></div>
+                        <div class="nhom-o-nhap"><label for="pk-ten">Tên phòng khám (*)</label><input type="text" id="pk-ten" required placeholder="Ví dụ: Nha Khoa Đức Tài Prodent"></div>
+                        <div class="nhom-o-nhap"><label for="pk-sdt">Số điện thoại</label><input type="text" id="pk-sdt" placeholder="Ví dụ: 0362921001"></div>
+                        <div class="nhom-o-nhap"><label for="pk-nguoi-lien-he">Người liên hệ</label><input type="text" id="pk-nguoi-lien-he" placeholder="Ví dụ: Anh Tài"></div>
+                        <div class="nhom-o-nhap"><label for="pk-dia-chi">Địa chỉ</label><input type="text" id="pk-dia-chi" placeholder="Địa chỉ phòng khám..."></div>
+                        <div class="nhom-o-nhap rong-toan-bo"><label for="pk-ghi-chu">Ghi chú</label><textarea id="pk-ghi-chu" rows="2" placeholder="Ghi chú thêm..."></textarea></div>
                         <div class="rong-toan-bo"><button type="submit" class="nut" id="nut-luu-phong-kham">+ Lưu phòng khám</button></div>
                     </form>
                 </div>
@@ -244,12 +244,12 @@
                     <form id="form-them-thiet-bi" class="luoi-form">
                         <div class="nhom-o-nhap"><label for="tb-phong-kham">Phòng khám (*)</label><select id="tb-phong-kham" required><option value="">-- Chọn phòng khám --</option></select></div>
                         <div class="nhom-o-nhap"><label for="tb-loai">Loại thiết bị (*)</label><input type="text" id="tb-loai" required placeholder="Ví dụ: CT Cone Beam"></div>
-                        <div class="nhom-o-nhap"><label for="tb-model">Model (*)</label><input type="text" id="tb-model" required placeholder="Ví dụ: Bright CT"></div>
+                        <div class="nhom-o-nhap"><label for="tb-model">Model (*)</label><input type="text" id="tb-model" required placeholder="Ví dụ: rainbow CT / Bright CT"></div>
                         <div class="nhom-o-nhap"><label for="tb-serial">Số Serial (*)</label><input type="text" id="tb-serial" required placeholder="Ví dụ: SN12345678"></div>
                         <div class="nhom-o-nhap"><label for="tb-ngay-lap">Ngày lắp đặt</label><input type="date" id="tb-ngay-lap"></div>
-                        <div class="nhom-o-nhap"><label for="tb-trang-thai">Trạng thái (*)</label><select id="tb-trang-thai" required><option value="active">Đang hoạt động</option><option value="maintenance">Bảo trì</option><option value="inactive">Ngưng hoạt động / Hỏng</option></select></div>
-                        <div class="nhom-o-nhap"><label for="tb-cau-hinh">Cấu hình máy tính đi kèm</label><input type="text" id="tb-cau-hinh" placeholder="Ví dụ: Core i7, 16GB RAM"></div>
-                        <div class="nhom-o-nhap"><label for="tb-phan-mem">Phiên bản phần mềm</label><input type="text" id="tb-phan-mem" placeholder="Ví dụ: Ez3D-i v5.1"></div>
+                        <div class="nhom-o-nhap"><label for="tb-trang-thai">Trạng thái (*)</label><select id="tb-trang-thai" required><option value="active">Đang hoạt động</option><option value="maintenance">Bảo trì</option><option value="inactive">Ngưng hoạt động</option></select></div>
+                        <div class="nhom-o-nhap"><label for="tb-cau-hinh">Cấu hình máy tính</label><input type="text" id="tb-cau-hinh" placeholder="Core i7, 16GB RAM"></div>
+                        <div class="nhom-o-nhap"><label for="tb-phan-mem">Phiên bản phần mềm</label><input type="text" id="tb-phan-mem" placeholder="Ez3D-i v5.1"></div>
                         <div class="nhom-o-nhap rong-toan-bo"><label for="tb-ghi-chu">Ghi chú</label><textarea id="tb-ghi-chu" rows="2" placeholder="Ghi chú thêm..."></textarea></div>
                         <div class="rong-toan-bo"><button type="submit" class="nut" id="nut-luu-thiet-bi">+ Lưu thiết bị</button></div>
                     </form>
@@ -274,24 +274,24 @@
             <!-- TRANG YÊU CẦU DỊCH VỤ -->
             <section class="trang" id="yeu-cau">
                 <div class="khung-ai">
-                    <h3>⚡ Phân tích & Tiếp nhận yêu cầu (Gemini API Thật)</h3>
+                    <h3>⚡ Phân tích & Tiếp nhận yêu cầu (Gemini AI Thật)</h3>
                     <p style="font-size: 12px; color: #475569; margin-bottom: 12px;">
-                        Dán trực tiếp tin nhắn từ Sales. Gemini AI sẽ phân tích dựa trên System Instructions thực sự!
+                        Dán trực tiếp tin nhắn từ Sales. AI sẽ chuẩn hóa CASE và đưa ra quy trình Remote First chuẩn xác!
                     </p>
                     <textarea id="van-ban-sales" rows="4" style="width: 100%; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px; font-size: 13px;" placeholder="Ví dụ:
-1. Tên nha khoa : Nha khoa SGBT Gia Lai
-2. Mô tả vấn đề: máy lỗi ko chụp được
-3. Thời gian báo lỗi: 09/10/2026
-4. Thông tin liên hệ:"></textarea>
+1. Tên nha khoa: Đức Tài Prodent
+2. Mô tả vấn đề: Cài thêm phần mềm đọc phim CT
+3. Thời gian ghi nhận: 9/10
+4. Thông tin liên hệ: 0362921001 - Anh Tài"></textarea>
 
                     <div style="margin-top: 10px; margin-bottom: 10px;">
                         <label for="sales-notebook-select" style="font-size: 12px; font-weight: bold; color: #1e40af;">📂 Chọn Kho NotebookLM chứa tài liệu thiết bị:</label>
                         <select id="sales-notebook-select" style="margin-top: 4px; font-size: 13px; padding: 6px;">
-                            <option value="https://notebooklm.google.com/notebook/c04b3e1c-942a-4b29-a06e-e50cba01db6c">🛠️ Bright CT New (Active System Instructions)</option>
+                            <option value="https://gemini.google.com/notebook/a65d7334-ec04-4562-8a27-5b55af275732">🦷 Chỉnh form RCT</option>
+                            <option value="https://notebooklm.google.com/notebook/c04b3e1c-942a-4b29-a06e-e50cba01db6c">🛠️ Bright CT New</option>
                             <option value="https://notebooklm.google.com/notebook/646b1964-0931-4357-9e3c-2c6b8fc58fed">🌈 rainbow CT</option>
                             <option value="https://notebooklm.google.com/notebook/ef1e9a31-7b28-49de-93f0-fd798f6c9d25">🦷 Ghế Bright 2 (ICT-CH02S)</option>
                             <option value="https://notebooklm.google.com/notebook/f47e8c3d-c7df-482f-a02b-690fbb6fb021">🦷 Shining 3D</option>
-                            <option value="https://notebooklm.google.com/notebook/dc12d63f-4772-441b-8c93-b3abde53aed5">🦷 REMEDI REMEX-T100</option>
                         </select>
                     </div>
                     
@@ -306,10 +306,10 @@
                     <form id="form-them-yeu-cau" class="luoi-form">
                         <div class="nhom-o-nhap"><label for="yc-phong-kham">Phòng khám (*)</label><select id="yc-phong-kham" required onchange="capNhatOptionThietBi('yc-phong-kham', 'yc-thiet-bi')"><option value="">-- Chọn phòng khám --</option></select></div>
                         <div class="nhom-o-nhap"><label for="yc-thiet-bi">Thiết bị (Nếu có)</label><select id="yc-thiet-bi"><option value="">-- Chọn thiết bị --</option></select></div>
-                        <div class="nhom-o-nhap"><label for="yc-loai">Loại dịch vụ (*)</label><select id="yc-loai" required><option value="installation">Lắp đặt thiết bị</option><option value="software_setup">Cài đặt phần mềm</option><option value="maintenance">Bảo trì định kỳ</option><option value="inspection">Kiểm tra tổng quát</option><option value="other">Yêu cầu khác</option></select></div>
+                        <div class="nhom-o-nhap"><label for="yc-loai">Loại dịch vụ (*)</label><select id="yc-loai" required><option value="installation">Lắp đặt thiết bị</option><option value="software_setup" selected>Cài đặt phần mềm</option><option value="maintenance">Bảo trì định kỳ</option><option value="inspection">Kiểm tra tổng quát</option><option value="other">Yêu cầu khác</option></select></div>
                         <div class="nhom-o-nhap"><label for="yc-uu-tien">Mức độ ưu tiên (*)</label><select id="yc-uu-tien" required><option value="low">Thấp</option><option value="medium" selected>Trung bình</option><option value="high">Cao</option><option value="urgent">Khẩn cấp</option></select></div>
-                        <div class="nhom-o-nhap rong-toan-bo"><label for="yc-tieu-de">Tiêu đề yêu cầu (*)</label><input type="text" id="yc-tieu-de" required placeholder="Ví dụ: Cài lại phần mềm Ez3D-i cho phòng CT"></div>
-                        <div class="nhom-o-nhap rong-toan-bo"><label for="yc-mo-ta">Mô tả chi tiết</label><textarea id="yc-mo-ta" rows="2" placeholder="Chi tiết yêu cầu của bác sĩ/phòng khám..."></textarea></div>
+                        <div class="nhom-o-nhap rong-toan-bo"><label for="yc-tieu-de">Tiêu đề yêu cầu (*)</label><input type="text" id="yc-tieu-de" required placeholder="Ví dụ: Cài thêm phần mềm đọc phim CT"></div>
+                        <div class="nhom-o-nhap rong-toan-bo"><label for="yc-mo-ta">Mô tả chi tiết</label><textarea id="yc-mo-ta" rows="2" placeholder="Chi tiết yêu cầu..."></textarea></div>
                         <div class="rong-toan-bo"><button type="submit" class="nut" id="nut-luu-yeu-cau">+ Tạo yêu cầu dịch vụ</button></div>
                     </form>
                 </div>
@@ -333,30 +333,31 @@
             <!-- TRANG HỒ SƠ SỰ CỐ -->
             <section class="trang" id="su-co">
                 <div class="khung">
-                    <div class="tieu-de-khung"><h2>Tạo hồ sơ xử lý sự cố mới (Bright CT Troubleshooting)</h2></div>
+                    <div class="tieu-de-khung"><h2>Tạo hồ sơ xử lý sự cố mới</h2></div>
                     <form id="form-them-su-co" class="luoi-form">
                         <div class="nhom-o-nhap"><label for="sc-phong-kham">Phòng khám (*)</label><select id="sc-phong-kham" required onchange="capNhatOptionThietBi('sc-phong-kham', 'sc-thiet-bi')"><option value="">-- Chọn phòng khám --</option></select></div>
                         <div class="nhom-o-nhap"><label for="sc-thiet-bi">Thiết bị bị sự cố (*)</label><select id="sc-thiet-bi" required><option value="">-- Chọn thiết bị --</option></select></div>
-                        <div class="nhom-o-nhap rong-toan-bo"><label for="sc-tieu-de">Tên/Tiêu đề sự cố (*)</label><input type="text" id="sc-tieu-de" required placeholder="Ví dụ: Bright CT lỗi nâng hạ ghế / Báo Error E04"></div>
+                        <div class="nhom-o-nhap rong-toan-bo"><label for="sc-tieu-de">Tên/Tiêu đề sự cố (*)</label><input type="text" id="sc-tieu-de" required placeholder="Tiêu đề sự cố..."></div>
                         <div class="nhom-o-nhap"><label for="sc-trieu-chung">Triệu chứng thực tế (*)</label><textarea id="sc-trieu-chung" rows="2" required placeholder="Mô tả hiện tượng lỗi..."></textarea></div>
-                        <div class="nhom-o-nhap"><label for="sc-ma-loi">Mã lỗi (Error Code)</label><input type="text" id="sc-ma-loi" placeholder="Ví dụ: Err 04, Err 102..."></div>
-                        <div class="nhom-o-nhap"><label for="sc-dieu-kien">Điều kiện xảy ra sự cố</label><input type="text" id="sc-dieu-kien" placeholder="Ví dụ: Khi bắt đầu bấm phát tia Panorama..."></div>
-                        <div class="nhom-o-nhap"><label for="sc-cau-hinh">Cấu hình máy tính / Phần mềm</label><input type="text" id="sc-cau-hinh" placeholder="Ví dụ: Win 11 64-bit, Card Nvidia, Ez3D-i v5.1"></div>
-                        <div class="nhom-o-nhap"><label for="sc-buoc-kiem-tra">Các bước đã kiểm tra (Test Conducted)</label><textarea id="sc-buoc-kiem-tra" rows="2" placeholder="1. Đo nguồn 24V... 2. Kiểm tra cáp tín hiệu..."></textarea></div>
-                        <div class="nhom-o-nhap"><label for="sc-ket-qua">Kết quả đo đạc / kiểm tra thực tế</label><textarea id="sc-ket-qua" rows="2" placeholder="Mất nguồn 24V cấp cho bo mạch chính..."></textarea></div>
-                        <div class="nhom-o-nhap"><label for="sc-linh-kien">Linh kiện đã thay thế</label><input type="text" id="sc-linh-kien" placeholder="Ví dụ: Nguồn Power Supply 24V-10A"></div>
-                        <div class="nhom-o-nhap"><label for="sc-nguyen-nhan">Nguyên nhân gốc rễ (Root Cause)</label><textarea id="sc-nguyen-nhan" rows="2" placeholder="Tụ điện trên bộ nguồn bị hỏng do điện áp phòng khám chập chờn..."></textarea></div>
-                        <div class="nhom-o-nhap"><label for="sc-trang-thai">Trạng thái hồ sơ (*)</label><select id="sc-trang-thai" required><option value="open">Mới ghi nhận (Open)</option><option value="investigating">Đang kiểm tra/xử lý (Investigating)</option><option value="resolved">Đã xử lý xong (Resolved)</option><option value="closed">Đã đóng hồ sơ (Closed)</option></select></div>
-                        <div class="nhom-o-nhap"><label>Xác nhận kỹ sư</label><div class="nhom-checkbox"><input type="checkbox" id="sc-xac-nhan-ky-su"><label for="sc-xac-nhan-ky-su">Kỹ sư đã xác nhận nguyên nhân gốc rễ [CONFIRMED]</label></div></div>
+                        <div class="nhom-o-nhap"><label for="sc-ma-loi">Mã lỗi (Error Code)</label><input type="text" id="sc-ma-loi" placeholder="Ví dụ: Err 04..."></div>
+                        <div class="nhom-o-nhap"><label for="sc-dieu-kien">Điều kiện xảy ra sự cố</label><input type="text" id="sc-dieu-kien" placeholder="Điều kiện..."></div>
+                        <div class="nhom-o-nhap"><label for="sc-cau-hinh">Cấu hình máy tính</label><input type="text" id="sc-cau-hinh" placeholder="Win 11, RAM 16GB"></div>
+                        <div class="nhom-o-nhap"><label for="sc-buoc-kiem-tra">Các bước đã kiểm tra</label><textarea id="sc-buoc-kiem-tra" rows="2" placeholder="Các bước đã làm..."></textarea></div>
+                        <div class="nhom-o-nhap"><label for="sc-ket-qua">Kết quả kiểm tra thực tế</label><textarea id="sc-ket-qua" rows="2" placeholder="Kết quả đo đạc..."></textarea></div>
+                        <div class="nhom-o-nhap"><label for="sc-linh-kien">Linh kiện đã thay thế</label><input type="text" id="sc-linh-kien" placeholder="Tên linh kiện..."></div>
+                        <div class="nhom-o-nhap"><label for="sc-nguyen-nhan">Nguyên nhân gốc rễ (Root Cause)</label><textarea id="sc-nguyen-nhan" rows="2" placeholder="Nguyên nhân..."></textarea></div>
+                        <div class="nhom-o-nhap"><label for="sc-trang-thai">Trạng thái hồ sơ (*)</label><select id="sc-trang-thai" required><option value="open">Mới ghi nhận</option><option value="investigating">Đang xử lý</option><option value="resolved">Đã xong</option><option value="closed">Đã đóng</option></select></div>
+                        <div class="nhom-o-nhap"><label>Xác nhận kỹ sư</label><div class="nhom-checkbox"><input type="checkbox" id="sc-xac-nhan-ky-su"><label for="sc-xac-nhan-ky-su">Đã xác nhận [CONFIRMED]</label></div></div>
 
-                        <!-- KHUNG TRỢ LÝ AI CHẨN ĐOÁN REAL GEMINI API -->
+                        <!-- KHUNG TRỢ LÝ AI CHẨN ĐOÁN -->
                         <div class="rong-toan-bo khung-ai">
                             <h3>🤖 Technical Service AI - Chẩn đoán Real-time từ Gemini API</h3>
                             
                             <div style="margin-bottom: 12px;">
                                 <label for="sc-notebook-select" style="font-size: 13px; font-weight: bold; color: #1e40af;">📂 Kho NotebookLM đối chiếu:</label>
                                 <select id="sc-notebook-select" style="margin-top: 6px;">
-                                    <option value="https://notebooklm.google.com/notebook/c04b3e1c-942a-4b29-a06e-e50cba01db6c">🛠️ Bright CT New (System Instructions Active)</option>
+                                    <option value="https://gemini.google.com/notebook/a65d7334-ec04-4562-8a27-5b55af275732">🦷 Chỉnh form RCT</option>
+                                    <option value="https://notebooklm.google.com/notebook/c04b3e1c-942a-4b29-a06e-e50cba01db6c">🛠️ Bright CT New</option>
                                     <option value="https://notebooklm.google.com/notebook/646b1964-0931-4357-9e3c-2c6b8fc58fed">🌈 rainbow CT</option>
                                     <option value="https://notebooklm.google.com/notebook/ef1e9a31-7b28-49de-93f0-fd798f6c9d25">🦷 Ghế Bright 2 (ICT-CH02S)</option>
                                 </select>
@@ -393,7 +394,7 @@
                 <div class="khung">
                     <div class="tieu-de-khung"><h2>Tra cứu ca sự cố tương tự (Case Memory)</h2></div>
                     <p class="phu-de">Tìm kiếm các hồ sơ sự cố dựa trên từ khóa triệu chứng hoặc mã lỗi.</p>
-                    <input class="o-tim-kiem" type="search" id="o-tim-ca-tuong-tu" placeholder="Ví dụ: Không phát tia, E04, hỏng nguồn..." aria-label="Nhập thông tin cần tìm" oninput="timKiemCaTuongTu()">
+                    <input class="o-tim-kiem" type="search" id="o-tim-ca-tuong-tu" placeholder="Ví dụ: Không phát tia, E04..." aria-label="Tìm kiếm" oninput="timKiemCaTuongTu()">
                     
                     <div class="vung-bang" style="margin-top: 20px;">
                         <table>
@@ -410,22 +411,20 @@
             <section class="trang" id="kien-thuc">
                 <div class="khung">
                     <div class="tieu-de-khung"><h2>Thư viện kiến thức & Link Kho NotebookLM</h2></div>
-                    <p>Danh sách các kho tri thức được phân loại theo từng dòng thiết bị:</p>
+                    <p>Danh sách các kho tri thức:</p>
                     <ul style="line-height: 2;">
+                        <li>🦷 <a href="https://gemini.google.com/notebook/a65d7334-ec04-4562-8a27-5b55af275732" target="_blank">Chỉnh form RCT</a></li>
                         <li>🛠️ <a href="https://notebooklm.google.com/notebook/c04b3e1c-942a-4b29-a06e-e50cba01db6c" target="_blank">Bright CT New</a></li>
                         <li>🌈 <a href="https://notebooklm.google.com/notebook/646b1964-0931-4357-9e3c-2c6b8fc58fed" target="_blank">rainbow CT</a></li>
                         <li>🦷 <a href="https://notebooklm.google.com/notebook/ef1e9a31-7b28-49de-93f0-fd798f6c9d25" target="_blank">Ghế Bright 2 (ICT-CH02S)</a></li>
-                        <li>🦷 <a href="https://notebooklm.google.com/notebook/f47e8c3d-c7df-482f-a02b-690fbb6fb021" target="_blank">Shining 3D - Nguồn internet</a></li>
-                        <li>🛠️ <a href="https://gemini.google.com/notebook/5328e2dd-825f-45ac-9874-d9380a2ca3db" target="_blank">Tool Shining 3W</a></li>
-                        <li>🦷 <a href="https://notebooklm.google.com/notebook/dc12d63f-4772-441b-8c93-b3abde53aed5" target="_blank">REMEDI REMEX-T100</a></li>
-                        <li>🦷 <a href="https://notebooklm.google.com/notebook/56cfc9b4-347e-4f08-bad2-40176ed2bf57" target="_blank">Dentium IOX Intraoral Sensor</a></li>
+                        <li>🦷 <a href="https://notebooklm.google.com/notebook/f47e8c3d-c7df-482f-a02b-690fbb6fb021" target="_blank">Shining 3D</a></li>
                     </ul>
                 </div>
             </section>
         </main>
     </div>
 
-    <!-- JAVASCRIPT XỬ LÝ KẾT NỐI API REAL GEMINI -->
+    <!-- JAVASCRIPT XỬ LÝ KẾT NỐI API GEMINI -->
     <script>
         const SUPABASE_URL = "https://vmwagxhzmnpkrhebbuih.supabase.co";
         const SUPABASE_KEY = "sb_publishable_oVApKGbKNKcDSlHaFEhPIQ_ZuOMmgbI";
@@ -444,7 +443,6 @@
         let danhSachThietBiGoc = [];
         let danhSachSuCoGoc = [];
 
-        // HÀM LƯU VÀ LẤY GEMINI API KEY
         function luuApiKey() {
             const key = document.getElementById("gemini-api-key").value.trim();
             if (!key) return alert("Vui lòng nhập API Key!");
@@ -462,36 +460,14 @@
             if (keyLuu) document.getElementById("gemini-api-key").value = keyLuu;
         });
 
-        // SYSTEM INSTRUCTION DÀNH CHO BRIGHT CT
-        const SYSTEM_INSTRUCTIONS_BRIGHT_CT = `
-1. VAI TRÒ VÀ MỤC TIÊU: Bạn là Technical Service Engineer chuyên về Bright CT. Nhiệm vụ là chẩn đoán lỗi, troubleshooting, sửa chữa và xác định nguyên nhân dựa trên các quy trình kỹ thuật.
+        const SYSTEM_INSTRUCTIONS_TECHNICAL = `
+VAI TRÒ VÀ MỤC TIÊU: Bạn là Technical Service Engineer chuyên thiết bị nha khoa (CT, ghế máy, phần mềm đọc phim). Nhiệm vụ là chẩn đoán lỗi, troubleshooting và xác định nguyên nhân.
 Mục tiêu:
 - Xác định nguyên nhân lỗi chính xác nhất.
-- Ưu tiên REMOTE FIRST.
-- Chỉ yêu cầu đến site khi remote không thể tiếp tục hoặc cần thao tác trực tiếp.
-- Nếu phải đến site, chuẩn bị trước linh kiện, board/module, cable, connector, tool, thiết bị đo.
-- Sau mỗi kết quả test mới, cập nhật diagnosis của CASE hiện tại, không phân tích lại từ đầu.
-
-2. CASE ISOLATION: Mỗi sự cố là một CASE độc lập. Tuyệt đối không trộn lẫn dữ liệu giữa các nha khoa/máy khác nhau.
-
-3. PHÂN LOẠI BẰNG CHỨNG:
-- [CONFIRMED]: Được xác nhận bằng test hoặc tài liệu.
-- [INFERENCE]: Suy luận kỹ thuật hợp lý từ triệu chứng + test result.
-- [HYPOTHESIS]: Giả thuyết cần kiểm tra.
-
-4. BỐ CỤC TRẢ LỜI BẮT BUỘC:
-CURRENT CASE: [Tên Nha Khoa] - [Thiết bị/Model] - [Lỗi]
-ĐÁNH GIÁ HIỆN TẠI: (Tóm tắt ngắn)
-DIAGNOSIS:
-- [CONFIRMED]
-- [INFERENCE]
-- [HYPOTHESIS]
-NEXT BEST TEST (REMOTE FIRST):
-- Mục đích:
-- Cách kiểm tra:
-- Normal / Abnormal:
-ON-SITE PREPARATION (Nếu cần đi site):
-- Lý do + Linh kiện chuẩn bị + Dụng cụ đo
+- Ưu tiên REMOTE FIRST (kiểm tra phần mềm, teamviewer, cấu hình, kết nối trước).
+- Chỉ yêu cầu đến site khi remote không thể tiếp tục.
+- Phân loại rõ ràng: [CONFIRMED], [INFERENCE], [HYPOTHESIS].
+- Trả về đúng định dạng cấu trúc: CURRENT CASE, ĐÁNH GIÁ HIỆN TẠI, DIAGNOSIS, NEXT BEST TEST, ON-SITE PREPARATION.
 `;
 
         async function goiGeminiAPI(userPrompt) {
@@ -501,10 +477,11 @@ ON-SITE PREPARATION (Nếu cần đi site):
                 return null;
             }
 
+            // Cập nhật endpoint dùng gemini-2.5-flash hoặc gemini-3.8-flash chuẩn
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
             const bodyData = {
                 contents: [
-                    { role: "user", parts: [{ text: `${SYSTEM_INSTRUCTIONS_BRIGHT_CT}\n\nTHÔNG TIN ĐẦU VÀO:\n${userPrompt}` }] }
+                    { role: "user", parts: [{ text: `${SYSTEM_INSTRUCTIONS_TECHNICAL}\n\nTHÔNG TIN ĐẦU VÀO:\n${userPrompt}` }] }
                 ]
             };
 
