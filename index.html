@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dental Equipment Management</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #1e293b;
+    }
+    header {
+      background: #12345a;
+      color: white;
+      padding: 24px 32px;
+    }
+    header h1 { margin: 0 0 8px; font-size: 25px; }
+    header p { margin: 0; color: #dbeafe; }
+    main { padding: 28px; max-width: 1200px; margin: auto; }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 18px;
+    }
+    .card {
+      background: white;
+      padding: 22px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+    }
+    .card h2 { font-size: 17px; margin-top: 0; }
+    .card p { color: #64748b; line-height: 1.5; }
+    .tag { color: #176b87; font-weight: bold; }
+    .notice {
+      margin-top: 24px;
+      padding: 18px;
+      background: #eaf3ff;
+      border-radius: 10px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Dental Equipment Management</h1>
+    <p>Equipment records, technical support and troubleshooting knowledge</p>
+  </header>
+
+  <main>
+    <h2>Dashboard</h2>
+    <div class="cards">
+      <section class="card">
+        <h2>Equipment</h2>
+        <p>Manage dental equipment, serial numbers, clinics and installation details.</p>
+        <span class="tag">Equipment Registry</span>
+      </section>
+      <section class="card">
+        <h2>Service Requests</h2>
+        <p>Track installations, software support, maintenance and general inspections.</p>
+        <span class="tag">Service Management</span>
+      </section>
+      <section class="card">
+        <h2>Fault Cases</h2>
+        <p>Record symptoms, error messages, diagnostic steps and confirmed results.</p>
+        <span class="tag">Troubleshooting</span>
+      </section>
+      <section class="card">
+        <h2>Similar Cases</h2>
+        <p>Find previous cases with similar symptoms, equipment models and test results.</p>
+        <span class="tag">Knowledge Base</span>
+      </section>
+    </div>
+
+    <div class="notice">
+      <strong>Development status:</strong> Initial interface only.
+      Database storage, case search, user access and AI-assisted diagnosis
+      will be implemented in later stages.
+    </div>
+  </main>
+</body>
+</html>
