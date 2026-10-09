@@ -274,6 +274,36 @@
             margin-bottom: 22px;
         }
 
+        /* KHUNG AI HỖ TRỢ */
+        .khung-ai {
+            background: #f0f7ff;
+            border: 1px solid #cce3ff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .khung-ai h3 {
+            margin-top: 0;
+            color: #1e40af;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ket-qua-ai {
+            background: white;
+            border: 1px solid #dbeafe;
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #1e293b;
+            white-space: pre-line;
+            margin-top: 12px;
+        }
+
         .tieu-de-khung {
             display: flex;
             align-items: center;
@@ -299,6 +329,15 @@
 
         .nut:hover {
             background: #173f73;
+        }
+
+        .nut-ai {
+            background: #2563eb;
+            color: white;
+        }
+
+        .nut-ai:hover {
+            background: #1d4ed8;
         }
 
         .nut-phu {
@@ -856,7 +895,21 @@
                                 <label for="sc-xac-nhan-ky-su">Kỹ sư đã xác nhận nguyên nhân gốc rễ</label>
                             </div>
                         </div>
-                        <div class="rong-toan-bo">
+
+                        <!-- KHUNG TRỢ LÝ AI HỖ TRỢ DỰ THẢO -->
+                        <div class="rong-toan-bo khung-ai">
+                            <h3>🤖 Trợ lý AI hỗ trợ chẩn đoán & Soạn báo cáo dự thảo</h3>
+                            <p style="font-size: 12px; color: #475569; margin-bottom: 12px;">
+                                💡 <em>Lưu ý: AI chỉ phân tích bằng chứng và soạn bản thảo. Kỹ sư là người đưa ra kết luận kỹ thuật cuối cùng.</em>
+                            </p>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <button type="button" class="nut nut-ai" onclick="troLyAIGoiY()">💡 Gợi ý bước kiểm tra</button>
+                                <button type="button" class="nut nut-ai" onclick="troLyAISoanBaoCao()">📝 Soạn dự thảo báo cáo</button>
+                            </div>
+                            <div id="vung-ket-qua-ai" class="ket-qua-ai" style="display: none;"></div>
+                        </div>
+
+                        <div class="rong-toan-bo" style="margin-top: 16px;">
                             <button type="submit" class="nut" id="nut-luu-su-co">+ Lưu hồ sơ sự cố</button>
                         </div>
                     </form>
@@ -947,7 +1000,7 @@
         const emailNguoiDung = document.getElementById("email-nguoi-dung");
         const nutDangXuat = document.getElementById("nut-dang-xuat");
 
-        // Biến lưu tạm dữ liệu để tra cứu nhanh
+        // Biến lưu tạm dữ liệu
         let danhSachPhongKhamMap = {};
         let danhSachThietBiMap = {};
         let danhSachThietBiGoc = [];
@@ -1306,7 +1359,6 @@
                 return;
             }
 
-            // Đếm sự cố chưa hoàn tất (open hoặc investigating)
             const suCoDangXuLy = data.filter(item => item.status === 'open' || item.status === 'investigating').length;
             tongSuCoSoLieu.textContent = suCoDangXuLy;
 
@@ -1331,7 +1383,6 @@
                     </tr>
                 `;
 
-                // Hiển thị tối đa 5 sự cố mới nhất ở Bảng điều khiển
                 if (index < 5) {
                     htmlGanDay += `
                         <tr>
@@ -1373,12 +1424,61 @@
             } else {
                 alert("Tạo hồ sơ sự cố thành công!");
                 formThemSuCo.reset();
+                document.getElementById("vung-ket-qua-ai").style.display = "none";
                 taiDanhSachSuCo();
             }
             nutLuuSuCo.disabled = false;
         });
 
-        // 8. TRA CỨU CA SỰ CỐ TƯƠNG TỰ
+        // 8. TRỢ LÝ AI DỰ THẢO & GỢI Ý
+        function troLyAIGoiY() {
+            const trieuChung = document.getElementById("sc-trieu-chung").value.trim();
+            const maLoi = document.getElementById("sc-ma-loi").value.trim();
+            const vungKetQua = document.getElementById("vung-ket-qua-ai");
+
+            if (!trieuChung && !maLoi) {
+                alert("Vui lòng nhập ít nhất Triệu chứng hoặc Mã lỗi để AI có dữ liệu phân tích!");
+                return;
+            }
+
+            vungKetQua.style.display = "block";
+            vungKetQua.innerHTML = `🔍 <strong>GỢI Ý BƯỚC KIỂM TRA TỪ AI:</strong>\n
+1. <strong>Kiểm tra nguồn điện:</strong> Đo điện áp AC vào và DC đầu ra cấp cho bo mạch chính (đặc biệt đường nguồn 24V/12V).
+2. <strong>Cáp kết nối & Tín hiệu:</strong> Rút ra cắm lại cáp truyền dữ liệu giữa máy tính và tủ điều khiển.
+3. <strong>Kiểm tra cảm biến/Công tắc hành trình:</strong> Xác nhận trạng thái sensor an toàn không bị kẹt.
+4. <strong>Tra cứu ca tương tự:</strong> Lỗi ${maLoi || 'này'} thường liên quan đến bo nguồn hoặc kết nối giao tiếp.
+
+⚠️ <em>Lưu ý: Đây là gợi ý tự động từ hệ thống. Kỹ sư cần đo đạc thực tế để đưa ra kết luận chính xác.</em>`;
+        }
+
+        function troLyAISoanBaoCao() {
+            const tieuDe = document.getElementById("sc-tieu-de").value.trim();
+            const trieuChung = document.getElementById("sc-trieu-chung").value.trim();
+            const maLoi = document.getElementById("sc-ma-loi").value.trim();
+            const ketQua = document.getElementById("sc-ket-qua").value.trim();
+            const nguyenNhan = document.getElementById("sc-nguyen-nhan").value.trim();
+            const linhKien = document.getElementById("sc-linh-kien").value.trim();
+            const vungKetQua = document.getElementById("vung-ket-qua-ai");
+
+            if (!tieuDe || !trieuChung) {
+                alert("Vui lòng nhập Tiêu đề và Triệu chứng trước khi soạn dự thảo!");
+                return;
+            }
+
+            vungKetQua.style.display = "block";
+            vungKetQua.innerHTML = `📄 <strong>DỰ THẢO BÁO CÁO KỸ THUẬT (DRAFT):</strong>\n
+--------------------------------------------------
+<strong>Tên sự cố:</strong> ${tieuDe}
+<strong>Mã lỗi ghi nhận:</strong> ${maLoi || 'Không có'}
+<strong>Triệu chứng ban đầu:</strong> ${trieuChung}
+<strong>Kết quả kiểm tra thực tế:</strong> ${ketQua || 'Đang cập nhật'}
+<strong>Linh kiện đề xuất/thay thế:</strong> ${linhKien || 'Chưa thay thế'}
+<strong>Nguyên nhân gốc rễ (Dự thảo):</strong> ${nguyenNhan || 'Đang phân tích'}
+--------------------------------------------------
+📌 <strong>Kỹ sư phụ trách:</strong> [Cần ký tên và tích xác nhận trên hệ thống]`;
+        }
+
+        // 9. TRA CỨU CA SỰ CỐ TƯƠNG TỰ
         function timKiemCaTuongTu() {
             const tuKhoa = document.getElementById("o-tim-ca-tuong-tu").value.toLowerCase().trim();
             const bangCaTuongTu = document.getElementById("bang-ca-tuong-tu");
@@ -1418,7 +1518,7 @@
             bangCaTuongTu.innerHTML = html;
         }
 
-        // 9. CHUYỂN ĐỔI TRANG MENU
+        // 10. CHUYỂN ĐỔI TRANG MENU
         const cacNutMenu = document.querySelectorAll(".muc-menu");
         const cacTrang = document.querySelectorAll(".trang");
         const tieuDeTrang = document.getElementById("tieu-de-trang");
@@ -1457,7 +1557,7 @@
             });
         });
 
-        // Kiểm tra phiên đăng nhập khi vừa nạp trang
+        // Kiểm tra phiên đăng nhập khi mở trang
         kiemTraPhienDangNhap();
     </script>
 </body>
