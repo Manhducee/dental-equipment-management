@@ -51,14 +51,14 @@
         .khung { background: white; border: 1px solid #e5eaf1; border-radius: 12px; padding: 22px; margin-bottom: 22px; }
         .khung-ai { background: #f0f7ff; border: 1px solid #cce3ff; border-radius: 12px; padding: 20px; margin-bottom: 22px; }
         .khung-ai h3 { margin-top: 0; color: #1e40af; font-size: 16px; display: flex; align-items: center; gap: 8px; }
-        .ket-qua-ai { background: white; border: 1px solid #dbeafe; border-radius: 8px; padding: 16px; font-size: 13px; line-height: 1.6; color: #1e293b; white-space: pre-line; margin-top: 12px; }
+        .ket-qua-ai { background: white; border: 1px solid #dbeafe; border-radius: 8px; padding: 16px; font-size: 13px; line-height: 1.6; color: #1e293b; white-space: pre-wrap; margin-top: 12px; }
 
         .tieu-de-khung { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
         .tieu-de-khung h2 { margin: 0; font-size: 18px; }
 
         .nut { padding: 10px 14px; border: none; border-radius: 7px; background: #245b9e; color: white; font-size: 13px; }
         .nut:hover { background: #173f73; }
-        .nut-ai { background: #2563eb; color: white; }
+        .nut-ai { background: #2563eb; color: white; font-weight: bold; }
         .nut-ai:hover { background: #1d4ed8; }
         .nut-lk { background: #059669; color: white; text-decoration: none; display: inline-block; padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; margin-top: 10px; }
         .nut-lk:hover { background: #047857; }
@@ -78,9 +78,6 @@
         .tt-hoat-dong, .tt-completed, .tt-resolved, .tt-closed { background: #dff6e8; color: #207044; }
         .tt-bao-tri, .tt-pending, .tt-open, .tt-investigating { background: #fff1d6; color: #946200; }
         .tt-hong, .tt-cancelled { background: #fde8e8; color: #9b1c1c; }
-
-        .nhan-xac-nhan { display: inline-block; padding: 3px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; background: #e2f0d9; color: #385723; }
-        .nhan-chua-xac-nhan { display: inline-block; padding: 3px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; background: #fce4d6; color: #c65911; }
 
         .o-tim-kiem { width: 100%; max-width: 360px; padding: 11px 13px; border: 1px solid #d9e1eb; border-radius: 8px; outline: none; }
 
@@ -152,6 +149,16 @@
                 <div class="nhan-phien-ban">PHIÊN BẢN THỬ NGHIỆM</div>
             </header>
 
+            <!-- KHUNG CẤP GEMINI API KEY -->
+            <div class="khung" style="background: #fffbe0; border-color: #fce788; padding: 14px 20px; margin-bottom: 20px;">
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <label for="gemini-api-key" style="font-weight: bold; font-size: 13px; color: #854d0e;">🔑 Cấu hình Gemini API Key (Đồ thật 100%):</label>
+                    <input type="password" id="gemini-api-key" style="flex: 1; min-width: 250px; padding: 6px 10px; border: 1px solid #facc15; border-radius: 6px;" placeholder="Dán Gemini API Key dạng AIzaSy... vào đây">
+                    <button class="nut" style="background: #ca8a04;" onclick="luuApiKey()">Lưu API Key</button>
+                </div>
+                <div id="tb-api-key" style="font-size: 11px; color: #15803d; margin-top: 4px; display: none;">✓ Đã lưu API Key thành công!</div>
+            </div>
+
             <!-- TRANG 1: TỔNG QUAN -->
             <section class="trang dang-hien" id="tong-quan">
                 <div class="luoi-the">
@@ -205,10 +212,10 @@
                 <div class="khung">
                     <div class="tieu-de-khung"><h2>Thêm phòng khám mới</h2></div>
                     <form id="form-them-phong-kham" class="luoi-form">
-                        <div class="nhom-o-nhap"><label for="pk-ten">Tên phòng khám (*)</label><input type="text" id="pk-ten" required placeholder="Ví dụ: Nha Khoa SGBT Lagu"></div>
+                        <div class="nhom-o-nhap"><label for="pk-ten">Tên phòng khám (*)</label><input type="text" id="pk-ten" required placeholder="Ví dụ: Nha Khoa SGBT Gia Lai"></div>
                         <div class="nhom-o-nhap"><label for="pk-sdt">Số điện thoại</label><input type="text" id="pk-sdt" placeholder="Ví dụ: 0912345678"></div>
                         <div class="nhom-o-nhap"><label for="pk-nguoi-lien-he">Người liên hệ</label><input type="text" id="pk-nguoi-lien-he" placeholder="Ví dụ: Bs Tair"></div>
-                        <div class="nhom-o-nhap"><label for="pk-dia-chi">Địa chỉ</label><input type="text" id="pk-dia-chi" placeholder="Ví dụ: 123 Đường ABC, Quận 1, TP.HCM"></div>
+                        <div class="nhom-o-nhap"><label for="pk-dia-chi">Địa chỉ</label><input type="text" id="pk-dia-chi" placeholder="Ví dụ: Gia Lai"></div>
                         <div class="nhom-o-nhap rong-toan-bo"><label for="pk-ghi-chu">Ghi chú</label><textarea id="pk-ghi-chu" rows="2" placeholder="Ghi chú thêm nếu có..."></textarea></div>
                         <div class="rong-toan-bo"><button type="submit" class="nut" id="nut-luu-phong-kham">+ Lưu phòng khám</button></div>
                     </form>
@@ -236,14 +243,14 @@
                     <div class="tieu-de-khung"><h2>Thêm thiết bị mới</h2></div>
                     <form id="form-them-thiet-bi" class="luoi-form">
                         <div class="nhom-o-nhap"><label for="tb-phong-kham">Phòng khám (*)</label><select id="tb-phong-kham" required><option value="">-- Chọn phòng khám --</option></select></div>
-                        <div class="nhom-o-nhap"><label for="tb-loai">Loại thiết bị (*)</label><input type="text" id="tb-loai" required placeholder="Ví dụ: Ghế nha khoa, Máy X-Quang, CT Cone Beam..."></div>
-                        <div class="nhom-o-nhap"><label for="tb-model">Model (*)</label><input type="text" id="tb-model" required placeholder="Ví dụ: Bright CT, Pax-i..."></div>
+                        <div class="nhom-o-nhap"><label for="tb-loai">Loại thiết bị (*)</label><input type="text" id="tb-loai" required placeholder="Ví dụ: CT Cone Beam"></div>
+                        <div class="nhom-o-nhap"><label for="tb-model">Model (*)</label><input type="text" id="tb-model" required placeholder="Ví dụ: Bright CT"></div>
                         <div class="nhom-o-nhap"><label for="tb-serial">Số Serial (*)</label><input type="text" id="tb-serial" required placeholder="Ví dụ: SN12345678"></div>
                         <div class="nhom-o-nhap"><label for="tb-ngay-lap">Ngày lắp đặt</label><input type="date" id="tb-ngay-lap"></div>
                         <div class="nhom-o-nhap"><label for="tb-trang-thai">Trạng thái (*)</label><select id="tb-trang-thai" required><option value="active">Đang hoạt động</option><option value="maintenance">Bảo trì</option><option value="inactive">Ngưng hoạt động / Hỏng</option></select></div>
-                        <div class="nhom-o-nhap"><label for="tb-cau-hinh">Cấu hình máy tính đi kèm</label><input type="text" id="tb-cau-hinh" placeholder="Ví dụ: Core i7, 16GB RAM, RTX 3060"></div>
+                        <div class="nhom-o-nhap"><label for="tb-cau-hinh">Cấu hình máy tính đi kèm</label><input type="text" id="tb-cau-hinh" placeholder="Ví dụ: Core i7, 16GB RAM"></div>
                         <div class="nhom-o-nhap"><label for="tb-phan-mem">Phiên bản phần mềm</label><input type="text" id="tb-phan-mem" placeholder="Ví dụ: Ez3D-i v5.1"></div>
-                        <div class="nhom-o-nhap rong-toan-bo"><label for="tb-ghi-chu">Ghi chú</label><textarea id="tb-ghi-chu" rows="2" placeholder="Ghi chú thêm về thiết bị..."></textarea></div>
+                        <div class="nhom-o-nhap rong-toan-bo"><label for="tb-ghi-chu">Ghi chú</label><textarea id="tb-ghi-chu" rows="2" placeholder="Ghi chú thêm..."></textarea></div>
                         <div class="rong-toan-bo"><button type="submit" class="nut" id="nut-luu-thiet-bi">+ Lưu thiết bị</button></div>
                     </form>
                 </div>
@@ -267,18 +274,29 @@
             <!-- TRANG YÊU CẦU DỊCH VỤ -->
             <section class="trang" id="yeu-cau">
                 <div class="khung-ai">
-                    <h3>⚡ Phân tích & Tiếp nhận yêu cầu nhanh từ Sales</h3>
+                    <h3>⚡ Phân tích & Tiếp nhận yêu cầu (Gemini API Thật)</h3>
                     <p style="font-size: 12px; color: #475569; margin-bottom: 12px;">
-                        Dán trực tiếp tin nhắn từ Sales. AI sẽ tự tách CASE cách biệt và phân tích quy trình Remote First!
+                        Dán trực tiếp tin nhắn từ Sales. Gemini AI sẽ phân tích dựa trên System Instructions thực sự!
                     </p>
                     <textarea id="van-ban-sales" rows="4" style="width: 100%; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px; font-size: 13px;" placeholder="Ví dụ:
-Tên nha khoa : SGBT Lagu
-Mô tả vấn đề: Cài phần mềm máy CT, và nhờ kĩ thuật ktra máy Ct
-Thời gian: 09/10/2026
-Liên hệ: Bs Tair"></textarea>
+1. Tên nha khoa : Nha khoa SGBT Gia Lai
+2. Mô tả vấn đề: máy lỗi ko chụp được
+3. Thời gian báo lỗi: 09/10/2026
+4. Thông tin liên hệ:"></textarea>
+
+                    <div style="margin-top: 10px; margin-bottom: 10px;">
+                        <label for="sales-notebook-select" style="font-size: 12px; font-weight: bold; color: #1e40af;">📂 Chọn Kho NotebookLM chứa tài liệu thiết bị:</label>
+                        <select id="sales-notebook-select" style="margin-top: 4px; font-size: 13px; padding: 6px;">
+                            <option value="https://notebooklm.google.com/notebook/c04b3e1c-942a-4b29-a06e-e50cba01db6c">🛠️ Bright CT New (Active System Instructions)</option>
+                            <option value="https://notebooklm.google.com/notebook/646b1964-0931-4357-9e3c-2c6b8fc58fed">🌈 rainbow CT</option>
+                            <option value="https://notebooklm.google.com/notebook/ef1e9a31-7b28-49de-93f0-fd798f6c9d25">🦷 Ghế Bright 2 (ICT-CH02S)</option>
+                            <option value="https://notebooklm.google.com/notebook/f47e8c3d-c7df-482f-a02b-690fbb6fb021">🦷 Shining 3D</option>
+                            <option value="https://notebooklm.google.com/notebook/dc12d63f-4772-441b-8c93-b3abde53aed5">🦷 REMEDI REMEX-T100</option>
+                        </select>
+                    </div>
                     
                     <div style="margin-top: 10px; display: flex; gap: 10px;">
-                        <button type="button" class="nut nut-ai" onclick="xuLyTinNhanSales()">⚡ Phân tích & Chuẩn hóa CASE</button>
+                        <button type="button" class="nut nut-ai" id="nut-ai-sales" onclick="xuLyTinNhanSalesGemini()">⚡ Tra cứu Gemini AI Thật</button>
                     </div>
                     <div id="ket-qua-sales-ai" class="ket-qua-ai" style="display: none;"></div>
                 </div>
@@ -331,26 +349,21 @@ Liên hệ: Bs Tair"></textarea>
                         <div class="nhom-o-nhap"><label for="sc-trang-thai">Trạng thái hồ sơ (*)</label><select id="sc-trang-thai" required><option value="open">Mới ghi nhận (Open)</option><option value="investigating">Đang kiểm tra/xử lý (Investigating)</option><option value="resolved">Đã xử lý xong (Resolved)</option><option value="closed">Đã đóng hồ sơ (Closed)</option></select></div>
                         <div class="nhom-o-nhap"><label>Xác nhận kỹ sư</label><div class="nhom-checkbox"><input type="checkbox" id="sc-xac-nhan-ky-su"><label for="sc-xac-nhan-ky-su">Kỹ sư đã xác nhận nguyên nhân gốc rễ [CONFIRMED]</label></div></div>
 
-                        <!-- KHUNG TRỢ LÝ AI CHẨN ĐOÁN THEO CẤU TRÚC SYSTEM INSTRUCTIONS -->
+                        <!-- KHUNG TRỢ LÝ AI CHẨN ĐOÁN REAL GEMINI API -->
                         <div class="rong-toan-bo khung-ai">
-                            <h3>🤖 Technical Service AI - Chẩn đoán Theo Cấu trúc Standard CASE</h3>
+                            <h3>🤖 Technical Service AI - Chẩn đoán Real-time từ Gemini API</h3>
                             
                             <div style="margin-bottom: 12px;">
-                                <label for="sc-notebook-select" style="font-size: 13px; font-weight: bold; color: #1e40af;">📂 Chọn Kho NotebookLM chứa System Prompt & Document của dòng máy:</label>
+                                <label for="sc-notebook-select" style="font-size: 13px; font-weight: bold; color: #1e40af;">📂 Kho NotebookLM đối chiếu:</label>
                                 <select id="sc-notebook-select" style="margin-top: 6px;">
                                     <option value="https://notebooklm.google.com/notebook/c04b3e1c-942a-4b29-a06e-e50cba01db6c">🛠️ Bright CT New (System Instructions Active)</option>
                                     <option value="https://notebooklm.google.com/notebook/646b1964-0931-4357-9e3c-2c6b8fc58fed">🌈 rainbow CT</option>
                                     <option value="https://notebooklm.google.com/notebook/ef1e9a31-7b28-49de-93f0-fd798f6c9d25">🦷 Ghế Bright 2 (ICT-CH02S)</option>
-                                    <option value="https://notebooklm.google.com/notebook/f47e8c3d-c7df-482f-a02b-690fbb6fb021">🦷 Shining 3D - Nguồn internet</option>
-                                    <option value="https://gemini.google.com/notebook/5328e2dd-825f-45ac-9874-d9380a2ca3db">🛠️ Tool Shining 3W</option>
-                                    <option value="https://notebooklm.google.com/notebook/dc12d63f-4772-441b-8c93-b3abde53aed5">🦷 REMEDI REMEX-T100</option>
-                                    <option value="https://notebooklm.google.com/notebook/56cfc9b4-347e-4f08-bad2-40176ed2bf57">🦷 Dentium IOX Intraoral Sensor</option>
                                 </select>
                             </div>
 
                             <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
-                                <button type="button" class="nut nut-ai" onclick="troLyAIGoiY()">💡 Phân tích & Xuất Chẩn đoán chuẩn</button>
-                                <button type="button" class="nut nut-phu" onclick="troLyAISoanBaoCao()">📝 Soạn dự thảo báo cáo (Format Standard)</button>
+                                <button type="button" class="nut nut-ai" id="nut-ai-su-co" onclick="troLyAIGeminiSuCo()">💡 Phân tích & Xuất Chẩn đoán Gemini Thật</button>
                             </div>
                             <div id="vung-ket-qua-ai" class="ket-qua-ai" style="display: none;"></div>
                         </div>
@@ -412,7 +425,7 @@ Liên hệ: Bs Tair"></textarea>
         </main>
     </div>
 
-    <!-- JAVASCRIPT XỬ LÝ KẾT NỐI & DỮ LIỆU -->
+    <!-- JAVASCRIPT XỬ LÝ KẾT NỐI API REAL GEMINI -->
     <script>
         const SUPABASE_URL = "https://vmwagxhzmnpkrhebbuih.supabase.co";
         const SUPABASE_KEY = "sb_publishable_oVApKGbKNKcDSlHaFEhPIQ_ZuOMmgbI";
@@ -430,6 +443,147 @@ Liên hệ: Bs Tair"></textarea>
         let danhSachThietBiMap = {};
         let danhSachThietBiGoc = [];
         let danhSachSuCoGoc = [];
+
+        // HÀM LƯU VÀ LẤY GEMINI API KEY
+        function luuApiKey() {
+            const key = document.getElementById("gemini-api-key").value.trim();
+            if (!key) return alert("Vui lòng nhập API Key!");
+            localStorage.setItem("GEMINI_API_KEY", key);
+            document.getElementById("tb-api-key").style.display = "block";
+            setTimeout(() => { document.getElementById("tb-api-key").style.display = "none"; }, 3000);
+        }
+
+        function layApiKey() {
+            return localStorage.getItem("GEMINI_API_KEY") || document.getElementById("gemini-api-key").value.trim();
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+            const keyLuu = localStorage.getItem("GEMINI_API_KEY");
+            if (keyLuu) document.getElementById("gemini-api-key").value = keyLuu;
+        });
+
+        // SYSTEM INSTRUCTION DÀNH CHO BRIGHT CT
+        const SYSTEM_INSTRUCTIONS_BRIGHT_CT = `
+1. VAI TRÒ VÀ MỤC TIÊU: Bạn là Technical Service Engineer chuyên về Bright CT. Nhiệm vụ là chẩn đoán lỗi, troubleshooting, sửa chữa và xác định nguyên nhân dựa trên các quy trình kỹ thuật.
+Mục tiêu:
+- Xác định nguyên nhân lỗi chính xác nhất.
+- Ưu tiên REMOTE FIRST.
+- Chỉ yêu cầu đến site khi remote không thể tiếp tục hoặc cần thao tác trực tiếp.
+- Nếu phải đến site, chuẩn bị trước linh kiện, board/module, cable, connector, tool, thiết bị đo.
+- Sau mỗi kết quả test mới, cập nhật diagnosis của CASE hiện tại, không phân tích lại từ đầu.
+
+2. CASE ISOLATION: Mỗi sự cố là một CASE độc lập. Tuyệt đối không trộn lẫn dữ liệu giữa các nha khoa/máy khác nhau.
+
+3. PHÂN LOẠI BẰNG CHỨNG:
+- [CONFIRMED]: Được xác nhận bằng test hoặc tài liệu.
+- [INFERENCE]: Suy luận kỹ thuật hợp lý từ triệu chứng + test result.
+- [HYPOTHESIS]: Giả thuyết cần kiểm tra.
+
+4. BỐ CỤC TRẢ LỜI BẮT BUỘC:
+CURRENT CASE: [Tên Nha Khoa] - [Thiết bị/Model] - [Lỗi]
+ĐÁNH GIÁ HIỆN TẠI: (Tóm tắt ngắn)
+DIAGNOSIS:
+- [CONFIRMED]
+- [INFERENCE]
+- [HYPOTHESIS]
+NEXT BEST TEST (REMOTE FIRST):
+- Mục đích:
+- Cách kiểm tra:
+- Normal / Abnormal:
+ON-SITE PREPARATION (Nếu cần đi site):
+- Lý do + Linh kiện chuẩn bị + Dụng cụ đo
+`;
+
+        async function goiGeminiAPI(userPrompt) {
+            const apiKey = layApiKey();
+            if (!apiKey) {
+                alert("Vui lòng nhập Gemini API Key ở ô phía trên trước!");
+                return null;
+            }
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+            const bodyData = {
+                contents: [
+                    { role: "user", parts: [{ text: `${SYSTEM_INSTRUCTIONS_BRIGHT_CT}\n\nTHÔNG TIN ĐẦU VÀO:\n${userPrompt}` }] }
+                ]
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(bodyData)
+                });
+                const data = await response.json();
+                if (data.error) {
+                    alert("Lỗi Gemini API: " + data.error.message);
+                    return null;
+                }
+                return data.candidates[0].content.parts[0].text;
+            } catch (err) {
+                alert("Không thể kết nối Gemini API: " + err.message);
+                return null;
+            }
+        }
+
+        async function xuLyTinNhanSalesGemini() {
+            const vanBan = document.getElementById("van-ban-sales").value.trim();
+            const ketQuaBox = document.getElementById("ket-qua-sales-ai");
+            const nut = document.getElementById("nut-ai-sales");
+            const selectSales = document.getElementById("sales-notebook-select");
+            const urlSalesNotebook = selectSales.value;
+            const tenSalesNotebook = selectSales.options[selectSales.selectedIndex].text;
+
+            if (!vanBan) return alert("Vui lòng dán tin nhắn từ Sales!");
+
+            nut.disabled = true;
+            nut.textContent = "⌛ Gemini đang đọc & chẩn đoán...";
+            ketQuaBox.style.display = "block";
+            ketQuaBox.textContent = "⌛ Đang gọi API Gemini để tra cứu tri thức thực tế...";
+
+            const ketQuaAI = await goiGeminiAPI(vanBan);
+            nut.disabled = false;
+            nut.textContent = "⚡ Tra cứu Gemini AI Thật";
+
+            if (ketQuaAI) {
+                ketQuaBox.innerHTML = `${ketQuaAI}\n\n--------------------------------------------------\n<a href="${urlSalesNotebook}" target="_blank" class="nut-lk">🔗 Mở trực tiếp Kho [${tenSalesNotebook}] trên NotebookLM để đọc sâu tài liệu</a>`;
+            } else {
+                ketQuaBox.textContent = "❌ Lỗi kết nối API. Vui lòng kiểm tra lại Gemini API Key.";
+            }
+        }
+
+        async function troLyAIGeminiSuCo() {
+            const tieuDe = document.getElementById("sc-tieu-de").value.trim();
+            const trieuChung = document.getElementById("sc-trieu-chung").value.trim();
+            const maLoi = document.getElementById("sc-ma-loi").value.trim();
+            const buocKiemTra = document.getElementById("sc-buoc-kiem-tra").value.trim();
+            const ketQuaThucTe = document.getElementById("sc-ket-qua").value.trim();
+            
+            const select = document.getElementById("sc-notebook-select");
+            const urlNotebook = select.value;
+            const tenNotebook = select.options[select.selectedIndex].text;
+            const vungKetQua = document.getElementById("vung-ket-qua-ai");
+            const nut = document.getElementById("nut-ai-su-co");
+
+            if (!trieuChung && !tieuDe) return alert("Vui lòng nhập Tiêu đề hoặc Triệu chứng!");
+
+            const userPrompt = `Tiêu đề: ${tieuDe}\nTriệu chứng: ${trieuChung}\nMã lỗi: ${maLoi}\nKiểm tra đã làm: ${buocKiemTra}\nKết quả đo: ${ketQuaThucTe}`;
+
+            nut.disabled = true;
+            nut.textContent = "⌛ Gemini AI đang phân tích...";
+            vungKetQua.style.display = "block";
+            vungKetQua.textContent = "⌛ Đang tra cứu quy trình chẩn đoán từ Gemini API...";
+
+            const ketQuaAI = await goiGeminiAPI(userPrompt);
+            nut.disabled = false;
+            nut.textContent = "💡 Phân tích & Xuất Chẩn đoán Gemini Thật";
+
+            if (ketQuaAI) {
+                vungKetQua.innerHTML = `${ketQuaAI}\n\n--------------------------------------------------\n<a href="${urlNotebook}" target="_blank" class="nut-lk">🔗 Mở trực tiếp Kho [${tenNotebook}] trên NotebookLM</a>`;
+            } else {
+                vungKetQua.textContent = "❌ Lỗi kết nối API. Vui lòng kiểm tra lại Gemini API Key.";
+            }
+        }
 
         async function kiemTraPhienDangNhap() {
             const { data: { session } } = await supabaseClient.auth.getSession();
@@ -511,36 +665,6 @@ Liên hệ: Bs Tair"></textarea>
             document.getElementById(idSelectThietBi).innerHTML = options;
         }
 
-        async function xuLyTinNhanSales() {
-            const vanBan = document.getElementById("van-ban-sales").value.trim();
-            const ketQuaBox = document.getElementById("ket-qua-sales-ai");
-            if (!vanBan) return alert("Vui lòng dán tin nhắn từ Sales!");
-
-            let tenNhaKhoa = "", moTa = "", lienHe = "", thoiGian = "";
-            vanBan.split('\n').forEach(dong => {
-                if (dong.toLowerCase().includes("nha khoa")) tenNhaKhoa = dong.split(':')[1]?.trim() || dong;
-                else if (dong.toLowerCase().includes("mô tả") || dong.toLowerCase().includes("vấn đề")) moTa = dong.split(':')[1]?.trim() || dong;
-                else if (dong.toLowerCase().includes("liên hệ") || dong.toLowerCase().includes("bs")) lienHe = dong.split(':')[1]?.trim() || dong;
-                else if (dong.toLowerCase().includes("thời gian") || dong.toLowerCase().includes("ngày")) thoiGian = dong.split(':')[1]?.trim() || dong;
-            });
-
-            const currentCaseName = `${tenNhaKhoa || 'Nha Khoa'} - Bright CT - ${moTa || 'Yêu cầu kiểm tra'}`;
-
-            ketQuaBox.style.display = "block";
-            ketQuaBox.innerHTML = `📌 <strong>CURRENT CASE:</strong> ${currentCaseName}\n
-📋 <strong>ĐÁNH GIÁ HIỆN TẠI:</strong>
-• <strong>Khách hàng:</strong> ${tenNhaKhoa || 'Chưa rõ'} | <strong>Liên hệ:</strong> ${lienHe || 'Chưa rõ'}
-• <strong>Nhiệm vụ:</strong> ${moTa || vanBan}
-• <strong>Thời gian tiếp nhận:</strong> ${thoiGian || 'Hôm nay'}
-
-🔍 <strong>REMOTE FIRST - QUY TRÌNH ĐỀ XUẤT:</strong>
-1. <strong>Kiểm tra từ xa (Remote):</strong>
-   - Yêu cầu phòng khám bật UltraViewer / TeamViewer kiểm tra phần mềm Ez3D-i.
-   - Kiểm tra log máy tính và trạng thái cáp mạng LAN kết nối máy CT.
-2. <strong>Nếu Remote thành công:</strong> Cài đặt / khắc phục trực tiếp trên máy tính.
-3. <strong>Nếu cần On-site:</strong> Chuẩn bị sẵn bộ đĩa cài đặt, USB phần mềm và dụng cụ đo nguồn trước khi đi.`;
-        }
-
         async function taiDanhSachYeuCau() {
             const { data } = await supabaseClient.from('service_requests').select('*').order('created_at', { ascending: false });
             if (!data) return;
@@ -562,70 +686,6 @@ Liên hệ: Bs Tair"></textarea>
                 html += `<tr><td><strong>${item.title || ''}</strong></td><td>${item.error_code || '-'}</td><td>${danhSachThietBiMap[item.equipment_id] || '-'}</td><td>${danhSachPhongKhamMap[item.clinic_id] || '-'}</td><td><span class="trang-thai-nhan tt-${item.status}">${item.status}</span></td><td>${item.confirmed_by_engineer ? '✓ Đã xác nhận' : 'Chưa xác nhận'}</td></tr>`;
             });
             document.getElementById("bang-danh-sach-su-co").innerHTML = html || '<tr><td colspan="6">Chưa có dữ liệu</td></tr>';
-        }
-
-        function troLyAIGoiY() {
-            const tieuDe = document.getElementById("sc-tieu-de").value.trim();
-            const trieuChung = document.getElementById("sc-trieu-chung").value.trim();
-            const maLoi = document.getElementById("sc-ma-loi").value.trim();
-            const buocKiemTra = document.getElementById("sc-buoc-kiem-tra").value.trim();
-            const ketQuaThucTe = document.getElementById("sc-ket-qua").value.trim();
-            
-            const select = document.getElementById("sc-notebook-select");
-            const urlNotebook = select.value;
-            const tenNotebook = select.options[select.selectedIndex].text;
-            const vungKetQua = document.getElementById("vung-ket-qua-ai");
-
-            if (!trieuChung && !tieuDe) return alert("Vui lòng nhập Tiêu đề hoặc Triệu chứng!");
-
-            vungKetQua.style.display = "block";
-            vungKetQua.innerHTML = `📌 <strong>CURRENT CASE:</strong> ${tieuDe || 'Chưa đặt tên'} - Bright CT
-
-📋 <strong>ĐÁNH GIÁ HIỆN TẠI:</strong>
-• Triệu chứng: ${trieuChung || 'Đang cập nhật'}
-• Mã lỗi: ${maLoi || 'Không có'}
-• Test đã thực hiện: ${buocKiemTra || 'Chưa thực hiện'}
-• Kết quả ghi nhận: ${ketQuaThucTe || 'Chưa có đo đạc'}
-
-🩺 <strong>DIAGNOSIS (ĐÁNH GIÁ CHẨN ĐOÁN):</strong>
-• [CONFIRMED] - Lỗi được xác nhận qua thông tin đầu vào.
-• [INFERENCE] - Suy luận từ tài liệu ${tenNotebook}: Khả năng mâu thuẫn giao tiếp bo mạch hoặc nguồn DC.
-• [HYPOTHESIS] - Giả thuyết: Cần kiểm tra điện áp đường 24V/12V cấp cho tủ điều khiển.
-
-🎯 <strong>NEXT BEST TEST (ƯU TIÊN REMOTE FIRST):</strong>
-• <strong>Mục đích:</strong> Xác định xem lỗi do phần mềm giao tiếp hay do phần cứng bo nguồn.
-• <strong>Cách kiểm tra:</strong> 1. Đo nguồn DC 24V đầu ra. 2. Rút ra cắm lại cáp truyền dữ liệu. 3. Kiểm tra công tắc hành trình sensor.
-• <strong>Normal:</strong> Nguồn đủ 24V ± 0.5V, cáp cắm chặt.
-• <strong>Abnormal:</strong> Sụt áp dưới 20V hoặc cáp bị lỏng.
-
-🛠️ <strong>ON-SITE REQUIRED (NẾU CẦN ĐẾN SITE):</strong>
-• Chuẩn bị trước: Bo nguồn Power Supply 24V-10A, Đồng hồ đo VOM, Cáp kết nối dự phòng.
-
-<a href="${urlNotebook}" target="_blank" class="nut-lk">🔗 Mở trực tiếp Kho [${tenNotebook}] để tra cứu tài liệu gốc</a>`;
-        }
-
-        function troLyAISoanBaoCao() {
-            const tieuDe = document.getElementById("sc-tieu-de").value.trim();
-            const trieuChung = document.getElementById("sc-trieu-chung").value.trim();
-            const maLoi = document.getElementById("sc-ma-loi").value.trim();
-            const ketQua = document.getElementById("sc-ket-qua").value.trim();
-            const nguyenNhan = document.getElementById("sc-nguyen-nhan").value.trim();
-            const linhKien = document.getElementById("sc-linh-kien").value.trim();
-            const vungKetQua = document.getElementById("vung-ket-qua-ai");
-
-            if (!tieuDe || !trieuChung) return alert("Vui lòng nhập Tiêu đề và Triệu chứng trước!");
-
-            vungKetQua.style.display = "block";
-            vungKetQua.innerHTML = `📄 <strong>DỰ THẢO BÁO CÁO KỸ THUẬT (STANDARD FORMAT):</strong>
---------------------------------------------------
-<strong>CURRENT CASE:</strong> ${tieuDe}
-<strong>Mã lỗi (Error Code):</strong> ${maLoi || 'Không có'}
-<strong>Triệu chứng ban đầu:</strong> ${trieuChung}
-<strong>Kết quả kiểm tra thực tế:</strong> ${ketQua || 'Đang đo đạc'}
-<strong>Linh kiện đã thay thế:</strong> ${linhKien || 'Chưa thay thế'}
-<strong>Nguyên nhân gốc rễ (Root Cause):</strong> ${nguyenNhan || 'Đang phân tích'}
---------------------------------------------------
-📌 <strong>Kỹ sư phụ trách:</strong> [Ký tên & Tích xác nhận CONFIRMED trên hệ thống]`;
         }
 
         function timKiemCaTuongTu() {
