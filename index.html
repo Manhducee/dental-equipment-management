@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý thiết bị nha khoa</title>
 
-    <!-- Thư viện Supabase JS SDK (bản nhẹ chạy trực tiếp trên trình duyệt) -->
+    <!-- Thư viện Supabase JS SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
@@ -24,7 +24,7 @@
             color: #243247;
         }
 
-        button, input {
+        button, input, textarea, select {
             font: inherit;
         }
 
@@ -76,7 +76,7 @@
             color: #334155;
         }
 
-        .nhom-o-nhap input {
+        .nhom-o-nhap input, .nhom-o-nhap textarea, .nhom-o-nhap select {
             width: 100%;
             padding: 10px 12px;
             border: 1px solid #cbd5e1;
@@ -84,7 +84,7 @@
             outline: none;
         }
 
-        .nhom-o-nhap input:focus {
+        .nhom-o-nhap input:focus, .nhom-o-nhap textarea:focus {
             border-color: #245b9e;
         }
 
@@ -168,7 +168,6 @@
             color: white;
         }
 
-        /* KHU VỰC THÔNG TIN TÀI KHOẢN TRÊN MENU */
         .khu-vuc-tai-khoan {
             border-top: 1px solid #2a507d;
             padding-top: 16px;
@@ -233,7 +232,7 @@
         }
 
         /* ==============================
-           4. CÁC THẺ SỐ LIỆU TỔNG QUAN
+           4. THẺ VÀ KHUNG NỘI DUNG
            ============================== */
         .luoi-the {
             display: grid;
@@ -268,9 +267,6 @@
             line-height: 1.5;
         }
 
-        /* ==============================
-           5. CÁC KHUNG NỘI DUNG
-           ============================== */
         .khung {
             background: white;
             border: 1px solid #e5eaf1;
@@ -315,9 +311,18 @@
             background: #dce5ef;
         }
 
-        /* ==============================
-           6. BẢNG DANH SÁCH SỰ CỐ
-           ============================== */
+        /* FORM BỐ TRÍ DẠNG LƯỚI */
+        .luoi-form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .luoi-form .rong-toan-bo {
+            grid-column: span 2;
+        }
+
+        /* BẢNG DỮ LIỆU */
         .vung-bang {
             overflow-x: auto;
         }
@@ -341,9 +346,6 @@
             font-weight: bold;
         }
 
-        /* ==============================
-           7. KHU VỰC TÌM KIẾM
-           ============================== */
         .o-tim-kiem {
             width: 100%;
             max-width: 360px;
@@ -353,13 +355,6 @@
             outline: none;
         }
 
-        .o-tim-kiem:focus {
-            border-color: #245b9e;
-        }
-
-        /* ==============================
-           8. MÀN HÌNH NHỎ & ẨN HIỆN
-           ============================== */
         @media (max-width: 1000px) {
             .luoi-the {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -382,8 +377,12 @@
                 grid-template-columns: 1fr;
             }
 
-            .dau-trang h1 {
-                font-size: 23px;
+            .luoi-form {
+                grid-template-columns: 1fr;
+            }
+
+            .luoi-form .rong-toan-bo {
+                grid-column: span 1;
             }
         }
 
@@ -403,9 +402,7 @@
 
 <body>
 
-    <!-- ==============================
-         MÀN HÌNH ĐĂNG NHẬP
-         ============================== -->
+    <!-- MÀN HÌNH ĐĂNG NHẬP -->
     <div id="man-hinh-dang-nhap" class="man-hinh-dang-nhap">
         <div class="the-dang-nhap">
             <h2>Dental Service</h2>
@@ -428,9 +425,7 @@
         </div>
     </div>
 
-    <!-- ==============================
-         GIAO DIỆN CHÍNH (Chỉ hiện khi đã đăng nhập)
-         ============================== -->
+    <!-- GIAO DIỆN CHÍNH -->
     <div id="giao-dien-chinh" class="an">
 
         <!-- MENU BÊN TRÁI -->
@@ -443,6 +438,7 @@
                 <button class="muc-menu dang-chon" data-trang="tong-quan">▦ &nbsp; Bảng điều khiển</button>
 
                 <div class="nhan-menu">Quản lý dữ liệu</div>
+                <button class="muc-menu" data-trang="phong-kham">🏥 &nbsp; Phòng khám nha khoa</button>
                 <button class="muc-menu" data-trang="thiet-bi">▣ &nbsp; Thiết bị nha khoa</button>
                 <button class="muc-menu" data-trang="yeu-cau">▤ &nbsp; Yêu cầu dịch vụ</button>
                 <button class="muc-menu" data-trang="su-co">⚙ &nbsp; Hồ sơ sự cố</button>
@@ -472,34 +468,25 @@
             <section class="trang dang-hien" id="tong-quan">
                 <div class="luoi-the">
                     <div class="the">
+                        <div class="ten-the">Tổng số phòng khám</div>
+                        <div class="so-lieu" id="tong-phong-kham">0</div>
+                        <div class="ghi-chu-the">Phòng khám trong hệ thống</div>
+                    </div>
+                    <div class="the">
                         <div class="ten-the">Tổng số thiết bị</div>
                         <div class="so-lieu">0</div>
-                        <div class="ghi-chu-the">Thiết bị đã được ghi nhận trong hệ thống</div>
+                        <div class="ghi-chu-the">Thiết bị đã ghi nhận</div>
                     </div>
                     <div class="the">
                         <div class="ten-the">Yêu cầu dịch vụ</div>
                         <div class="so-lieu">0</div>
-                        <div class="ghi-chu-the">Yêu cầu lắp đặt, bảo trì và hỗ trợ</div>
+                        <div class="ghi-chu-the">Yêu cầu lắp đặt, bảo trì</div>
                     </div>
                     <div class="the">
                         <div class="ten-the">Sự cố đang xử lý</div>
                         <div class="so-lieu">0</div>
-                        <div class="ghi-chu-the">Hồ sơ chưa hoàn tất xử lý</div>
+                        <div class="ghi-chu-the">Hồ sơ chưa hoàn tất</div>
                     </div>
-                    <div class="the">
-                        <div class="ten-the">Ca đã xác nhận nguyên nhân</div>
-                        <div class="so-lieu">0</div>
-                        <div class="ghi-chu-the">Chỉ tính ca đã được kỹ sư xác nhận</div>
-                    </div>
-                </div>
-
-                <div class="khung">
-                    <div class="tieu-de-khung">
-                        <h2>Các khu vực làm việc</h2>
-                    </div>
-                    <p class="phu-de">
-                        Chọn một mục ở menu bên trái để bắt đầu. Dữ liệu sẽ được bổ sung khi chúng ta xây dựng các chức năng quản lý.
-                    </p>
                 </div>
 
                 <div class="khung">
@@ -519,7 +506,68 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td colspan="4">Chưa có dữ liệu. Đây là giao diện mẫu.</td>
+                                    <td colspan="4">Chưa có dữ liệu sự cố.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TRANG MỚI: PHÒNG KHÁM NHA KHOA -->
+            <section class="trang" id="phong-kham">
+                <!-- KHUNG THÊM PHÒNG KHÁM MỚI -->
+                <div class="khung">
+                    <div class="tieu-de-khung">
+                        <h2>Thêm phòng khám mới</h2>
+                    </div>
+                    <form id="form-them-phong-kham" class="luoi-form">
+                        <div class="nhom-o-nhap">
+                            <label for="pk-ten">Tên phòng khám (*)</label>
+                            <input type="text" id="pk-ten" required placeholder="Ví dụ: Nha Khoa Nụ Cười">
+                        </div>
+                        <div class="nhom-o-nhap">
+                            <label for="pk-sdt">Số điện thoại</label>
+                            <input type="text" id="pk-sdt" placeholder="Ví dụ: 0912345678">
+                        </div>
+                        <div class="nhom-o-nhap">
+                            <label for="pk-nguoi-lien-he">Người liên hệ</label>
+                            <input type="text" id="pk-nguoi-lien-he" placeholder="Ví dụ: Bác sĩ Minh">
+                        </div>
+                        <div class="nhom-o-nhap">
+                            <label for="pk-dia-chi">Địa chỉ</label>
+                            <input type="text" id="pk-dia-chi" placeholder="Ví dụ: 123 Đường ABC, Quận 1, TP.HCM">
+                        </div>
+                        <div class="nhom-o-nhap rong-toan-bo">
+                            <label for="pk-ghi-chu">Ghi chú</label>
+                            <textarea id="pk-ghi-chu" rows="2" placeholder="Ghi chú thêm nếu có..."></textarea>
+                        </div>
+                        <div class="rong-toan-bo">
+                            <button type="submit" class="nut" id="nut-luu-phong-kham">+ Lưu phòng khám</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- KHUNG DANH SÁCH PHÒNG KHÁM -->
+                <div class="khung">
+                    <div class="tieu-de-khung">
+                        <h2>Danh sách phòng khám</h2>
+                        <button class="nut nut-phu" onclick="taiDanhSachPhongKham()">🔄 Tải lại</button>
+                    </div>
+                    <div class="vung-bang">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tên phòng khám</th>
+                                    <th>Người liên hệ</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Địa chỉ</th>
+                                    <th>Ghi chú</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bang-danh-sach-phong-kham">
+                                <tr>
+                                    <td colspan="5">Đang tải dữ liệu...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -534,7 +582,7 @@
                         <h2>Danh sách thiết bị nha khoa</h2>
                         <button class="nut" onclick="thongBaoChuaCoChucNang()">+ Thêm thiết bị</button>
                     </div>
-                    <p>Tại đây sẽ quản lý tên phòng khám, địa chỉ, loại thiết bị, model, số serial, ngày lắp đặt, cấu hình máy tính và lịch sử bảo trì.</p>
+                    <p>Chức năng thêm và xem thiết bị sẽ được kết nối ở bước tiếp theo.</p>
                 </div>
             </section>
 
@@ -545,7 +593,7 @@
                         <h2>Quản lý yêu cầu dịch vụ</h2>
                         <button class="nut" onclick="thongBaoChuaCoChucNang()">+ Tạo yêu cầu</button>
                     </div>
-                    <p>Quản lý yêu cầu cài đặt phần mềm, lắp đặt thiết bị, bảo trì định kỳ và kiểm tra tổng quát.</p>
+                    <p>Quản lý yêu cầu cài đặt phần mềm, lắp đặt thiết bị, bảo trì định kỳ.</p>
                 </div>
             </section>
 
@@ -556,7 +604,7 @@
                         <h2>Hồ sơ xử lý sự cố</h2>
                         <button class="nut" onclick="thongBaoChuaCoChucNang()">+ Tạo hồ sơ sự cố</button>
                     </div>
-                    <p>Mỗi hồ sơ sẽ lưu phòng khám, thiết bị, ngày xảy ra, triệu chứng, mã lỗi, kết quả kiểm tra, hình ảnh hoặc video và lịch sử xử lý.</p>
+                    <p>Lưu triệu chứng, mã lỗi, kết quả kiểm tra và lịch sử xử lý.</p>
                 </div>
             </section>
 
@@ -576,21 +624,17 @@
                     <div class="tieu-de-khung">
                         <h2>Thư viện kiến thức kỹ thuật</h2>
                     </div>
-                    <p>Tập hợp tài liệu hãng, hướng dẫn xử lý lỗi, quy trình kiểm tra và các nguồn kiến thức tham khảo.</p>
+                    <p>Tập hợp tài liệu hãng, hướng dẫn xử lý lỗi.</p>
                 </div>
             </section>
         </main>
     </div>
 
-    <!-- ==============================
-         KỊCH BẢN JAVASCRIPT XỬ LÝ KẾT NỐI & DỮ LIỆU
-         ============================== -->
+    <!-- JAVASCRIPT XỬ LÝ KẾT NỐI & DỮ LIỆU -->
     <script>
-        // 1. Cấu hình Supabase bằng URL và Key công khai
+        // 1. Cấu hình Supabase
         const SUPABASE_URL = "https://vmwagxhzmnpkrhebbuih.supabase.co";
         const SUPABASE_KEY = "sb_publishable_oVApKGbKNKcDSlHaFEhPIQ_ZuOMmgbI";
-
-        // Khởi tạo đối tượng supabase
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         // Các phần tử giao diện
@@ -602,30 +646,30 @@
         const emailNguoiDung = document.getElementById("email-nguoi-dung");
         const nutDangXuat = document.getElementById("nut-dang-xuat");
 
-        // 2. Kiểm tra trạng thái đăng nhập khi vừa mở trang
+        // 2. Kiểm tra đăng nhập
         async function kiemTraPhienDangNhap() {
             const { data: { session } } = await supabaseClient.auth.getSession();
             capNhatGiaoDien(session);
         }
 
-        // Lắng nghe thay đổi trạng thái đăng nhập/đăng xuất
         supabaseClient.auth.onAuthStateChange((_event, session) => {
             capNhatGiaoDien(session);
         });
 
-        // Đổi màn hình tùy thuộc vào việc người dùng đã đăng nhập hay chưa
         function capNhatGiaoDien(session) {
             if (session) {
                 manHinhDangNhap.classList.add("an");
                 giaoDienChinh.classList.remove("an");
                 emailNguoiDung.textContent = session.user.email;
+                // Tải danh sách phòng khám ngay khi đăng nhập thành công
+                taiDanhSachPhongKham();
             } else {
                 manHinhDangNhap.classList.remove("an");
                 giaoDienChinh.classList.add("an");
             }
         }
 
-        // 3. Xử lý khi nhấn nút Đăng nhập
+        // 3. Xử lý Đăng nhập
         formDangNhap.addEventListener("submit", async function (e) {
             e.preventDefault();
             thongBaoLoi.style.display = "none";
@@ -649,18 +693,100 @@
             nutDangNhap.textContent = "Đăng nhập";
         });
 
-        // 4. Xử lý khi nhấn nút Đăng xuất
+        // 4. Xử lý Đăng xuất
         nutDangXuat.addEventListener("click", async function () {
             await supabaseClient.auth.signOut();
         });
 
-        // 5. Chuyển đổi giữa các trang menu
+        // 5. CHỨC NĂNG QUẢN LÝ PHÒNG KHÁM
+        const formThemPhongKham = document.getElementById("form-them-phong-kham");
+        const nutLuuPhongKham = document.getElementById("nut-luu-phong-kham");
+        const bangDanhSachPhongKham = document.getElementById("bang-danh-sach-phong-kham");
+        const tongPhongKhamSoLieu = document.getElementById("tong-phong-kham");
+
+        // Tải danh sách phòng khám từ Supabase
+        async function taiDanhSachPhongKham() {
+            bangDanhSachPhongKham.innerHTML = '<tr><td colspan="5">Đang tải dữ liệu...</td></tr>';
+
+            const { data, error } = await supabaseClient
+                .from('clinics')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                bangDanhSachPhongKham.innerHTML = `<tr><td colspan="5" style="color: red;">Lỗi tải dữ liệu: ${error.message}</td></tr>`;
+                return;
+            }
+
+            if (!data || data.length === 0) {
+                bangDanhSachPhongKham.innerHTML = '<tr><td colspan="5">Chưa có phòng khám nào trong hệ thống.</td></tr>';
+                tongPhongKhamSoLieu.textContent = "0";
+                return;
+            }
+
+            // Cập nhật tổng số lượng phòng khám ở Bảng điều khiển
+            tongPhongKhamSoLieu.textContent = data.length;
+
+            // Hiển thị danh sách vào bảng
+            let html = '';
+            data.forEach(item => {
+                html += `
+                    <tr>
+                        <td><strong>${item.name || ''}</strong></td>
+                        <td>${item.contact_person || '-'}</td>
+                        <td>${item.phone || '-'}</td>
+                        <td>${item.address || '-'}</td>
+                        <td>${item.notes || '-'}</td>
+                    </tr>
+                `;
+            });
+            bangDanhSachPhongKham.innerHTML = html;
+        }
+
+        // Thêm phòng khám mới vào Supabase
+        formThemPhongKham.addEventListener("submit", async function (e) {
+            e.preventDefault();
+            nutLuuPhongKham.disabled = true;
+            nutLuuPhongKham.textContent = "Đang lưu...";
+
+            const tenPK = document.getElementById("pk-ten").value;
+            const sdtPK = document.getElementById("pk-sdt").value;
+            const nguoiLienHePK = document.getElementById("pk-nguoi-lien-he").value;
+            const diaChiPK = document.getElementById("pk-dia-chi").value;
+            const ghiChuPK = document.getElementById("pk-ghi-chu").value;
+
+            const { data, error } = await supabaseClient
+                .from('clinics')
+                .insert([
+                    {
+                        name: tenPK,
+                        phone: sdtPK || null,
+                        contact_person: nguoiLienHePK || null,
+                        address: diaChiPK || null,
+                        notes: ghiChuPK || null
+                    }
+                ]);
+
+            if (error) {
+                alert("Lỗi khi thêm phòng khám: " + error.message);
+            } else {
+                alert("Thêm phòng khám thành công!");
+                formThemPhongKham.reset();
+                taiDanhSachPhongKham();
+            }
+
+            nutLuuPhongKham.disabled = false;
+            nutLuuPhongKham.textContent = "+ Lưu phòng khám";
+        });
+
+        // 6. Chuyển đổi giữa các trang menu
         const cacNutMenu = document.querySelectorAll(".muc-menu");
         const cacTrang = document.querySelectorAll(".trang");
         const tieuDeTrang = document.getElementById("tieu-de-trang");
 
         const tenCacTrang = {
             "tong-quan": "Bảng điều khiển",
+            "phong-kham": "Phòng khám nha khoa",
             "thiet-bi": "Quản lý thiết bị nha khoa",
             "yeu-cau": "Quản lý yêu cầu dịch vụ",
             "su-co": "Hồ sơ sự cố",
@@ -696,7 +822,7 @@
             alert("Chức năng này chưa được lập trình. Chúng ta sẽ xây dựng ở bước tiếp theo.");
         }
 
-        // Chạy kiểm tra đăng nhập khi trang tải xong
+        // Kiểm tra phiên đăng nhập khi mở trang
         kiemTraPhienDangNhap();
     </script>
 </body>
