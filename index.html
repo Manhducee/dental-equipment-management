@@ -2,7 +2,6 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <!-- Giúp giao diện hiển thị tốt trên máy tính và điện thoại -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý thiết bị nha khoa</title>
 
@@ -84,7 +83,7 @@
             outline: none;
         }
 
-        .nhom-o-nhap input:focus, .nhom-o-nhap textarea:focus {
+        .nhom-o-nhap input:focus, .nhom-o-nhap textarea:focus, .nhom-o-nhap select:focus {
             border-color: #245b9e;
         }
 
@@ -311,7 +310,6 @@
             background: #dce5ef;
         }
 
-        /* FORM BỐ TRÍ DẠNG LƯỚI */
         .luoi-form {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -322,7 +320,6 @@
             grid-column: span 2;
         }
 
-        /* BẢNG DỮ LIỆU */
         .vung-bang {
             overflow-x: auto;
         }
@@ -344,6 +341,29 @@
             color: #64748b;
             background: #f8fafc;
             font-weight: bold;
+        }
+
+        .trang-thai-nhan {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .tt-hoat-dong {
+            background: #dff6e8;
+            color: #207044;
+        }
+
+        .tt-bao-tri {
+            background: #fff1d6;
+            color: #946200;
+        }
+
+        .tt-hong {
+            background: #fde8e8;
+            color: #9b1c1c;
         }
 
         .o-tim-kiem {
@@ -474,7 +494,7 @@
                     </div>
                     <div class="the">
                         <div class="ten-the">Tổng số thiết bị</div>
-                        <div class="so-lieu">0</div>
+                        <div class="so-lieu" id="tong-thiet-bi">0</div>
                         <div class="ghi-chu-the">Thiết bị đã ghi nhận</div>
                     </div>
                     <div class="the">
@@ -514,9 +534,8 @@
                 </div>
             </section>
 
-            <!-- TRANG MỚI: PHÒNG KHÁM NHA KHOA -->
+            <!-- TRANG PHÒNG KHÁM -->
             <section class="trang" id="phong-kham">
-                <!-- KHUNG THÊM PHÒNG KHÁM MỚI -->
                 <div class="khung">
                     <div class="tieu-de-khung">
                         <h2>Thêm phòng khám mới</h2>
@@ -548,7 +567,6 @@
                     </form>
                 </div>
 
-                <!-- KHUNG DANH SÁCH PHÒNG KHÁM -->
                 <div class="khung">
                     <div class="tieu-de-khung">
                         <h2>Danh sách phòng khám</h2>
@@ -575,18 +593,91 @@
                 </div>
             </section>
 
-            <!-- TRANG 2: THIẾT BỊ -->
+            <!-- TRANG THIẾT BỊ NHA KHOA -->
             <section class="trang" id="thiet-bi">
+                <!-- KHUNG THÊM THIẾT BỊ MỚI -->
                 <div class="khung">
                     <div class="tieu-de-khung">
-                        <h2>Danh sách thiết bị nha khoa</h2>
-                        <button class="nut" onclick="thongBaoChuaCoChucNang()">+ Thêm thiết bị</button>
+                        <h2>Thêm thiết bị mới</h2>
                     </div>
-                    <p>Chức năng thêm và xem thiết bị sẽ được kết nối ở bước tiếp theo.</p>
+                    <form id="form-them-thiet-bi" class="luoi-form">
+                        <div class="nhom-o-nhap">
+                            <label for="tb-phong-kham">Phòng khám (*)</label>
+                            <select id="tb-phong-kham" required>
+                                <option value="">-- Chọn phòng khám --</option>
+                            </select>
+                        </div>
+                        <div class="nhom-o-nhap">
+                            <label for="tb-loai">Loại thiết bị (*)</label>
+                            <input type="text" id="tb-loai" required placeholder="Ví dụ: Ghế nha khoa, Máy X-Quang, CT Cone Beam...">
+                        </div>
+                        <div class="nhom-o-nhap">
+                            <label for="tb-model">Model (*)</label>
+                            <input type="text" id="tb-model" required placeholder="Ví dụ: Bright CT, Pax-i...">
+                        </div>
+                        <div class="nhom-o-nhap">
+                            <label for="tb-serial">Số Serial (*)</label>
+                            <input type="text" id="tb-serial" required placeholder="Ví dụ: SN12345678">
+                        </div>
+                        <div class="nhom-o-nhap">
+                            <label for="tb-ngay-lap">Ngày lắp đặt</label>
+                            <input type="date" id="tb-ngay-lap">
+                        </div>
+                        <div class="nhom-o-nhap">
+                            <label for="tb-trang-thai">Trạng thái (*)</label>
+                            <select id="tb-trang-thai" required>
+                                <option value="Đang hoạt động">Đang hoạt động</option>
+                                <option value="Bảo trì">Bảo trì</option>
+                                <option value="Hỏng">Hỏng</option>
+                            </select>
+                        </div>
+                        <div class="nhom-o-nhap">
+                            <label for="tb-cau-hinh">Cấu hình máy tính đi kèm</label>
+                            <input type="text" id="tb-cau-hinh" placeholder="Ví dụ: Core i7, 16GB RAM, RTX 3060">
+                        </div>
+                        <div class="nhom-o-nhap">
+                            <label for="tb-phan-mem">Phiên bản phần mềm</label>
+                            <input type="text" id="tb-phan-mem" placeholder="Ví dụ: Ez3D-i v5.1">
+                        </div>
+                        <div class="nhom-o-nhap rong-toan-bo">
+                            <label for="tb-ghi-chu">Ghi chú</label>
+                            <textarea id="tb-ghi-chu" rows="2" placeholder="Ghi chú thêm về thiết bị..."></textarea>
+                        </div>
+                        <div class="rong-toan-bo">
+                            <button type="submit" class="nut" id="nut-luu-thiet-bi">+ Lưu thiết bị</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- KHUNG DANH SÁCH THIẾT BỊ -->
+                <div class="khung">
+                    <div class="tieu-de-khung">
+                        <h2>Danh sách thiết bị</h2>
+                        <button class="nut nut-phu" onclick="taiDanhSachThietBi()">🔄 Tải lại</button>
+                    </div>
+                    <div class="vung-bang">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Loại thiết bị</th>
+                                    <th>Model</th>
+                                    <th>Số Serial</th>
+                                    <th>Phòng khám</th>
+                                    <th>Trạng thái</th>
+                                    <th>Phiên bản phần mềm</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bang-danh-sach-thiet-bi">
+                                <tr>
+                                    <td colspan="6">Đang tải dữ liệu...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
 
-            <!-- TRANG 3: YÊU CẦU DỊCH VỤ -->
+            <!-- TRANG YÊU CẦU DỊCH VỤ -->
             <section class="trang" id="yeu-cau">
                 <div class="khung">
                     <div class="tieu-de-khung">
@@ -597,7 +688,7 @@
                 </div>
             </section>
 
-            <!-- TRANG 4: HỒ SƠ SỰ CỐ -->
+            <!-- TRANG HỒ SƠ SỰ CỐ -->
             <section class="trang" id="su-co">
                 <div class="khung">
                     <div class="tieu-de-khung">
@@ -608,7 +699,7 @@
                 </div>
             </section>
 
-            <!-- TRANG 5: TRA CỨU CA TƯƠNG TỰ -->
+            <!-- TRANG TRA CỨU CA TƯƠNG TỰ -->
             <section class="trang" id="ca-tuong-tu">
                 <div class="khung">
                     <div class="tieu-de-khung">
@@ -618,7 +709,7 @@
                 </div>
             </section>
 
-            <!-- TRANG 6: TÀI LIỆU KỸ THUẬT -->
+            <!-- TRANG TÀI LIỆU KỸ THUẬT -->
             <section class="trang" id="kien-thuc">
                 <div class="khung">
                     <div class="tieu-de-khung">
@@ -646,6 +737,9 @@
         const emailNguoiDung = document.getElementById("email-nguoi-dung");
         const nutDangXuat = document.getElementById("nut-dang-xuat");
 
+        // Biến lưu tạm danh sách phòng khám để hiển thị tên phòng khám ở bảng thiết bị
+        let danhSachPhongKhamMap = {};
+
         // 2. Kiểm tra đăng nhập
         async function kiemTraPhienDangNhap() {
             const { data: { session } } = await supabaseClient.auth.getSession();
@@ -661,8 +755,10 @@
                 manHinhDangNhap.classList.add("an");
                 giaoDienChinh.classList.remove("an");
                 emailNguoiDung.textContent = session.user.email;
-                // Tải danh sách phòng khám ngay khi đăng nhập thành công
+
+                // Tải danh sách phòng khám và thiết bị khi đăng nhập
                 taiDanhSachPhongKham();
+                taiDanhSachThietBi();
             } else {
                 manHinhDangNhap.classList.remove("an");
                 giaoDienChinh.classList.add("an");
@@ -703,8 +799,8 @@
         const nutLuuPhongKham = document.getElementById("nut-luu-phong-kham");
         const bangDanhSachPhongKham = document.getElementById("bang-danh-sach-phong-kham");
         const tongPhongKhamSoLieu = document.getElementById("tong-phong-kham");
+        const selectThietBiPhongKham = document.getElementById("tb-phong-kham");
 
-        // Tải danh sách phòng khám từ Supabase
         async function taiDanhSachPhongKham() {
             bangDanhSachPhongKham.innerHTML = '<tr><td colspan="5">Đang tải dữ liệu...</td></tr>';
 
@@ -721,15 +817,21 @@
             if (!data || data.length === 0) {
                 bangDanhSachPhongKham.innerHTML = '<tr><td colspan="5">Chưa có phòng khám nào trong hệ thống.</td></tr>';
                 tongPhongKhamSoLieu.textContent = "0";
+                selectThietBiPhongKham.innerHTML = '<option value="">-- Chọn phòng khám --</option>';
                 return;
             }
 
-            // Cập nhật tổng số lượng phòng khám ở Bảng điều khiển
             tongPhongKhamSoLieu.textContent = data.length;
 
-            // Hiển thị danh sách vào bảng
+            // Cập nhật danh sách chọn phòng khám trong form Thêm thiết bị
+            let selectOptions = '<option value="">-- Chọn phòng khám --</option>';
+            danhSachPhongKhamMap = {};
+
             let html = '';
             data.forEach(item => {
+                danhSachPhongKhamMap[item.id] = item.name;
+                selectOptions += `<option value="${item.id}">${item.name}</option>`;
+
                 html += `
                     <tr>
                         <td><strong>${item.name || ''}</strong></td>
@@ -740,10 +842,11 @@
                     </tr>
                 `;
             });
+
             bangDanhSachPhongKham.innerHTML = html;
+            selectThietBiPhongKham.innerHTML = selectOptions;
         }
 
-        // Thêm phòng khám mới vào Supabase
         formThemPhongKham.addEventListener("submit", async function (e) {
             e.preventDefault();
             nutLuuPhongKham.disabled = true;
@@ -779,7 +882,100 @@
             nutLuuPhongKham.textContent = "+ Lưu phòng khám";
         });
 
-        // 6. Chuyển đổi giữa các trang menu
+        // 6. CHỨC NĂNG QUẢN LÝ THIẾT BỊ NHA KHOA
+        const formThemThietBi = document.getElementById("form-them-thiet-bi");
+        const nutLuuThietBi = document.getElementById("nut-luu-thiet-bi");
+        const bangDanhSachThietBi = document.getElementById("bang-danh-sach-thiet-bi");
+        const tongThietBiSoLieu = document.getElementById("tong-thiet-bi");
+
+        async function taiDanhSachThietBi() {
+            bangDanhSachThietBi.innerHTML = '<tr><td colspan="6">Đang tải dữ liệu...</td></tr>';
+
+            const { data, error } = await supabaseClient
+                .from('equipment')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                bangDanhSachThietBi.innerHTML = `<tr><td colspan="6" style="color: red;">Lỗi tải dữ liệu: ${error.message}</td></tr>`;
+                return;
+            }
+
+            if (!data || data.length === 0) {
+                bangDanhSachThietBi.innerHTML = '<tr><td colspan="6">Chưa có thiết bị nào trong hệ thống.</td></tr>';
+                tongThietBiSoLieu.textContent = "0";
+                return;
+            }
+
+            tongThietBiSoLieu.textContent = data.length;
+
+            let html = '';
+            data.forEach(item => {
+                const tenPhongKham = danhSachPhongKhamMap[item.clinic_id] || "Không xác định";
+
+                let lopTrangThai = 'tt-hoat-dong';
+                if (item.status === 'Bảo trì') lopTrangThai = 'tt-bao-tri';
+                if (item.status === 'Hỏng') lopTrangThai = 'tt-hong';
+
+                html += `
+                    <tr>
+                        <td><strong>${item.equipment_type || ''}</strong></td>
+                        <td>${item.model || ''}</td>
+                        <td>${item.serial_number || ''}</td>
+                        <td>${tenPhongKham}</td>
+                        <td><span class="trang-thai-nhan ${lopTrangThai}">${item.status || ''}</span></td>
+                        <td>${item.software_version || '-'}</td>
+                    </tr>
+                `;
+            });
+
+            bangDanhSachThietBi.innerHTML = html;
+        }
+
+        formThemThietBi.addEventListener("submit", async function (e) {
+            e.preventDefault();
+            nutLuuThietBi.disabled = true;
+            nutLuuThietBi.textContent = "Đang lưu...";
+
+            const clinicId = document.getElementById("tb-phong-kham").value;
+            const loaiTB = document.getElementById("tb-loai").value;
+            const modelTB = document.getElementById("tb-model").value;
+            const serialTB = document.getElementById("tb-serial").value;
+            const ngayLapTB = document.getElementById("tb-ngay-lap").value;
+            const trangThaiTB = document.getElementById("tb-trang-thai").value;
+            const cauHinhTB = document.getElementById("tb-cau-hinh").value;
+            const phanMemTB = document.getElementById("tb-phan-mem").value;
+            const ghiChuTB = document.getElementById("tb-ghi-chu").value;
+
+            const { data, error } = await supabaseClient
+                .from('equipment')
+                .insert([
+                    {
+                        clinic_id: clinicId,
+                        equipment_type: loaiTB,
+                        model: modelTB,
+                        serial_number: serialTB,
+                        installation_date: ngayLapTB || null,
+                        status: trangThaiTB,
+                        computer_configuration: cauHinhTB || null,
+                        software_version: phanMemTB || null,
+                        notes: ghiChuTB || null
+                    }
+                ]);
+
+            if (error) {
+                alert("Lỗi khi thêm thiết bị: " + error.message);
+            } else {
+                alert("Thêm thiết bị thành công!");
+                formThemThietBi.reset();
+                taiDanhSachThietBi();
+            }
+
+            nutLuuThietBi.disabled = false;
+            nutLuuThietBi.textContent = "+ Lưu thiết bị";
+        });
+
+        // 7. CHUYỂN ĐỔI GIỮA CÁC TRANG MENU
         const cacNutMenu = document.querySelectorAll(".muc-menu");
         const cacTrang = document.querySelectorAll(".trang");
         const tieuDeTrang = document.getElementById("tieu-de-trang");
