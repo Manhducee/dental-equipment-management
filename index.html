@@ -626,9 +626,9 @@
                         <div class="nhom-o-nhap">
                             <label for="tb-trang-thai">Trạng thái (*)</label>
                             <select id="tb-trang-thai" required>
-                                <option value="Đang hoạt động">Đang hoạt động</option>
-                                <option value="Bảo trì">Bảo trì</option>
-                                <option value="Hỏng">Hỏng</option>
+                                <option value="active">Đang hoạt động</option>
+                                <option value="maintenance">Bảo trì</option>
+                                <option value="inactive">Ngưng hoạt động / Hỏng</option>
                             </select>
                         </div>
                         <div class="nhom-o-nhap">
@@ -823,7 +823,6 @@
 
             tongPhongKhamSoLieu.textContent = data.length;
 
-            // Cập nhật danh sách chọn phòng khám trong form Thêm thiết bị
             let selectOptions = '<option value="">-- Chọn phòng khám --</option>';
             danhSachPhongKhamMap = {};
 
@@ -888,6 +887,13 @@
         const bangDanhSachThietBi = document.getElementById("bang-danh-sach-thiet-bi");
         const tongThietBiSoLieu = document.getElementById("tong-thiet-bi");
 
+        // Ánh xạ từ mã tiếng Anh sang nhãn hiển thị tiếng Việt
+        const tenTrangThaiMap = {
+            'active': 'Đang hoạt động',
+            'maintenance': 'Bảo trì',
+            'inactive': 'Ngưng hoạt động'
+        };
+
         async function taiDanhSachThietBi() {
             bangDanhSachThietBi.innerHTML = '<tr><td colspan="6">Đang tải dữ liệu...</td></tr>';
 
@@ -914,8 +920,10 @@
                 const tenPhongKham = danhSachPhongKhamMap[item.clinic_id] || "Không xác định";
 
                 let lopTrangThai = 'tt-hoat-dong';
-                if (item.status === 'Bảo trì') lopTrangThai = 'tt-bao-tri';
-                if (item.status === 'Hỏng') lopTrangThai = 'tt-hong';
+                if (item.status === 'maintenance') lopTrangThai = 'tt-bao-tri';
+                if (item.status === 'inactive') lopTrangThai = 'tt-hong';
+
+                const hienThiTrangThai = tenTrangThaiMap[item.status] || item.status || '';
 
                 html += `
                     <tr>
@@ -923,7 +931,7 @@
                         <td>${item.model || ''}</td>
                         <td>${item.serial_number || ''}</td>
                         <td>${tenPhongKham}</td>
-                        <td><span class="trang-thai-nhan ${lopTrangThai}">${item.status || ''}</span></td>
+                        <td><span class="trang-thai-nhan ${lopTrangThai}">${hienThiTrangThai}</span></td>
                         <td>${item.software_version || '-'}</td>
                     </tr>
                 `;
