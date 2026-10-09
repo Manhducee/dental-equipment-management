@@ -3,490 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý thiết bị nha khoa</title>
+    <title>Quản lý thiết bị nha khoa - Dentium Technical Service</title>
 
     <!-- Thư viện Supabase JS SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        /* ==============================
-           1. THIẾT LẬP CHUNG CHO GIAO DIỆN
-           ============================== */
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f4f7fb;
-            color: #243247;
-        }
-
-        button, input, textarea, select {
-            font: inherit;
-        }
-
-        button {
-            cursor: pointer;
-        }
-
-        /* KHUNG ĐĂNG NHẬP */
-        .man-hinh-dang-nhap {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: #17365d;
-            padding: 20px;
-        }
-
-        .the-dang-nhap {
-            background: white;
-            padding: 32px;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .the-dang-nhap h2 {
-            margin-top: 0;
-            color: #17365d;
-            font-size: 22px;
-            margin-bottom: 8px;
-        }
-
-        .the-dang-nhap p {
-            color: #64748b;
-            font-size: 13px;
-            margin-bottom: 24px;
-        }
-
-        .nhom-o-nhap {
-            margin-bottom: 16px;
-        }
-
-        .nhom-o-nhap label {
-            display: block;
-            font-size: 13px;
-            font-weight: bold;
-            margin-bottom: 6px;
-            color: #334155;
-        }
-
-        .nhom-o-nhap input, .nhom-o-nhap textarea, .nhom-o-nhap select {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            outline: none;
-        }
-
-        .nhom-o-nhap input:focus, .nhom-o-nhap textarea:focus, .nhom-o-nhap select:focus {
-            border-color: #245b9e;
-        }
-
-        .nut-dang-nhap {
-            width: 100%;
-            padding: 12px;
-            background: #245b9e;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .nut-dang-nhap:hover {
-            background: #173f73;
-        }
-
-        .thong-bao-loi {
-            color: #dc2626;
-            font-size: 13px;
-            margin-top: 12px;
-            display: none;
-        }
-
-        /* ==============================
-           2. THANH MENU BÊN TRÁI
-           ============================== */
-        .thanh-ben {
-            width: 250px;
-            min-height: 100vh;
-            background: #17365d;
-            color: white;
-            position: fixed;
-            top: 0;
-            left: 0;
-            padding: 24px 16px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .ten-phan-mem {
-            font-size: 20px;
-            font-weight: bold;
-            line-height: 1.5;
-            margin: 0 0 6px;
-        }
-
-        .mo-ta-phan-mem {
-            font-size: 12px;
-            color: #cbd8e8;
-            margin-bottom: 32px;
-        }
-
-        .nhan-menu {
-            color: #a9bfd9;
-            font-size: 11px;
-            font-weight: bold;
-            margin: 22px 10px 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .muc-menu {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            margin: 4px 0;
-            color: #e4edf7;
-            background: transparent;
-            border: none;
-            border-radius: 8px;
-            text-align: left;
-            font-size: 14px;
-        }
-
-        .muc-menu:hover,
-        .muc-menu.dang-chon {
-            background: #2a507d;
-            color: white;
-        }
-
-        .khu-vuc-tai-khoan {
-            border-top: 1px solid #2a507d;
-            padding-top: 16px;
-            margin-top: 20px;
-        }
-
-        .email-tai-khoan {
-            font-size: 12px;
-            color: #cbd8e8;
-            margin-bottom: 8px;
-            word-break: break-all;
-        }
-
-        .nut-dang-xuat {
-            width: 100%;
-            padding: 8px;
-            background: #334155;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 12px;
-        }
-
-        .nut-dang-xuat:hover {
-            background: #475569;
-        }
-
-        /* ==============================
-           3. KHU VỰC NỘI DUNG CHÍNH
-           ============================== */
-        .noi-dung {
-            margin-left: 250px;
-            padding: 30px;
-        }
-
-        .dau-trang {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-            margin-bottom: 28px;
-        }
-
-        .dau-trang h1 {
-            margin: 0 0 8px;
-            font-size: 27px;
-        }
-
-        .phu-de {
-            color: #718096;
-            font-size: 14px;
-        }
-
-        .nhan-phien-ban {
-            padding: 9px 13px;
-            border-radius: 8px;
-            background: #e2edff;
-            color: #245b9e;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        /* ==============================
-           4. THẺ VÀ KHUNG NỘI DUNG
-           ============================== */
-        .luoi-the {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 18px;
-            margin-bottom: 28px;
-        }
-
-        .the {
-            background: white;
-            padding: 22px;
-            border: 1px solid #e5eaf1;
-            border-radius: 12px;
-        }
-
-        .ten-the {
-            color: #64748b;
-            font-size: 13px;
-            margin-bottom: 15px;
-        }
-
-        .so-lieu {
-            font-size: 30px;
-            font-weight: bold;
-            color: #17365d;
-            margin-bottom: 10px;
-        }
-
-        .ghi-chu-the {
-            font-size: 12px;
-            color: #718096;
-            line-height: 1.5;
-        }
-
-        .khung {
-            background: white;
-            border: 1px solid #e5eaf1;
-            border-radius: 12px;
-            padding: 22px;
-            margin-bottom: 22px;
-        }
-
-        /* KHUNG AI HỖ TRỢ */
-        .khung-ai {
-            background: #f0f7ff;
-            border: 1px solid #cce3ff;
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        .khung-ai h3 {
-            margin-top: 0;
-            color: #1e40af;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .ket-qua-ai {
-            background: white;
-            border: 1px solid #dbeafe;
-            border-radius: 8px;
-            padding: 14px;
-            font-size: 13px;
-            line-height: 1.6;
-            color: #1e293b;
-            white-space: pre-line;
-            margin-top: 12px;
-        }
-
-        .tieu-de-khung {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 18px;
-        }
-
-        .tieu-de-khung h2 {
-            margin: 0;
-            font-size: 18px;
-        }
-
-        .nut {
-            padding: 10px 14px;
-            border: none;
-            border-radius: 7px;
-            background: #245b9e;
-            color: white;
-            font-size: 13px;
-        }
-
-        .nut:hover {
-            background: #173f73;
-        }
-
-        .nut-ai {
-            background: #2563eb;
-            color: white;
-        }
-
-        .nut-ai:hover {
-            background: #1d4ed8;
-        }
-
-        .nut-phu {
-            background: #edf2f7;
-            color: #334155;
-        }
-
-        .nut-phu:hover {
-            background: #dce5ef;
-        }
-
-        .luoi-form {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-        }
-
-        .luoi-form .rong-toan-bo {
-            grid-column: span 2;
-        }
-
-        .nhom-checkbox {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .nhom-checkbox input {
-            width: auto;
-        }
-
-        .vung-bang {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 650px;
-        }
-
-        th, td {
-            text-align: left;
-            padding: 14px 12px;
-            border-bottom: 1px solid #edf0f5;
-            font-size: 13px;
-        }
-
-        th {
-            color: #64748b;
-            background: #f8fafc;
-            font-weight: bold;
-        }
-
-        .trang-thai-nhan {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: bold;
-        }
-
-        .tt-hoat-dong, .tt-completed, .tt-resolved, .tt-closed {
-            background: #dff6e8;
-            color: #207044;
-        }
-
-        .tt-bao-tri, .tt-pending, .tt-open, .tt-investigating {
-            background: #fff1d6;
-            color: #946200;
-        }
-
-        .tt-hong, .tt-cancelled {
-            background: #fde8e8;
-            color: #9b1c1c;
-        }
-
-        .nhan-xac-nhan {
-            display: inline-block;
-            padding: 3px 6px;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: bold;
-            background: #e2f0d9;
-            color: #385723;
-        }
-
-        .nhan-chua-xac-nhan {
-            display: inline-block;
-            padding: 3px 6px;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: bold;
-            background: #fce4d6;
-            color: #c65911;
-        }
-
-        .o-tim-kiem {
-            width: 100%;
-            max-width: 360px;
-            padding: 11px 13px;
-            border: 1px solid #d9e1eb;
-            border-radius: 8px;
-            outline: none;
-        }
-
-        @media (max-width: 1000px) {
-            .luoi-the {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-        }
-
-        @media (max-width: 700px) {
-            .thanh-ben {
-                position: static;
-                width: 100%;
-                min-height: auto;
-            }
-
-            .noi-dung {
-                margin-left: 0;
-                padding: 18px;
-            }
-
-            .luoi-the {
-                grid-template-columns: 1fr;
-            }
-
-            .luoi-form {
-                grid-template-columns: 1fr;
-            }
-
-            .luoi-form .rong-toan-bo {
-                grid-column: span 1;
-            }
-        }
-
-        .trang {
-            display: none;
-        }
-
-        .trang.dang-hien {
-            display: block;
-        }
-
-        .an {
-            display: none !important;
-        }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f4f7fb; color: #243247; }
+        button, input, textarea, select { font: inherit; }
+        button { cursor: pointer; }
+
+        .man-hinh-dang-nhap { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #17365d; padding: 20px; }
+        .the-dang-nhap { background: white; padding: 32px; border-radius: 12px; width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .the-dang-nhap h2 { margin-top: 0; color: #17365d; font-size: 22px; margin-bottom: 8px; }
+        .the-dang-nhap p { color: #64748b; font-size: 13px; margin-bottom: 24px; }
+        .nhom-o-nhap { margin-bottom: 16px; }
+        .nhom-o-nhap label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 6px; color: #334155; }
+        .nhom-o-nhap input, .nhom-o-nhap textarea, .nhom-o-nhap select { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; }
+        .nhom-o-nhap input:focus, .nhom-o-nhap textarea:focus, .nhom-o-nhap select:focus { border-color: #245b9e; }
+        .nut-dang-nhap { width: 100%; padding: 12px; background: #245b9e; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 14px; }
+        .nut-dang-nhap:hover { background: #173f73; }
+        .thong-bao-loi { color: #dc2626; font-size: 13px; margin-top: 12px; display: none; }
+
+        .thanh-ben { width: 250px; min-height: 100vh; background: #17365d; color: white; position: fixed; top: 0; left: 0; padding: 24px 16px; display: flex; flex-direction: column; justify-content: space-between; }
+        .ten-phan-mem { font-size: 20px; font-weight: bold; line-height: 1.5; margin: 0 0 6px; }
+        .mo-ta-phan-mem { font-size: 12px; color: #cbd8e8; margin-bottom: 32px; }
+        .nhan-menu { color: #a9bfd9; font-size: 11px; font-weight: bold; margin: 22px 10px 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .muc-menu { display: block; width: 100%; padding: 12px; margin: 4px 0; color: #e4edf7; background: transparent; border: none; border-radius: 8px; text-align: left; font-size: 14px; }
+        .muc-menu:hover, .muc-menu.dang-chon { background: #2a507d; color: white; }
+        .khu-vuc-tai-khoan { border-top: 1px solid #2a507d; padding-top: 16px; margin-top: 20px; }
+        .email-tai-khoan { font-size: 12px; color: #cbd8e8; margin-bottom: 8px; word-break: break-all; }
+        .nut-dang-xuat { width: 100%; padding: 8px; background: #334155; color: white; border: none; border-radius: 6px; font-size: 12px; }
+
+        .noi-dung { margin-left: 250px; padding: 30px; }
+        .dau-trang { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 28px; }
+        .dau-trang h1 { margin: 0 0 8px; font-size: 27px; }
+        .phu-de { color: #718096; font-size: 14px; }
+        .nhan-phien-ban { padding: 9px 13px; border-radius: 8px; background: #e2edff; color: #245b9e; font-size: 12px; font-weight: bold; }
+
+        .luoi-the { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin-bottom: 28px; }
+        .the { background: white; padding: 22px; border: 1px solid #e5eaf1; border-radius: 12px; }
+        .ten-the { color: #64748b; font-size: 13px; margin-bottom: 15px; }
+        .so-lieu { font-size: 30px; font-weight: bold; color: #17365d; margin-bottom: 10px; }
+        .ghi-chu-the { font-size: 12px; color: #718096; line-height: 1.5; }
+
+        .khung { background: white; border: 1px solid #e5eaf1; border-radius: 12px; padding: 22px; margin-bottom: 22px; }
+        .khung-ai { background: #f0f7ff; border: 1px solid #cce3ff; border-radius: 12px; padding: 20px; margin-bottom: 22px; }
+        .khung-ai h3 { margin-top: 0; color: #1e40af; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+        .ket-qua-ai { background: white; border: 1px solid #dbeafe; border-radius: 8px; padding: 16px; font-size: 13px; line-height: 1.6; color: #1e293b; white-space: pre-line; margin-top: 12px; }
+
+        .tieu-de-khung { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+        .tieu-de-khung h2 { margin: 0; font-size: 18px; }
+
+        .nut { padding: 10px 14px; border: none; border-radius: 7px; background: #245b9e; color: white; font-size: 13px; }
+        .nut:hover { background: #173f73; }
+        .nut-ai { background: #2563eb; color: white; }
+        .nut-ai:hover { background: #1d4ed8; }
+        .nut-lk { background: #059669; color: white; text-decoration: none; display: inline-block; padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; margin-top: 10px; }
+        .nut-lk:hover { background: #047857; }
+        .nut-phu { background: #edf2f7; color: #334155; }
+
+        .luoi-form { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .luoi-form .rong-toan-bo { grid-column: span 2; }
+        .nhom-checkbox { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+        .nhom-checkbox input { width: auto; }
+
+        .vung-bang { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 650px; }
+        th, td { text-align: left; padding: 14px 12px; border-bottom: 1px solid #edf0f5; font-size: 13px; }
+        th { color: #64748b; background: #f8fafc; font-weight: bold; }
+
+        .trang-thai-nhan { display: inline-block; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; }
+        .tt-hoat-dong, .tt-completed, .tt-resolved, .tt-closed { background: #dff6e8; color: #207044; }
+        .tt-bao-tri, .tt-pending, .tt-open, .tt-investigating { background: #fff1d6; color: #946200; }
+        .tt-hong, .tt-cancelled { background: #fde8e8; color: #9b1c1c; }
+
+        .nhan-xac-nhan { display: inline-block; padding: 3px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; background: #e2f0d9; color: #385723; }
+        .nhan-chua-xac-nhan { display: inline-block; padding: 3px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; background: #fce4d6; color: #c65911; }
+
+        .o-tim-kiem { width: 100%; max-width: 360px; padding: 11px 13px; border: 1px solid #d9e1eb; border-radius: 8px; outline: none; }
+
+        .trang { display: none; }
+        .trang.dang-hien { display: block; }
+        .an { display: none !important; }
     </style>
 </head>
 
@@ -503,12 +103,10 @@
                     <label for="email">Email</label>
                     <input type="email" id="email" required placeholder="nhap-email@domain.com">
                 </div>
-
                 <div class="nhom-o-nhap">
                     <label for="mat-khau">Mật khẩu</label>
                     <input type="password" id="mat-khau" required placeholder="••••••••">
                 </div>
-
                 <button type="submit" class="nut-dang-nhap" id="nut-dang-nhap">Đăng nhập</button>
                 <div id="thong-bao-loi" class="thong-bao-loi"></div>
             </form>
@@ -595,9 +193,7 @@
                                 </tr>
                             </thead>
                             <tbody id="bang-su-co-gan-day">
-                                <tr>
-                                    <td colspan="4">Chưa có dữ liệu sự cố.</td>
-                                </tr>
+                                <tr><td colspan="4">Chưa có dữ liệu sự cố.</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -607,33 +203,14 @@
             <!-- TRANG PHÒNG KHÁM -->
             <section class="trang" id="phong-kham">
                 <div class="khung">
-                    <div class="tieu-de-khung">
-                        <h2>Thêm phòng khám mới</h2>
-                    </div>
+                    <div class="tieu-de-khung"><h2>Thêm phòng khám mới</h2></div>
                     <form id="form-them-phong-kham" class="luoi-form">
-                        <div class="nhom-o-nhap">
-                            <label for="pk-ten">Tên phòng khám (*)</label>
-                            <input type="text" id="pk-ten" required placeholder="Ví dụ: Nha Khoa Nụ Cười">
-                        </div>
-                        <div class="nhom-o-nhap">
-                            <label for="pk-sdt">Số điện thoại</label>
-                            <input type="text" id="pk-sdt" placeholder="Ví dụ: 0912345678">
-                        </div>
-                        <div class="nhom-o-nhap">
-                            <label for="pk-nguoi-lien-he">Người liên hệ</label>
-                            <input type="text" id="pk-nguoi-lien-he" placeholder="Ví dụ: Bác sĩ Minh">
-                        </div>
-                        <div class="nhom-o-nhap">
-                            <label for="pk-dia-chi">Địa chỉ</label>
-                            <input type="text" id="pk-dia-chi" placeholder="Ví dụ: 123 Đường ABC, Quận 1, TP.HCM">
-                        </div>
-                        <div class="nhom-o-nhap rong-toan-bo">
-                            <label for="pk-ghi-chu">Ghi chú</label>
-                            <textarea id="pk-ghi-chu" rows="2" placeholder="Ghi chú thêm nếu có..."></textarea>
-                        </div>
-                        <div class="rong-toan-bo">
-                            <button type="submit" class="nut" id="nut-luu-phong-kham">+ Lưu phòng khám</button>
-                        </div>
+                        <div class="nhom-o-nhap"><label for="pk-ten">Tên phòng khám (*)</label><input type="text" id="pk-ten" required placeholder="Ví dụ: Nha Khoa SGBT Lagu"></div>
+                        <div class="nhom-o-nhap"><label for="pk-sdt">Số điện thoại</label><input type="text" id="pk-sdt" placeholder="Ví dụ: 0912345678"></div>
+                        <div class="nhom-o-nhap"><label for="pk-nguoi-lien-he">Người liên hệ</label><input type="text" id="pk-nguoi-lien-he" placeholder="Ví dụ: Bs Tair"></div>
+                        <div class="nhom-o-nhap"><label for="pk-dia-chi">Địa chỉ</label><input type="text" id="pk-dia-chi" placeholder="Ví dụ: 123 Đường ABC, Quận 1, TP.HCM"></div>
+                        <div class="nhom-o-nhap rong-toan-bo"><label for="pk-ghi-chu">Ghi chú</label><textarea id="pk-ghi-chu" rows="2" placeholder="Ghi chú thêm nếu có..."></textarea></div>
+                        <div class="rong-toan-bo"><button type="submit" class="nut" id="nut-luu-phong-kham">+ Lưu phòng khám</button></div>
                     </form>
                 </div>
 
@@ -645,19 +222,9 @@
                     <div class="vung-bang">
                         <table>
                             <thead>
-                                <tr>
-                                    <th>Tên phòng khám</th>
-                                    <th>Người liên hệ</th>
-                                    <th>Số điện thoại</th>
-                                    <th>Địa chỉ</th>
-                                    <th>Ghi chú</th>
-                                </tr>
+                                <tr><th>Tên phòng khám</th><th>Người liên hệ</th><th>Số điện thoại</th><th>Địa chỉ</th><th>Ghi chú</th></tr>
                             </thead>
-                            <tbody id="bang-danh-sach-phong-kham">
-                                <tr>
-                                    <td colspan="5">Đang tải dữ liệu...</td>
-                                </tr>
-                            </tbody>
+                            <tbody id="bang-danh-sach-phong-kham"><tr><td colspan="5">Đang tải dữ liệu...</td></tr></tbody>
                         </table>
                     </div>
                 </div>
@@ -666,55 +233,18 @@
             <!-- TRANG THIẾT BỊ NHA KHOA -->
             <section class="trang" id="thiet-bi">
                 <div class="khung">
-                    <div class="tieu-de-khung">
-                        <h2>Thêm thiết bị mới</h2>
-                    </div>
+                    <div class="tieu-de-khung"><h2>Thêm thiết bị mới</h2></div>
                     <form id="form-them-thiet-bi" class="luoi-form">
-                        <div class="nhom-o-nhap">
-                            <label for="tb-phong-kham">Phòng khám (*)</label>
-                            <select id="tb-phong-kham" required>
-                                <option value="">-- Chọn phòng khám --</option>
-                            </select>
-                        </div>
-                        <div class="nhom-o-nhap">
-                            <label for="tb-loai">Loại thiết bị (*)</label>
-                            <input type="text" id="tb-loai" required placeholder="Ví dụ: Ghế nha khoa, Máy X-Quang, CT Cone Beam...">
-                        </div>
-                        <div class="nhom-o-nhap">
-                            <label for="tb-model">Model (*)</label>
-                            <input type="text" id="tb-model" required placeholder="Ví dụ: Bright CT, Pax-i...">
-                        </div>
-                        <div class="nhom-o-nhap">
-                            <label for="tb-serial">Số Serial (*)</label>
-                            <input type="text" id="tb-serial" required placeholder="Ví dụ: SN12345678">
-                        </div>
-                        <div class="nhom-o-nhap">
-                            <label for="tb-ngay-lap">Ngày lắp đặt</label>
-                            <input type="date" id="tb-ngay-lap">
-                        </div>
-                        <div class="nhom-o-nhap">
-                            <label for="tb-trang-thai">Trạng thái (*)</label>
-                            <select id="tb-trang-thai" required>
-                                <option value="active">Đang hoạt động</option>
-                                <option value="maintenance">Bảo trì</option>
-                                <option value="inactive">Ngưng hoạt động / Hỏng</option>
-                            </select>
-                        </div>
-                        <div class="nhom-o-nhap">
-                            <label for="tb-cau-hinh">Cấu hình máy tính đi kèm</label>
-                            <input type="text" id="tb-cau-hinh" placeholder="Ví dụ: Core i7, 16GB RAM, RTX 3060">
-                        </div>
-                        <div class="nhom-o-nhap">
-                            <label for="tb-phan-mem">Phiên bản phần mềm</label>
-                            <input type="text" id="tb-phan-mem" placeholder="Ví dụ: Ez3D-i v5.1">
-                        </div>
-                        <div class="nhom-o-nhap rong-toan-bo">
-                            <label for="tb-ghi-chu">Ghi chú</label>
-                            <textarea id="tb-ghi-chu" rows="2" placeholder="Ghi chú thêm về thiết bị..."></textarea>
-                        </div>
-                        <div class="rong-toan-bo">
-                            <button type="submit" class="nut" id="nut-luu-thiet-bi">+ Lưu thiết bị</button>
-                        </div>
+                        <div class="nhom-o-nhap"><label for="tb-phong-kham">Phòng khám (*)</label><select id="tb-phong-kham" required><option value="">-- Chọn phòng khám --</option></select></div>
+                        <div class="nhom-o-nhap"><label for="tb-loai">Loại thiết bị (*)</label><input type="text" id="tb-loai" required placeholder="Ví dụ: Ghế nha khoa, Máy X-Quang, CT Cone Beam..."></div>
+                        <div class="nhom-o-nhap"><label for="tb-model">Model (*)</label><input type="text" id="tb-model" required placeholder="Ví dụ: Bright CT, Pax-i..."></div>
+                        <div class="nhom-o-nhap"><label for="tb-serial">Số Serial (*)</label><input type="text" id="tb-serial" required placeholder="Ví dụ: SN12345678"></div>
+                        <div class="nhom-o-nhap"><label for="tb-ngay-lap">Ngày lắp đặt</label><input type="date" id="tb-ngay-lap"></div>
+                        <div class="nhom-o-nhap"><label for="tb-trang-thai">Trạng thái (*)</label><select id="tb-trang-thai" required><option value="active">Đang hoạt động</option><option value="maintenance">Bảo trì</option><option value="inactive">Ngưng hoạt động / Hỏng</option></select></div>
+                        <div class="nhom-o-nhap"><label for="tb-cau-hinh">Cấu hình máy tính đi kèm</label><input type="text" id="tb-cau-hinh" placeholder="Ví dụ: Core i7, 16GB RAM, RTX 3060"></div>
+                        <div class="nhom-o-nhap"><label for="tb-phan-mem">Phiên bản phần mềm</label><input type="text" id="tb-phan-mem" placeholder="Ví dụ: Ez3D-i v5.1"></div>
+                        <div class="nhom-o-nhap rong-toan-bo"><label for="tb-ghi-chu">Ghi chú</label><textarea id="tb-ghi-chu" rows="2" placeholder="Ghi chú thêm về thiết bị..."></textarea></div>
+                        <div class="rong-toan-bo"><button type="submit" class="nut" id="nut-luu-thiet-bi">+ Lưu thiết bị</button></div>
                     </form>
                 </div>
 
@@ -726,20 +256,9 @@
                     <div class="vung-bang">
                         <table>
                             <thead>
-                                <tr>
-                                    <th>Loại thiết bị</th>
-                                    <th>Model</th>
-                                    <th>Số Serial</th>
-                                    <th>Phòng khám</th>
-                                    <th>Trạng thái</th>
-                                    <th>Phiên bản phần mềm</th>
-                                </tr>
+                                <tr><th>Loại thiết bị</th><th>Model</th><th>Số Serial</th><th>Phòng khám</th><th>Trạng thái</th><th>Phiên bản phần mềm</th></tr>
                             </thead>
-                            <tbody id="bang-danh-sach-thiet-bi">
-                                <tr>
-                                    <td colspan="6">Đang tải dữ liệu...</td>
-                                </tr>
-                            </tbody>
+                            <tbody id="bang-danh-sach-thiet-bi"><tr><td colspan="6">Đang tải dữ liệu...</td></tr></tbody>
                         </table>
                     </div>
                 </div>
@@ -747,53 +266,33 @@
 
             <!-- TRANG YÊU CẦU DỊCH VỤ -->
             <section class="trang" id="yeu-cau">
-                <div class="khung">
-                    <div class="tieu-de-khung">
-                        <h2>Tạo yêu cầu dịch vụ mới</h2>
+                <div class="khung-ai">
+                    <h3>⚡ Phân tích & Tiếp nhận yêu cầu nhanh từ Sales</h3>
+                    <p style="font-size: 12px; color: #475569; margin-bottom: 12px;">
+                        Dán trực tiếp tin nhắn từ Sales. AI sẽ tự tách CASE cách biệt và phân tích quy trình Remote First!
+                    </p>
+                    <textarea id="van-ban-sales" rows="4" style="width: 100%; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px; font-size: 13px;" placeholder="Ví dụ:
+Tên nha khoa : SGBT Lagu
+Mô tả vấn đề: Cài phần mềm máy CT, và nhờ kĩ thuật ktra máy Ct
+Thời gian: 09/10/2026
+Liên hệ: Bs Tair"></textarea>
+                    
+                    <div style="margin-top: 10px; display: flex; gap: 10px;">
+                        <button type="button" class="nut nut-ai" onclick="xuLyTinNhanSales()">⚡ Phân tích & Chuẩn hóa CASE</button>
                     </div>
+                    <div id="ket-qua-sales-ai" class="ket-qua-ai" style="display: none;"></div>
+                </div>
+
+                <div class="khung">
+                    <div class="tieu-de-khung"><h2>Tạo yêu cầu dịch vụ mới (Thủ công)</h2></div>
                     <form id="form-them-yeu-cau" class="luoi-form">
-                        <div class="nhom-o-nhap">
-                            <label for="yc-phong-kham">Phòng khám (*)</label>
-                            <select id="yc-phong-kham" required onchange="capNhatOptionThietBi('yc-phong-kham', 'yc-thiet-bi')">
-                                <option value="">-- Chọn phòng khám --</option>
-                            </select>
-                        </div>
-                        <div class="nhom-o-nhap">
-                            <label for="yc-thiet-bi">Thiết bị (Nếu có)</label>
-                            <select id="yc-thiet-bi">
-                                <option value="">-- Chọn thiết bị --</option>
-                            </select>
-                        </div>
-                        <div class="nhom-o-nhap">
-                            <label for="yc-loai">Loại dịch vụ (*)</label>
-                            <select id="yc-loai" required>
-                                <option value="installation">Lắp đặt thiết bị</option>
-                                <option value="software_setup">Cài đặt phần mềm</option>
-                                <option value="maintenance">Bảo trì định kỳ</option>
-                                <option value="inspection">Kiểm tra tổng quát</option>
-                                <option value="other">Yêu cầu khác</option>
-                            </select>
-                        </div>
-                        <div class="nhom-o-nhap">
-                            <label for="yc-uu-tien">Mức độ ưu tiên (*)</label>
-                            <select id="yc-uu-tien" required>
-                                <option value="low">Thấp</option>
-                                <option value="medium" selected>Trung bình</option>
-                                <option value="high">Cao</option>
-                                <option value="urgent">Khẩn cấp</option>
-                            </select>
-                        </div>
-                        <div class="nhom-o-nhap rong-toan-bo">
-                            <label for="yc-tieu-de">Tiêu đề yêu cầu (*)</label>
-                            <input type="text" id="yc-tieu-de" required placeholder="Ví dụ: Cài lại phần mềm Ez3D-i cho phòng CT">
-                        </div>
-                        <div class="nhom-o-nhap rong-toan-bo">
-                            <label for="yc-mo-ta">Mô tả chi tiết</label>
-                            <textarea id="yc-mo-ta" rows="2" placeholder="Chi tiết yêu cầu của bác sĩ/phòng khám..."></textarea>
-                        </div>
-                        <div class="rong-toan-bo">
-                            <button type="submit" class="nut" id="nut-luu-yeu-cau">+ Tạo yêu cầu dịch vụ</button>
-                        </div>
+                        <div class="nhom-o-nhap"><label for="yc-phong-kham">Phòng khám (*)</label><select id="yc-phong-kham" required onchange="capNhatOptionThietBi('yc-phong-kham', 'yc-thiet-bi')"><option value="">-- Chọn phòng khám --</option></select></div>
+                        <div class="nhom-o-nhap"><label for="yc-thiet-bi">Thiết bị (Nếu có)</label><select id="yc-thiet-bi"><option value="">-- Chọn thiết bị --</option></select></div>
+                        <div class="nhom-o-nhap"><label for="yc-loai">Loại dịch vụ (*)</label><select id="yc-loai" required><option value="installation">Lắp đặt thiết bị</option><option value="software_setup">Cài đặt phần mềm</option><option value="maintenance">Bảo trì định kỳ</option><option value="inspection">Kiểm tra tổng quát</option><option value="other">Yêu cầu khác</option></select></div>
+                        <div class="nhom-o-nhap"><label for="yc-uu-tien">Mức độ ưu tiên (*)</label><select id="yc-uu-tien" required><option value="low">Thấp</option><option value="medium" selected>Trung bình</option><option value="high">Cao</option><option value="urgent">Khẩn cấp</option></select></div>
+                        <div class="nhom-o-nhap rong-toan-bo"><label for="yc-tieu-de">Tiêu đề yêu cầu (*)</label><input type="text" id="yc-tieu-de" required placeholder="Ví dụ: Cài lại phần mềm Ez3D-i cho phòng CT"></div>
+                        <div class="nhom-o-nhap rong-toan-bo"><label for="yc-mo-ta">Mô tả chi tiết</label><textarea id="yc-mo-ta" rows="2" placeholder="Chi tiết yêu cầu của bác sĩ/phòng khám..."></textarea></div>
+                        <div class="rong-toan-bo"><button type="submit" class="nut" id="nut-luu-yeu-cau">+ Tạo yêu cầu dịch vụ</button></div>
                     </form>
                 </div>
 
@@ -805,20 +304,9 @@
                     <div class="vung-bang">
                         <table>
                             <thead>
-                                <tr>
-                                    <th>Tiêu đề</th>
-                                    <th>Loại dịch vụ</th>
-                                    <th>Phòng khám</th>
-                                    <th>Ưu tiên</th>
-                                    <th>Trạng thái</th>
-                                    <th>Ngày yêu cầu</th>
-                                </tr>
+                                <tr><th>Tiêu đề</th><th>Loại dịch vụ</th><th>Phòng khám</th><th>Ưu tiên</th><th>Trạng thái</th><th>Ngày yêu cầu</th></tr>
                             </thead>
-                            <tbody id="bang-danh-sach-yeu-cau">
-                                <tr>
-                                    <td colspan="6">Đang tải dữ liệu...</td>
-                                </tr>
-                            </tbody>
+                            <tbody id="bang-danh-sach-yeu-cau"><tr><td colspan="6">Đang tải dữ liệu...</td></tr></tbody>
                         </table>
                     </div>
                 </div>
@@ -827,91 +315,47 @@
             <!-- TRANG HỒ SƠ SỰ CỐ -->
             <section class="trang" id="su-co">
                 <div class="khung">
-                    <div class="tieu-de-khung">
-                        <h2>Tạo hồ sơ xử lý sự cố mới</h2>
-                    </div>
+                    <div class="tieu-de-khung"><h2>Tạo hồ sơ xử lý sự cố mới (Bright CT Troubleshooting)</h2></div>
                     <form id="form-them-su-co" class="luoi-form">
-                        <div class="nhom-o-nhap">
-                            <label for="sc-phong-kham">Phòng khám (*)</label>
-                            <select id="sc-phong-kham" required onchange="capNhatOptionThietBi('sc-phong-kham', 'sc-thiet-bi')">
-                                <option value="">-- Chọn phòng khám --</option>
-                            </select>
-                        </div>
-                        <div class="nhom-o-nhap">
-                            <label for="sc-thiet-bi">Thiết bị bị sự cố (*)</label>
-                            <select id="sc-thiet-bi" required>
-                                <option value="">-- Chọn thiết bị --</option>
-                            </select>
-                        </div>
-                        <div class="nhom-o-nhap rong-toan-bo">
-                            <label for="sc-tieu-de">Tên/Tiêu đề sự cố (*)</label>
-                            <input type="text" id="sc-tieu-de" required placeholder="Ví dụ: Máy CT không phát tia X, báo lỗi E04">
-                        </div>
-                        <div class="nhom-o-nhap">
-                            <label for="sc-trieu-chung">Triệu chứng thực tế (*)</label>
-                            <textarea id="sc-trieu-chung" rows="2" required placeholder="Mô tả hiện tượng lỗi..."></textarea>
-                        </div>
-                        <div class="nhom-o-nhap">
-                            <label for="sc-ma-loi">Mã lỗi (Error Code)</label>
-                            <input type="text" id="sc-ma-loi" placeholder="Ví dụ: Err 04, Err 102...">
-                        </div>
-                        <div class="nhom-o-nhap">
-                            <label for="sc-dieu-kien">Điều kiện xảy ra sự cố</label>
-                            <input type="text" id="sc-dieu-kien" placeholder="Ví dụ: Khi bắt đầu bấm phát tia Panorama...">
-                        </div>
-                        <div class="nhom-o-nhap">
-                            <label for="sc-cau-hinh">Cấu hình máy tính lúc bị lỗi</label>
-                            <input type="text" id="sc-cau-hinh" placeholder="Ví dụ: Win 11 64-bit, Card Nvidia v535...">
-                        </div>
-                        <div class="nhom-o-nhap">
-                            <label for="sc-buoc-kiem-tra">Các bước đã kiểm tra</label>
-                            <textarea id="sc-buoc-kiem-tra" rows="2" placeholder="1. Đo nguồn 24V... 2. Kiểm tra cáp tín hiệu..."></textarea>
-                        </div>
-                        <div class="nhom-o-nhap">
-                            <label for="sc-ket-qua">Kết quả đo đạc / kiểm tra thực tế</label>
-                            <textarea id="sc-ket-qua" rows="2" placeholder="Mất nguồn 24V cấp cho bo mạch chính..."></textarea>
-                        </div>
-                        <div class="nhom-o-nhap">
-                            <label for="sc-linh-kien">Linh kiện đã thay thế</label>
-                            <input type="text" id="sc-linh-kien" placeholder="Ví dụ: Nguồn Power Supply 24V-10A">
-                        </div>
-                        <div class="nhom-o-nhap">
-                            <label for="sc-nguyen-nhan">Nguyên nhân gốc rễ (Root Cause)</label>
-                            <textarea id="sc-nguyen-nhan" rows="2" placeholder="Tụ điện trên bộ nguồn bị hỏng do điện áp phòng khám chập chờn..."></textarea>
-                        </div>
-                        <div class="nhom-o-nhap">
-                            <label for="sc-trang-thai">Trạng thái hồ sơ (*)</label>
-                            <select id="sc-trang-thai" required>
-                                <option value="open">Mới ghi nhận (Open)</option>
-                                <option value="investigating">Đang kiểm tra/xử lý (Investigating)</option>
-                                <option value="resolved">Đã xử lý xong (Resolved)</option>
-                                <option value="closed">Đã đóng hồ sơ (Closed)</option>
-                            </select>
-                        </div>
-                        <div class="nhom-o-nhap">
-                            <label>Xác nhận nguyên nhân</label>
-                            <div class="nhom-checkbox">
-                                <input type="checkbox" id="sc-xac-nhan-ky-su">
-                                <label for="sc-xac-nhan-ky-su">Kỹ sư đã xác nhận nguyên nhân gốc rễ</label>
-                            </div>
-                        </div>
+                        <div class="nhom-o-nhap"><label for="sc-phong-kham">Phòng khám (*)</label><select id="sc-phong-kham" required onchange="capNhatOptionThietBi('sc-phong-kham', 'sc-thiet-bi')"><option value="">-- Chọn phòng khám --</option></select></div>
+                        <div class="nhom-o-nhap"><label for="sc-thiet-bi">Thiết bị bị sự cố (*)</label><select id="sc-thiet-bi" required><option value="">-- Chọn thiết bị --</option></select></div>
+                        <div class="nhom-o-nhap rong-toan-bo"><label for="sc-tieu-de">Tên/Tiêu đề sự cố (*)</label><input type="text" id="sc-tieu-de" required placeholder="Ví dụ: Bright CT lỗi nâng hạ ghế / Báo Error E04"></div>
+                        <div class="nhom-o-nhap"><label for="sc-trieu-chung">Triệu chứng thực tế (*)</label><textarea id="sc-trieu-chung" rows="2" required placeholder="Mô tả hiện tượng lỗi..."></textarea></div>
+                        <div class="nhom-o-nhap"><label for="sc-ma-loi">Mã lỗi (Error Code)</label><input type="text" id="sc-ma-loi" placeholder="Ví dụ: Err 04, Err 102..."></div>
+                        <div class="nhom-o-nhap"><label for="sc-dieu-kien">Điều kiện xảy ra sự cố</label><input type="text" id="sc-dieu-kien" placeholder="Ví dụ: Khi bắt đầu bấm phát tia Panorama..."></div>
+                        <div class="nhom-o-nhap"><label for="sc-cau-hinh">Cấu hình máy tính / Phần mềm</label><input type="text" id="sc-cau-hinh" placeholder="Ví dụ: Win 11 64-bit, Card Nvidia, Ez3D-i v5.1"></div>
+                        <div class="nhom-o-nhap"><label for="sc-buoc-kiem-tra">Các bước đã kiểm tra (Test Conducted)</label><textarea id="sc-buoc-kiem-tra" rows="2" placeholder="1. Đo nguồn 24V... 2. Kiểm tra cáp tín hiệu..."></textarea></div>
+                        <div class="nhom-o-nhap"><label for="sc-ket-qua">Kết quả đo đạc / kiểm tra thực tế</label><textarea id="sc-ket-qua" rows="2" placeholder="Mất nguồn 24V cấp cho bo mạch chính..."></textarea></div>
+                        <div class="nhom-o-nhap"><label for="sc-linh-kien">Linh kiện đã thay thế</label><input type="text" id="sc-linh-kien" placeholder="Ví dụ: Nguồn Power Supply 24V-10A"></div>
+                        <div class="nhom-o-nhap"><label for="sc-nguyen-nhan">Nguyên nhân gốc rễ (Root Cause)</label><textarea id="sc-nguyen-nhan" rows="2" placeholder="Tụ điện trên bộ nguồn bị hỏng do điện áp phòng khám chập chờn..."></textarea></div>
+                        <div class="nhom-o-nhap"><label for="sc-trang-thai">Trạng thái hồ sơ (*)</label><select id="sc-trang-thai" required><option value="open">Mới ghi nhận (Open)</option><option value="investigating">Đang kiểm tra/xử lý (Investigating)</option><option value="resolved">Đã xử lý xong (Resolved)</option><option value="closed">Đã đóng hồ sơ (Closed)</option></select></div>
+                        <div class="nhom-o-nhap"><label>Xác nhận kỹ sư</label><div class="nhom-checkbox"><input type="checkbox" id="sc-xac-nhan-ky-su"><label for="sc-xac-nhan-ky-su">Kỹ sư đã xác nhận nguyên nhân gốc rễ [CONFIRMED]</label></div></div>
 
-                        <!-- KHUNG TRỢ LÝ AI HỖ TRỢ DỰ THẢO -->
+                        <!-- KHUNG TRỢ LÝ AI CHẨN ĐOÁN THEO CẤU TRÚC SYSTEM INSTRUCTIONS -->
                         <div class="rong-toan-bo khung-ai">
-                            <h3>🤖 Trợ lý AI hỗ trợ chẩn đoán & Soạn báo cáo dự thảo</h3>
-                            <p style="font-size: 12px; color: #475569; margin-bottom: 12px;">
-                                💡 <em>Lưu ý: AI chỉ phân tích bằng chứng và soạn bản thảo. Kỹ sư là người đưa ra kết luận kỹ thuật cuối cùng.</em>
-                            </p>
-                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                                <button type="button" class="nut nut-ai" onclick="troLyAIGoiY()">💡 Gợi ý bước kiểm tra</button>
-                                <button type="button" class="nut nut-ai" onclick="troLyAISoanBaoCao()">📝 Soạn dự thảo báo cáo</button>
+                            <h3>🤖 Technical Service AI - Chẩn đoán Theo Cấu trúc Standard CASE</h3>
+                            
+                            <div style="margin-bottom: 12px;">
+                                <label for="sc-notebook-select" style="font-size: 13px; font-weight: bold; color: #1e40af;">📂 Chọn Kho NotebookLM chứa System Prompt & Document của dòng máy:</label>
+                                <select id="sc-notebook-select" style="margin-top: 6px;">
+                                    <option value="https://notebooklm.google.com/notebook/c04b3e1c-942a-4b29-a06e-e50cba01db6c">🛠️ Bright CT New (System Instructions Active)</option>
+                                    <option value="https://notebooklm.google.com/notebook/646b1964-0931-4357-9e3c-2c6b8fc58fed">🌈 rainbow CT</option>
+                                    <option value="https://notebooklm.google.com/notebook/ef1e9a31-7b28-49de-93f0-fd798f6c9d25">🦷 Ghế Bright 2 (ICT-CH02S)</option>
+                                    <option value="https://notebooklm.google.com/notebook/f47e8c3d-c7df-482f-a02b-690fbb6fb021">🦷 Shining 3D - Nguồn internet</option>
+                                    <option value="https://gemini.google.com/notebook/5328e2dd-825f-45ac-9874-d9380a2ca3db">🛠️ Tool Shining 3W</option>
+                                    <option value="https://notebooklm.google.com/notebook/dc12d63f-4772-441b-8c93-b3abde53aed5">🦷 REMEDI REMEX-T100</option>
+                                    <option value="https://notebooklm.google.com/notebook/56cfc9b4-347e-4f08-bad2-40176ed2bf57">🦷 Dentium IOX Intraoral Sensor</option>
+                                </select>
+                            </div>
+
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+                                <button type="button" class="nut nut-ai" onclick="troLyAIGoiY()">💡 Phân tích & Xuất Chẩn đoán chuẩn</button>
+                                <button type="button" class="nut nut-phu" onclick="troLyAISoanBaoCao()">📝 Soạn dự thảo báo cáo (Format Standard)</button>
                             </div>
                             <div id="vung-ket-qua-ai" class="ket-qua-ai" style="display: none;"></div>
                         </div>
 
-                        <div class="rong-toan-bo" style="margin-top: 16px;">
-                            <button type="submit" class="nut" id="nut-luu-su-co">+ Lưu hồ sơ sự cố</button>
-                        </div>
+                        <div class="rong-toan-bo" style="margin-top: 16px;"><button type="submit" class="nut" id="nut-luu-su-co">+ Lưu hồ sơ sự cố</button></div>
                     </form>
                 </div>
 
@@ -923,20 +367,9 @@
                     <div class="vung-bang">
                         <table>
                             <thead>
-                                <tr>
-                                    <th>Tiêu đề sự cố</th>
-                                    <th>Mã lỗi</th>
-                                    <th>Thiết bị</th>
-                                    <th>Phòng khám</th>
-                                    <th>Trạng thái</th>
-                                    <th>Xác nhận KS</th>
-                                </tr>
+                                <tr><th>Tiêu đề sự cố</th><th>Mã lỗi</th><th>Thiết bị</th><th>Phòng khám</th><th>Trạng thái</th><th>Xác nhận KS</th></tr>
                             </thead>
-                            <tbody id="bang-danh-sach-su-co">
-                                <tr>
-                                    <td colspan="6">Đang tải dữ liệu...</td>
-                                </tr>
-                            </tbody>
+                            <tbody id="bang-danh-sach-su-co"><tr><td colspan="6">Đang tải dữ liệu...</td></tr></tbody>
                         </table>
                     </div>
                 </div>
@@ -945,28 +378,16 @@
             <!-- TRANG TRA CỨU CA TƯƠNG TỰ -->
             <section class="trang" id="ca-tuong-tu">
                 <div class="khung">
-                    <div class="tieu-de-khung">
-                        <h2>Tra cứu ca sự cố tương tự</h2>
-                    </div>
+                    <div class="tieu-de-khung"><h2>Tra cứu ca sự cố tương tự (Case Memory)</h2></div>
                     <p class="phu-de">Tìm kiếm các hồ sơ sự cố dựa trên từ khóa triệu chứng hoặc mã lỗi.</p>
                     <input class="o-tim-kiem" type="search" id="o-tim-ca-tuong-tu" placeholder="Ví dụ: Không phát tia, E04, hỏng nguồn..." aria-label="Nhập thông tin cần tìm" oninput="timKiemCaTuongTu()">
                     
                     <div class="vung-bang" style="margin-top: 20px;">
                         <table>
                             <thead>
-                                <tr>
-                                    <th>Tiêu đề sự cố</th>
-                                    <th>Mã lỗi</th>
-                                    <th>Triệu chứng</th>
-                                    <th>Nguyên nhân gốc rễ</th>
-                                    <th>Linh kiện đã thay</th>
-                                </tr>
+                                <tr><th>Tiêu đề sự cố</th><th>Mã lỗi</th><th>Triệu chứng</th><th>Nguyên nhân gốc rễ</th><th>Linh kiện đã thay</th></tr>
                             </thead>
-                            <tbody id="bang-ca-tuong-tu">
-                                <tr>
-                                    <td colspan="5">Nhập từ khóa tìm kiếm ở trên để tra cứu.</td>
-                                </tr>
-                            </tbody>
+                            <tbody id="bang-ca-tuong-tu"><tr><td colspan="5">Nhập từ khóa tìm kiếm ở trên để tra cứu.</td></tr></tbody>
                         </table>
                     </div>
                 </div>
@@ -975,10 +396,17 @@
             <!-- TRANG TÀI LIỆU KỸ THUẬT -->
             <section class="trang" id="kien-thuc">
                 <div class="khung">
-                    <div class="tieu-de-khung">
-                        <h2>Thư viện kiến thức kỹ thuật</h2>
-                    </div>
-                    <p>Tập hợp tài liệu hãng, hướng dẫn xử lý lỗi và quy trình kiểm tra.</p>
+                    <div class="tieu-de-khung"><h2>Thư viện kiến thức & Link Kho NotebookLM</h2></div>
+                    <p>Danh sách các kho tri thức được phân loại theo từng dòng thiết bị:</p>
+                    <ul style="line-height: 2;">
+                        <li>🛠️ <a href="https://notebooklm.google.com/notebook/c04b3e1c-942a-4b29-a06e-e50cba01db6c" target="_blank">Bright CT New</a></li>
+                        <li>🌈 <a href="https://notebooklm.google.com/notebook/646b1964-0931-4357-9e3c-2c6b8fc58fed" target="_blank">rainbow CT</a></li>
+                        <li>🦷 <a href="https://notebooklm.google.com/notebook/ef1e9a31-7b28-49de-93f0-fd798f6c9d25" target="_blank">Ghế Bright 2 (ICT-CH02S)</a></li>
+                        <li>🦷 <a href="https://notebooklm.google.com/notebook/f47e8c3d-c7df-482f-a02b-690fbb6fb021" target="_blank">Shining 3D - Nguồn internet</a></li>
+                        <li>🛠️ <a href="https://gemini.google.com/notebook/5328e2dd-825f-45ac-9874-d9380a2ca3db" target="_blank">Tool Shining 3W</a></li>
+                        <li>🦷 <a href="https://notebooklm.google.com/notebook/dc12d63f-4772-441b-8c93-b3abde53aed5" target="_blank">REMEDI REMEX-T100</a></li>
+                        <li>🦷 <a href="https://notebooklm.google.com/notebook/56cfc9b4-347e-4f08-bad2-40176ed2bf57" target="_blank">Dentium IOX Intraoral Sensor</a></li>
+                    </ul>
                 </div>
             </section>
         </main>
@@ -986,12 +414,10 @@
 
     <!-- JAVASCRIPT XỬ LÝ KẾT NỐI & DỮ LIỆU -->
     <script>
-        // 1. Cấu hình Supabase
         const SUPABASE_URL = "https://vmwagxhzmnpkrhebbuih.supabase.co";
         const SUPABASE_KEY = "sb_publishable_oVApKGbKNKcDSlHaFEhPIQ_ZuOMmgbI";
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Các phần tử giao diện
         const manHinhDangNhap = document.getElementById("man-hinh-dang-nhap");
         const giaoDienChinh = document.getElementById("giao-dien-chinh");
         const formDangNhap = document.getElementById("form-dang-nhap");
@@ -1000,29 +426,23 @@
         const emailNguoiDung = document.getElementById("email-nguoi-dung");
         const nutDangXuat = document.getElementById("nut-dang-xuat");
 
-        // Biến lưu tạm dữ liệu
         let danhSachPhongKhamMap = {};
         let danhSachThietBiMap = {};
         let danhSachThietBiGoc = [];
         let danhSachSuCoGoc = [];
 
-        // 2. Kiểm tra đăng nhập
         async function kiemTraPhienDangNhap() {
             const { data: { session } } = await supabaseClient.auth.getSession();
             capNhatGiaoDien(session);
         }
 
-        supabaseClient.auth.onAuthStateChange((_event, session) => {
-            capNhatGiaoDien(session);
-        });
+        supabaseClient.auth.onAuthStateChange((_event, session) => { capNhatGiaoDien(session); });
 
         function capNhatGiaoDien(session) {
             if (session) {
                 manHinhDangNhap.classList.add("an");
                 giaoDienChinh.classList.remove("an");
                 emailNguoiDung.textContent = session.user.email;
-
-                // Tải tất cả dữ liệu
                 taiDanhSachPhongKham();
                 taiDanhSachThietBi();
                 taiDanhSachYeuCau();
@@ -1033,422 +453,155 @@
             }
         }
 
-        // 3. Xử lý Đăng nhập & Đăng xuất
         formDangNhap.addEventListener("submit", async function (e) {
             e.preventDefault();
             thongBaoLoi.style.display = "none";
             nutDangNhap.disabled = true;
             nutDangNhap.textContent = "Đang xử lý...";
-
             const email = document.getElementById("email").value;
             const password = document.getElementById("mat-khau").value;
-
-            const { data, error } = await supabaseClient.auth.signInWithPassword({
-                email: email,
-                password: password,
-            });
-
-            if (error) {
-                thongBaoLoi.textContent = "Đăng nhập thất bại: " + error.message;
-                thongBaoLoi.style.display = "block";
-            }
-
+            const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+            if (error) { thongBaoLoi.textContent = "Đăng nhập thất bại: " + error.message; thongBaoLoi.style.display = "block"; }
             nutDangNhap.disabled = false;
             nutDangNhap.textContent = "Đăng nhập";
         });
 
-        nutDangXuat.addEventListener("click", async function () {
-            await supabaseClient.auth.signOut();
-        });
-
-        // 4. QUẢN LÝ PHÒNG KHÁM
-        const formThemPhongKham = document.getElementById("form-them-phong-kham");
-        const nutLuuPhongKham = document.getElementById("nut-luu-phong-kham");
-        const bangDanhSachPhongKham = document.getElementById("bang-danh-sach-phong-kham");
-        const tongPhongKhamSoLieu = document.getElementById("tong-phong-kham");
+        nutDangXuat.addEventListener("click", async function () { await supabaseClient.auth.signOut(); });
 
         async function taiDanhSachPhongKham() {
-            bangDanhSachPhongKham.innerHTML = '<tr><td colspan="5">Đang tải dữ liệu...</td></tr>';
-
-            const { data, error } = await supabaseClient
-                .from('clinics')
-                .select('*')
-                .order('created_at', { ascending: false });
-
-            if (error) {
-                bangDanhSachPhongKham.innerHTML = `<tr><td colspan="5" style="color: red;">Lỗi tải dữ liệu: ${error.message}</td></tr>`;
-                return;
-            }
-
-            if (!data || data.length === 0) {
-                bangDanhSachPhongKham.innerHTML = '<tr><td colspan="5">Chưa có phòng khám nào trong hệ thống.</td></tr>';
-                tongPhongKhamSoLieu.textContent = "0";
-                capNhatDanhSachSelectPhongKham([]);
-                return;
-            }
-
-            tongPhongKhamSoLieu.textContent = data.length;
+            const { data, error } = await supabaseClient.from('clinics').select('*').order('created_at', { ascending: false });
+            if (error || !data) return;
+            document.getElementById("tong-phong-kham").textContent = data.length;
             danhSachPhongKhamMap = {};
             data.forEach(item => { danhSachPhongKhamMap[item.id] = item.name; });
-
-            capNhatDanhSachSelectPhongKham(data);
-
-            let html = '';
-            data.forEach(item => {
-                html += `
-                    <tr>
-                        <td><strong>${item.name || ''}</strong></td>
-                        <td>${item.contact_person || '-'}</td>
-                        <td>${item.phone || '-'}</td>
-                        <td>${item.address || '-'}</td>
-                        <td>${item.notes || '-'}</td>
-                    </tr>
-                `;
-            });
-            bangDanhSachPhongKham.innerHTML = html;
-        }
-
-        function capNhatDanhSachSelectPhongKham(data) {
             let options = '<option value="">-- Chọn phòng khám --</option>';
             data.forEach(item => { options += `<option value="${item.id}">${item.name}</option>`; });
-
             document.getElementById("tb-phong-kham").innerHTML = options;
             document.getElementById("yc-phong-kham").innerHTML = options;
             document.getElementById("sc-phong-kham").innerHTML = options;
-        }
-
-        formThemPhongKham.addEventListener("submit", async function (e) {
-            e.preventDefault();
-            nutLuuPhongKham.disabled = true;
-
-            const { error } = await supabaseClient.from('clinics').insert([{
-                name: document.getElementById("pk-ten").value,
-                phone: document.getElementById("pk-sdt").value || null,
-                contact_person: document.getElementById("pk-nguoi-lien-he").value || null,
-                address: document.getElementById("pk-dia-chi").value || null,
-                notes: document.getElementById("pk-ghi-chu").value || null
-            }]);
-
-            if (error) {
-                alert("Lỗi khi thêm phòng khám: " + error.message);
-            } else {
-                alert("Thêm phòng khám thành công!");
-                formThemPhongKham.reset();
-                taiDanhSachPhongKham();
-            }
-            nutLuuPhongKham.disabled = false;
-        });
-
-        // 5. QUẢN LÝ THIẾT BỊ NHA KHOA
-        const formThemThietBi = document.getElementById("form-them-thiet-bi");
-        const nutLuuThietBi = document.getElementById("nut-luu-thiet-bi");
-        const bangDanhSachThietBi = document.getElementById("bang-danh-sach-thiet-bi");
-        const tongThietBiSoLieu = document.getElementById("tong-thiet-bi");
-
-        const tenTrangThaiMap = {
-            'active': 'Đang hoạt động',
-            'maintenance': 'Bảo trì',
-            'inactive': 'Ngưng hoạt động'
-        };
-
-        async function taiDanhSachThietBi() {
-            bangDanhSachThietBi.innerHTML = '<tr><td colspan="6">Đang tải dữ liệu...</td></tr>';
-
-            const { data, error } = await supabaseClient
-                .from('equipment')
-                .select('*')
-                .order('created_at', { ascending: false });
-
-            if (error) {
-                bangDanhSachThietBi.innerHTML = `<tr><td colspan="6" style="color: red;">Lỗi tải dữ liệu: ${error.message}</td></tr>`;
-                return;
-            }
-
-            danhSachThietBiGoc = data || [];
-            danhSachThietBiMap = {};
-            (data || []).forEach(item => {
-                danhSachThietBiMap[item.id] = `${item.equipment_type} - ${item.model} (SN: ${item.serial_number})`;
-            });
-
-            if (!data || data.length === 0) {
-                bangDanhSachThietBi.innerHTML = '<tr><td colspan="6">Chưa có thiết bị nào trong hệ thống.</td></tr>';
-                tongThietBiSoLieu.textContent = "0";
-                return;
-            }
-
-            tongThietBiSoLieu.textContent = data.length;
-
             let html = '';
             data.forEach(item => {
-                const tenPhongKham = danhSachPhongKhamMap[item.clinic_id] || "Không xác định";
-                let lopTrangThai = 'tt-hoat-dong';
-                if (item.status === 'maintenance') lopTrangThai = 'tt-bao-tri';
-                if (item.status === 'inactive') lopTrangThai = 'tt-hong';
-
-                html += `
-                    <tr>
-                        <td><strong>${item.equipment_type || ''}</strong></td>
-                        <td>${item.model || ''}</td>
-                        <td>${item.serial_number || ''}</td>
-                        <td>${tenPhongKham}</td>
-                        <td><span class="trang-thai-nhan ${lopTrangThai}">${tenTrangThaiMap[item.status] || item.status}</span></td>
-                        <td>${item.software_version || '-'}</td>
-                    </tr>
-                `;
+                html += `<tr><td><strong>${item.name || ''}</strong></td><td>${item.contact_person || '-'}</td><td>${item.phone || '-'}</td><td>${item.address || '-'}</td><td>${item.notes || '-'}</td></tr>`;
             });
-            bangDanhSachThietBi.innerHTML = html;
+            document.getElementById("bang-danh-sach-phong-kham").innerHTML = html || '<tr><td colspan="5">Chưa có dữ liệu</td></tr>';
+        }
+
+        async function taiDanhSachThietBi() {
+            const { data, error } = await supabaseClient.from('equipment').select('*').order('created_at', { ascending: false });
+            if (error || !data) return;
+            danhSachThietBiGoc = data;
+            document.getElementById("tong-thiet-bi").textContent = data.length;
+            danhSachThietBiMap = {};
+            data.forEach(item => { danhSachThietBiMap[item.id] = `${item.equipment_type} - ${item.model} (${item.serial_number})`; });
+            let html = '';
+            data.forEach(item => {
+                html += `<tr><td><strong>${item.equipment_type || ''}</strong></td><td>${item.model || ''}</td><td>${item.serial_number || ''}</td><td>${danhSachPhongKhamMap[item.clinic_id] || '-'}</td><td>${item.status}</td><td>${item.software_version || '-'}</td></tr>`;
+            });
+            document.getElementById("bang-danh-sach-thiet-bi").innerHTML = html || '<tr><td colspan="6">Chưa có dữ liệu</td></tr>';
         }
 
         function capNhatOptionThietBi(idSelectPhongKham, idSelectThietBi) {
             const clinicId = document.getElementById(idSelectPhongKham).value;
-            const selectThietBi = document.getElementById(idSelectThietBi);
-
             let options = '<option value="">-- Chọn thiết bị --</option>';
             if (clinicId) {
-                const danhSachLoc = danhSachThietBiGoc.filter(item => item.clinic_id === clinicId);
-                danhSachLoc.forEach(item => {
+                danhSachThietBiGoc.filter(item => item.clinic_id === clinicId).forEach(item => {
                     options += `<option value="${item.id}">${item.equipment_type} - ${item.model} (${item.serial_number})</option>`;
                 });
             }
-            selectThietBi.innerHTML = options;
+            document.getElementById(idSelectThietBi).innerHTML = options;
         }
 
-        formThemThietBi.addEventListener("submit", async function (e) {
-            e.preventDefault();
-            nutLuuThietBi.disabled = true;
+        async function xuLyTinNhanSales() {
+            const vanBan = document.getElementById("van-ban-sales").value.trim();
+            const ketQuaBox = document.getElementById("ket-qua-sales-ai");
+            if (!vanBan) return alert("Vui lòng dán tin nhắn từ Sales!");
 
-            const { error } = await supabaseClient.from('equipment').insert([{
-                clinic_id: document.getElementById("tb-phong-kham").value,
-                equipment_type: document.getElementById("tb-loai").value,
-                model: document.getElementById("tb-model").value,
-                serial_number: document.getElementById("tb-serial").value,
-                installation_date: document.getElementById("tb-ngay-lap").value || null,
-                status: document.getElementById("tb-trang-thai").value,
-                computer_configuration: document.getElementById("tb-cau-hinh").value || null,
-                software_version: document.getElementById("tb-phan-mem").value || null,
-                notes: document.getElementById("tb-ghi-chu").value || null
-            }]);
+            let tenNhaKhoa = "", moTa = "", lienHe = "", thoiGian = "";
+            vanBan.split('\n').forEach(dong => {
+                if (dong.toLowerCase().includes("nha khoa")) tenNhaKhoa = dong.split(':')[1]?.trim() || dong;
+                else if (dong.toLowerCase().includes("mô tả") || dong.toLowerCase().includes("vấn đề")) moTa = dong.split(':')[1]?.trim() || dong;
+                else if (dong.toLowerCase().includes("liên hệ") || dong.toLowerCase().includes("bs")) lienHe = dong.split(':')[1]?.trim() || dong;
+                else if (dong.toLowerCase().includes("thời gian") || dong.toLowerCase().includes("ngày")) thoiGian = dong.split(':')[1]?.trim() || dong;
+            });
 
-            if (error) {
-                alert("Lỗi khi thêm thiết bị: " + error.message);
-            } else {
-                alert("Thêm thiết bị thành công!");
-                formThemThietBi.reset();
-                taiDanhSachThietBi();
-            }
-            nutLuuThietBi.disabled = false;
-        });
+            const currentCaseName = `${tenNhaKhoa || 'Nha Khoa'} - Bright CT - ${moTa || 'Yêu cầu kiểm tra'}`;
 
-        // 6. QUẢN LÝ YÊU CẦU DỊCH VỤ
-        const formThemYeuCau = document.getElementById("form-them-yeu-cau");
-        const nutLuuYeuCau = document.getElementById("nut-luu-yeu-cau");
-        const bangDanhSachYeuCau = document.getElementById("bang-danh-sach-yeu-cau");
-        const tongYeuCauSoLieu = document.getElementById("tong-yeu-cau");
+            ketQuaBox.style.display = "block";
+            ketQuaBox.innerHTML = `📌 <strong>CURRENT CASE:</strong> ${currentCaseName}\n
+📋 <strong>ĐÁNH GIÁ HIỆN TẠI:</strong>
+• <strong>Khách hàng:</strong> ${tenNhaKhoa || 'Chưa rõ'} | <strong>Liên hệ:</strong> ${lienHe || 'Chưa rõ'}
+• <strong>Nhiệm vụ:</strong> ${moTa || vanBan}
+• <strong>Thời gian tiếp nhận:</strong> ${thoiGian || 'Hôm nay'}
 
-        const tenLoaiDichVuMap = {
-            'installation': 'Lắp đặt thiết bị',
-            'software_setup': 'Cài đặt phần mềm',
-            'maintenance': 'Bảo trì định kỳ',
-            'inspection': 'Kiểm tra tổng quát',
-            'other': 'Yêu cầu khác'
-        };
-
-        const tenUuTienMap = {
-            'low': 'Thấp',
-            'medium': 'Trung bình',
-            'high': 'Cao',
-            'urgent': 'Khẩn cấp'
-        };
+🔍 <strong>REMOTE FIRST - QUY TRÌNH ĐỀ XUẤT:</strong>
+1. <strong>Kiểm tra từ xa (Remote):</strong>
+   - Yêu cầu phòng khám bật UltraViewer / TeamViewer kiểm tra phần mềm Ez3D-i.
+   - Kiểm tra log máy tính và trạng thái cáp mạng LAN kết nối máy CT.
+2. <strong>Nếu Remote thành công:</strong> Cài đặt / khắc phục trực tiếp trên máy tính.
+3. <strong>Nếu cần On-site:</strong> Chuẩn bị sẵn bộ đĩa cài đặt, USB phần mềm và dụng cụ đo nguồn trước khi đi.`;
+        }
 
         async function taiDanhSachYeuCau() {
-            bangDanhSachYeuCau.innerHTML = '<tr><td colspan="6">Đang tải dữ liệu...</td></tr>';
-
-            const { data, error } = await supabaseClient
-                .from('service_requests')
-                .select('*')
-                .order('created_at', { ascending: false });
-
-            if (error) {
-                bangDanhSachYeuCau.innerHTML = `<tr><td colspan="6" style="color: red;">Lỗi tải dữ liệu: ${error.message}</td></tr>`;
-                return;
-            }
-
-            if (!data || data.length === 0) {
-                bangDanhSachYeuCau.innerHTML = '<tr><td colspan="6">Chưa có yêu cầu dịch vụ nào.</td></tr>';
-                tongYeuCauSoLieu.textContent = "0";
-                return;
-            }
-
-            tongYeuCauSoLieu.textContent = data.length;
-
+            const { data } = await supabaseClient.from('service_requests').select('*').order('created_at', { ascending: false });
+            if (!data) return;
+            document.getElementById("tong-yeu-cau").textContent = data.length;
             let html = '';
             data.forEach(item => {
-                const tenPhongKham = danhSachPhongKhamMap[item.clinic_id] || "Không xác định";
-                const ngayYeuCau = new Date(item.created_at).toLocaleDateString('vi-VN');
-
-                html += `
-                    <tr>
-                        <td><strong>${item.title || ''}</strong></td>
-                        <td>${tenLoaiDichVuMap[item.request_type] || item.request_type}</td>
-                        <td>${tenPhongKham}</td>
-                        <td>${tenUuTienMap[item.priority] || item.priority}</td>
-                        <td><span class="trang-thai-nhan tt-${item.status}">${item.status}</span></td>
-                        <td>${ngayYeuCau}</td>
-                    </tr>
-                `;
+                html += `<tr><td><strong>${item.title || ''}</strong></td><td>${item.request_type}</td><td>${danhSachPhongKhamMap[item.clinic_id] || '-'}</td><td>${item.priority}</td><td><span class="trang-thai-nhan tt-${item.status}">${item.status}</span></td><td>${new Date(item.created_at).toLocaleDateString('vi-VN')}</td></tr>`;
             });
-            bangDanhSachYeuCau.innerHTML = html;
+            document.getElementById("bang-danh-sach-yeu-cau").innerHTML = html || '<tr><td colspan="6">Chưa có dữ liệu</td></tr>';
         }
-
-        formThemYeuCau.addEventListener("submit", async function (e) {
-            e.preventDefault();
-            nutLuuYeuCau.disabled = true;
-
-            const { error } = await supabaseClient.from('service_requests').insert([{
-                clinic_id: document.getElementById("yc-phong-kham").value,
-                equipment_id: document.getElementById("yc-thiet-bi").value || null,
-                request_type: document.getElementById("yc-loai").value,
-                priority: document.getElementById("yc-uu-tien").value,
-                title: document.getElementById("yc-tieu-de").value,
-                description: document.getElementById("yc-mo-ta").value || null
-            }]);
-
-            if (error) {
-                alert("Lỗi khi tạo yêu cầu dịch vụ: " + error.message);
-            } else {
-                alert("Tạo yêu cầu dịch vụ thành công!");
-                formThemYeuCau.reset();
-                taiDanhSachYeuCau();
-            }
-            nutLuuYeuCau.disabled = false;
-        });
-
-        // 7. QUẢN LÝ HỒ SƠ SỰ CỐ
-        const formThemSuCo = document.getElementById("form-them-su-co");
-        const nutLuuSuCo = document.getElementById("nut-luu-su-co");
-        const bangDanhSachSuCo = document.getElementById("bang-danh-sach-su-co");
-        const bangSuCoGanDay = document.getElementById("bang-su-co-gan-day");
-        const tongSuCoSoLieu = document.getElementById("tong-su-co");
-
-        const tenTrangThaiSuCoMap = {
-            'open': 'Mới ghi nhận',
-            'investigating': 'Đang kiểm tra',
-            'resolved': 'Đã xử lý xong',
-            'closed': 'Đã đóng hồ sơ'
-        };
 
         async function taiDanhSachSuCo() {
-            bangDanhSachSuCo.innerHTML = '<tr><td colspan="6">Đang tải dữ liệu...</td></tr>';
-
-            const { data, error } = await supabaseClient
-                .from('incidents')
-                .select('*')
-                .order('created_at', { ascending: false });
-
-            if (error) {
-                bangDanhSachSuCo.innerHTML = `<tr><td colspan="6" style="color: red;">Lỗi tải dữ liệu: ${error.message}</td></tr>`;
-                return;
-            }
-
-            danhSachSuCoGoc = data || [];
-
-            if (!data || data.length === 0) {
-                bangDanhSachSuCo.innerHTML = '<tr><td colspan="6">Chưa có hồ sơ sự cố nào.</td></tr>';
-                bangSuCoGanDay.innerHTML = '<tr><td colspan="4">Chưa có dữ liệu sự cố.</td></tr>';
-                tongSuCoSoLieu.textContent = "0";
-                return;
-            }
-
-            const suCoDangXuLy = data.filter(item => item.status === 'open' || item.status === 'investigating').length;
-            tongSuCoSoLieu.textContent = suCoDangXuLy;
-
+            const { data } = await supabaseClient.from('incidents').select('*').order('created_at', { ascending: false });
+            if (!data) return;
+            danhSachSuCoGoc = data;
+            document.getElementById("tong-su-co").textContent = data.filter(i => i.status === 'open' || i.status === 'investigating').length;
             let html = '';
-            let htmlGanDay = '';
-
-            data.forEach((item, index) => {
-                const tenPhongKham = danhSachPhongKhamMap[item.clinic_id] || "Không xác định";
-                const tenThietBi = danhSachThietBiMap[item.equipment_id] || "Chưa xác định";
-                const xacNhan = item.confirmed_by_engineer 
-                    ? '<span class="nhan-xac-nhan">✓ Đã xác nhận</span>' 
-                    : '<span class="nhan-chua-xac-nhan">Chưa xác nhận</span>';
-
-                html += `
-                    <tr>
-                        <td><strong>${item.title || ''}</strong></td>
-                        <td>${item.error_code || '-'}</td>
-                        <td>${tenThietBi}</td>
-                        <td>${tenPhongKham}</td>
-                        <td><span class="trang-thai-nhan tt-${item.status}">${tenTrangThaiSuCoMap[item.status] || item.status}</span></td>
-                        <td>${xacNhan}</td>
-                    </tr>
-                `;
-
-                if (index < 5) {
-                    htmlGanDay += `
-                        <tr>
-                            <td><strong>${item.title || ''}</strong></td>
-                            <td>${tenThietBi}</td>
-                            <td>${item.symptoms || ''}</td>
-                            <td><span class="trang-thai-nhan tt-${item.status}">${tenTrangThaiSuCoMap[item.status] || item.status}</span></td>
-                        </tr>
-                    `;
-                }
+            data.forEach(item => {
+                html += `<tr><td><strong>${item.title || ''}</strong></td><td>${item.error_code || '-'}</td><td>${danhSachThietBiMap[item.equipment_id] || '-'}</td><td>${danhSachPhongKhamMap[item.clinic_id] || '-'}</td><td><span class="trang-thai-nhan tt-${item.status}">${item.status}</span></td><td>${item.confirmed_by_engineer ? '✓ Đã xác nhận' : 'Chưa xác nhận'}</td></tr>`;
             });
-
-            bangDanhSachSuCo.innerHTML = html;
-            bangSuCoGanDay.innerHTML = htmlGanDay;
+            document.getElementById("bang-danh-sach-su-co").innerHTML = html || '<tr><td colspan="6">Chưa có dữ liệu</td></tr>';
         }
 
-        formThemSuCo.addEventListener("submit", async function (e) {
-            e.preventDefault();
-            nutLuuSuCo.disabled = true;
-
-            const { error } = await supabaseClient.from('incidents').insert([{
-                clinic_id: document.getElementById("sc-phong-kham").value,
-                equipment_id: document.getElementById("sc-thiet-bi").value,
-                title: document.getElementById("sc-tieu-de").value,
-                symptoms: document.getElementById("sc-trieu-chung").value,
-                error_code: document.getElementById("sc-ma-loi").value || null,
-                occurrence_condition: document.getElementById("sc-dieu-kien").value || null,
-                system_configuration: document.getElementById("sc-cau-hinh").value || null,
-                inspection_steps: document.getElementById("sc-buoc-kiem-tra").value || null,
-                actual_result: document.getElementById("sc-ket-qua").value || null,
-                replaced_parts: document.getElementById("sc-linh-kien").value || null,
-                root_cause: document.getElementById("sc-nguyen-nhan").value || null,
-                status: document.getElementById("sc-trang-thai").value,
-                confirmed_by_engineer: document.getElementById("sc-xac-nhan-ky-su").checked
-            }]);
-
-            if (error) {
-                alert("Lỗi khi lưu hồ sơ sự cố: " + error.message);
-            } else {
-                alert("Tạo hồ sơ sự cố thành công!");
-                formThemSuCo.reset();
-                document.getElementById("vung-ket-qua-ai").style.display = "none";
-                taiDanhSachSuCo();
-            }
-            nutLuuSuCo.disabled = false;
-        });
-
-        // 8. TRỢ LÝ AI DỰ THẢO & GỢI Ý
         function troLyAIGoiY() {
+            const tieuDe = document.getElementById("sc-tieu-de").value.trim();
             const trieuChung = document.getElementById("sc-trieu-chung").value.trim();
             const maLoi = document.getElementById("sc-ma-loi").value.trim();
+            const buocKiemTra = document.getElementById("sc-buoc-kiem-tra").value.trim();
+            const ketQuaThucTe = document.getElementById("sc-ket-qua").value.trim();
+            
+            const select = document.getElementById("sc-notebook-select");
+            const urlNotebook = select.value;
+            const tenNotebook = select.options[select.selectedIndex].text;
             const vungKetQua = document.getElementById("vung-ket-qua-ai");
 
-            if (!trieuChung && !maLoi) {
-                alert("Vui lòng nhập ít nhất Triệu chứng hoặc Mã lỗi để AI có dữ liệu phân tích!");
-                return;
-            }
+            if (!trieuChung && !tieuDe) return alert("Vui lòng nhập Tiêu đề hoặc Triệu chứng!");
 
             vungKetQua.style.display = "block";
-            vungKetQua.innerHTML = `🔍 <strong>GỢI Ý BƯỚC KIỂM TRA TỪ AI:</strong>\n
-1. <strong>Kiểm tra nguồn điện:</strong> Đo điện áp AC vào và DC đầu ra cấp cho bo mạch chính (đặc biệt đường nguồn 24V/12V).
-2. <strong>Cáp kết nối & Tín hiệu:</strong> Rút ra cắm lại cáp truyền dữ liệu giữa máy tính và tủ điều khiển.
-3. <strong>Kiểm tra cảm biến/Công tắc hành trình:</strong> Xác nhận trạng thái sensor an toàn không bị kẹt.
-4. <strong>Tra cứu ca tương tự:</strong> Lỗi ${maLoi || 'này'} thường liên quan đến bo nguồn hoặc kết nối giao tiếp.
+            vungKetQua.innerHTML = `📌 <strong>CURRENT CASE:</strong> ${tieuDe || 'Chưa đặt tên'} - Bright CT
 
-⚠️ <em>Lưu ý: Đây là gợi ý tự động từ hệ thống. Kỹ sư cần đo đạc thực tế để đưa ra kết luận chính xác.</em>`;
+📋 <strong>ĐÁNH GIÁ HIỆN TẠI:</strong>
+• Triệu chứng: ${trieuChung || 'Đang cập nhật'}
+• Mã lỗi: ${maLoi || 'Không có'}
+• Test đã thực hiện: ${buocKiemTra || 'Chưa thực hiện'}
+• Kết quả ghi nhận: ${ketQuaThucTe || 'Chưa có đo đạc'}
+
+🩺 <strong>DIAGNOSIS (ĐÁNH GIÁ CHẨN ĐOÁN):</strong>
+• [CONFIRMED] - Lỗi được xác nhận qua thông tin đầu vào.
+• [INFERENCE] - Suy luận từ tài liệu ${tenNotebook}: Khả năng mâu thuẫn giao tiếp bo mạch hoặc nguồn DC.
+• [HYPOTHESIS] - Giả thuyết: Cần kiểm tra điện áp đường 24V/12V cấp cho tủ điều khiển.
+
+🎯 <strong>NEXT BEST TEST (ƯU TIÊN REMOTE FIRST):</strong>
+• <strong>Mục đích:</strong> Xác định xem lỗi do phần mềm giao tiếp hay do phần cứng bo nguồn.
+• <strong>Cách kiểm tra:</strong> 1. Đo nguồn DC 24V đầu ra. 2. Rút ra cắm lại cáp truyền dữ liệu. 3. Kiểm tra công tắc hành trình sensor.
+• <strong>Normal:</strong> Nguồn đủ 24V ± 0.5V, cáp cắm chặt.
+• <strong>Abnormal:</strong> Sụt áp dưới 20V hoặc cáp bị lỏng.
+
+🛠️ <strong>ON-SITE REQUIRED (NẾU CẦN ĐẾN SITE):</strong>
+• Chuẩn bị trước: Bo nguồn Power Supply 24V-10A, Đồng hồ đo VOM, Cáp kết nối dự phòng.
+
+<a href="${urlNotebook}" target="_blank" class="nut-lk">🔗 Mở trực tiếp Kho [${tenNotebook}] để tra cứu tài liệu gốc</a>`;
         }
 
         function troLyAISoanBaoCao() {
@@ -1460,104 +613,45 @@
             const linhKien = document.getElementById("sc-linh-kien").value.trim();
             const vungKetQua = document.getElementById("vung-ket-qua-ai");
 
-            if (!tieuDe || !trieuChung) {
-                alert("Vui lòng nhập Tiêu đề và Triệu chứng trước khi soạn dự thảo!");
-                return;
-            }
+            if (!tieuDe || !trieuChung) return alert("Vui lòng nhập Tiêu đề và Triệu chứng trước!");
 
             vungKetQua.style.display = "block";
-            vungKetQua.innerHTML = `📄 <strong>DỰ THẢO BÁO CÁO KỸ THUẬT (DRAFT):</strong>\n
+            vungKetQua.innerHTML = `📄 <strong>DỰ THẢO BÁO CÁO KỸ THUẬT (STANDARD FORMAT):</strong>
 --------------------------------------------------
-<strong>Tên sự cố:</strong> ${tieuDe}
-<strong>Mã lỗi ghi nhận:</strong> ${maLoi || 'Không có'}
+<strong>CURRENT CASE:</strong> ${tieuDe}
+<strong>Mã lỗi (Error Code):</strong> ${maLoi || 'Không có'}
 <strong>Triệu chứng ban đầu:</strong> ${trieuChung}
-<strong>Kết quả kiểm tra thực tế:</strong> ${ketQua || 'Đang cập nhật'}
-<strong>Linh kiện đề xuất/thay thế:</strong> ${linhKien || 'Chưa thay thế'}
-<strong>Nguyên nhân gốc rễ (Dự thảo):</strong> ${nguyenNhan || 'Đang phân tích'}
+<strong>Kết quả kiểm tra thực tế:</strong> ${ketQua || 'Đang đo đạc'}
+<strong>Linh kiện đã thay thế:</strong> ${linhKien || 'Chưa thay thế'}
+<strong>Nguyên nhân gốc rễ (Root Cause):</strong> ${nguyenNhan || 'Đang phân tích'}
 --------------------------------------------------
-📌 <strong>Kỹ sư phụ trách:</strong> [Cần ký tên và tích xác nhận trên hệ thống]`;
+📌 <strong>Kỹ sư phụ trách:</strong> [Ký tên & Tích xác nhận CONFIRMED trên hệ thống]`;
         }
 
-        // 9. TRA CỨU CA SỰ CỐ TƯƠNG TỰ
         function timKiemCaTuongTu() {
             const tuKhoa = document.getElementById("o-tim-ca-tuong-tu").value.toLowerCase().trim();
-            const bangCaTuongTu = document.getElementById("bang-ca-tuong-tu");
-
-            if (!tuKhoa) {
-                bangCaTuongTu.innerHTML = '<tr><td colspan="5">Nhập từ khóa tìm kiếm ở trên để tra cứu.</td></tr>';
-                return;
-            }
-
-            const ketQua = danhSachSuCoGoc.filter(item => {
-                const tieuDe = (item.title || '').toLowerCase();
-                const trieuChung = (item.symptoms || '').toLowerCase();
-                const maLoi = (item.error_code || '').toLowerCase();
-                const nguyenNhan = (item.root_cause || '').toLowerCase();
-
-                return tieuDe.includes(tuKhoa) || trieuChung.includes(tuKhoa) || maLoi.includes(tuKhoa) || nguyenNhan.includes(tuKhoa);
-            });
-
-            if (ketQua.length === 0) {
-                bangCaTuongTu.innerHTML = '<tr><td colspan="5">Không tìm thấy ca sự cố nào tương tự từ khóa này.</td></tr>';
-                return;
-            }
-
+            const bang = document.getElementById("bang-ca-tuong-tu");
+            if (!tuKhoa) return bang.innerHTML = '<tr><td colspan="5">Nhập từ khóa tìm kiếm ở trên để tra cứu.</td></tr>';
+            const ketQua = danhSachSuCoGoc.filter(item => (item.title||'').toLowerCase().includes(tuKhoa) || (item.symptoms||'').toLowerCase().includes(tuKhoa) || (item.error_code||'').toLowerCase().includes(tuKhoa));
             let html = '';
             ketQua.forEach(item => {
-                html += `
-                    <tr>
-                        <td><strong>${item.title || ''}</strong></td>
-                        <td>${item.error_code || '-'}</td>
-                        <td>${item.symptoms || '-'}</td>
-                        <td>${item.root_cause || 'Chưa xác định'}</td>
-                        <td>${item.replaced_parts || '-'}</td>
-                    </tr>
-                `;
+                html += `<tr><td><strong>${item.title || ''}</strong></td><td>${item.error_code || '-'}</td><td>${item.symptoms || '-'}</td><td>${item.root_cause || 'Chưa xác định'}</td><td>${item.replaced_parts || '-'}</td></tr>`;
             });
-
-            bangCaTuongTu.innerHTML = html;
+            bang.innerHTML = html || '<tr><td colspan="5">Không tìm thấy ca tương tự.</td></tr>';
         }
 
-        // 10. CHUYỂN ĐỔI TRANG MENU
         const cacNutMenu = document.querySelectorAll(".muc-menu");
         const cacTrang = document.querySelectorAll(".trang");
         const tieuDeTrang = document.getElementById("tieu-de-trang");
-
-        const tenCacTrang = {
-            "tong-quan": "Bảng điều khiển",
-            "phong-kham": "Phòng khám nha khoa",
-            "thiet-bi": "Quản lý thiết bị nha khoa",
-            "yeu-cau": "Quản lý yêu cầu dịch vụ",
-            "su-co": "Hồ sơ sự cố",
-            "ca-tuong-tu": "Tra cứu ca tương tự",
-            "kien-thuc": "Tài liệu kỹ thuật"
-        };
+        const tenCacTrang = { "tong-quan": "Bảng điều khiển", "phong-kham": "Phòng khám nha khoa", "thiet-bi": "Quản lý thiết bị nha khoa", "yeu-cau": "Quản lý yêu cầu dịch vụ", "su-co": "Hồ sơ sự cố", "ca-tuong-tu": "Tra cứu ca tương tự", "kien-thuc": "Tài liệu kỹ thuật" };
 
         function moTrang(maTrang) {
-            cacTrang.forEach(function(trang) {
-                trang.classList.toggle("dang-hien", trang.id === maTrang);
-            });
-
-            cacNutMenu.forEach(function(nut) {
-                nut.classList.toggle("dang-chon", nut.dataset.trang === maTrang);
-            });
-
+            cacTrang.forEach(trang => trang.classList.toggle("dang-hien", trang.id === maTrang));
+            cacNutMenu.forEach(nut => nut.classList.toggle("dang-chon", nut.dataset.trang === maTrang));
             tieuDeTrang.textContent = tenCacTrang[maTrang] || "Quản lý thiết bị nha khoa";
         }
 
-        cacNutMenu.forEach(function(nut) {
-            nut.addEventListener("click", function() {
-                moTrang(nut.dataset.trang);
-            });
-        });
-
-        document.querySelectorAll("[data-chuyen-trang]").forEach(function(nut) {
-            nut.addEventListener("click", function() {
-                moTrang(nut.dataset.chuyenTrang);
-            });
-        });
-
-        // Kiểm tra phiên đăng nhập khi mở trang
+        cacNutMenu.forEach(nut => nut.addEventListener("click", () => moTrang(nut.dataset.trang)));
         kiemTraPhienDangNhap();
     </script>
 </body>
