@@ -1,85 +1,680 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dental Equipment Management</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f7fb;
-      color: #1e293b;
-    }
-    header {
-      background: #12345a;
-      color: white;
-      padding: 24px 32px;
-    }
-    header h1 { margin: 0 0 8px; font-size: 25px; }
-    header p { margin: 0; color: #dbeafe; }
-    main { padding: 28px; max-width: 1200px; margin: auto; }
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 18px;
-    }
-    .card {
-      background: white;
-      padding: 22px;
-      border-radius: 12px;
-      border: 1px solid #e2e8f0;
-    }
-    .card h2 { font-size: 17px; margin-top: 0; }
-    .card p { color: #64748b; line-height: 1.5; }
-    .tag { color: #176b87; font-weight: bold; }
-    .notice {
-      margin-top: 24px;
-      padding: 18px;
-      background: #eaf3ff;
-      border-radius: 10px;
-      line-height: 1.6;
-    }
-  </style>
+    <meta charset="UTF-8">
+
+    <!-- Giúp giao diện hiển thị tốt trên máy tính và điện thoại -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Tên hiển thị trên tab trình duyệt -->
+    <title>Quản lý thiết bị nha khoa</title>
+
+    <style>
+        /* ==============================
+           1. THIẾT LẬP CHUNG CHO GIAO DIỆN
+           ============================== */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #243247;
+        }
+
+        button, input {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* ==============================
+           2. THANH MENU BÊN TRÁI
+           ============================== */
+
+        .thanh-ben {
+            width: 250px;
+            min-height: 100vh;
+            background: #17365d;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 24px 16px;
+        }
+
+        .ten-phan-mem {
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 1.5;
+            margin: 0 0 6px;
+        }
+
+        .mo-ta-phan-mem {
+            font-size: 12px;
+            color: #cbd8e8;
+            margin-bottom: 32px;
+        }
+
+        .nhan-menu {
+            color: #a9bfd9;
+            font-size: 11px;
+            font-weight: bold;
+            margin: 22px 10px 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .muc-menu {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 4px 0;
+            color: #e4edf7;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        /* Màu của mục menu đang được chọn */
+        .muc-menu:hover,
+        .muc-menu.dang-chon {
+            background: #2a507d;
+            color: white;
+        }
+
+        /* ==============================
+           3. KHU VỰC NỘI DUNG CHÍNH
+           ============================== */
+
+        .noi-dung {
+            margin-left: 250px;
+            padding: 30px;
+        }
+
+        .dau-trang {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .dau-trang h1 {
+            margin: 0 0 8px;
+            font-size: 27px;
+        }
+
+        .phu-de {
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .nhan-phien-ban {
+            padding: 9px 13px;
+            border-radius: 8px;
+            background: #e2edff;
+            color: #245b9e;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* ==============================
+           4. CÁC THẺ SỐ LIỆU TỔNG QUAN
+           ============================== */
+
+        .luoi-the {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        .the {
+            background: white;
+            padding: 22px;
+            border: 1px solid #e5eaf1;
+            border-radius: 12px;
+        }
+
+        .ten-the {
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .so-lieu {
+            font-size: 30px;
+            font-weight: bold;
+            color: #17365d;
+            margin-bottom: 10px;
+        }
+
+        .ghi-chu-the {
+            font-size: 12px;
+            color: #718096;
+            line-height: 1.5;
+        }
+
+        /* ==============================
+           5. CÁC KHUNG NỘI DUNG
+           ============================== */
+
+        .khung {
+            background: white;
+            border: 1px solid #e5eaf1;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 22px;
+        }
+
+        .tieu-de-khung {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .tieu-de-khung h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .nut {
+            padding: 10px 14px;
+            border: none;
+            border-radius: 7px;
+            background: #245b9e;
+            color: white;
+            font-size: 13px;
+        }
+
+        .nut:hover {
+            background: #173f73;
+        }
+
+        .nut-phu {
+            background: #edf2f7;
+            color: #334155;
+        }
+
+        .nut-phu:hover {
+            background: #dce5ef;
+        }
+
+        /* ==============================
+           6. BẢNG DANH SÁCH SỰ CỐ
+           ============================== */
+
+        .vung-bang {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 14px 12px;
+            border-bottom: 1px solid #edf0f5;
+            font-size: 13px;
+        }
+
+        th {
+            color: #64748b;
+            background: #f8fafc;
+            font-weight: bold;
+        }
+
+        .trang-thai {
+            display: inline-block;
+            padding: 6px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .dang-xu-ly {
+            background: #fff1d6;
+            color: #946200;
+        }
+
+        .cho-xac-nhan {
+            background: #e8eaff;
+            color: #4844a0;
+        }
+
+        .da-ket-thuc {
+            background: #dff6e8;
+            color: #207044;
+        }
+
+        /* ==============================
+           7. KHU VỰC TÌM KIẾM
+           ============================== */
+
+        .o-tim-kiem {
+            width: 100%;
+            max-width: 360px;
+            padding: 11px 13px;
+            border: 1px solid #d9e1eb;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .o-tim-kiem:focus {
+            border-color: #245b9e;
+        }
+
+        /* ==============================
+           8. MÀN HÌNH NHỎ
+           ============================== */
+
+        @media (max-width: 1000px) {
+            .luoi-the {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 700px) {
+            .thanh-ben {
+                position: static;
+                width: 100%;
+                min-height: auto;
+            }
+
+            .noi-dung {
+                margin-left: 0;
+                padding: 18px;
+            }
+
+            .luoi-the {
+                grid-template-columns: 1fr;
+            }
+
+            .dau-trang h1 {
+                font-size: 23px;
+            }
+        }
+
+        /* Ẩn các trang chưa được chọn */
+        .trang {
+            display: none;
+        }
+
+        .trang.dang-hien {
+            display: block;
+        }
+    </style>
 </head>
+
 <body>
-  <header>
-    <h1>Dental Equipment Management</h1>
-    <p>Equipment records, technical support and troubleshooting knowledge</p>
-  </header>
 
-  <main>
-    <h2>Dashboard</h2>
-    <div class="cards">
-      <section class="card">
-        <h2>Equipment</h2>
-        <p>Manage dental equipment, serial numbers, clinics and installation details.</p>
-        <span class="tag">Equipment Registry</span>
-      </section>
-      <section class="card">
-        <h2>Service Requests</h2>
-        <p>Track installations, software support, maintenance and general inspections.</p>
-        <span class="tag">Service Management</span>
-      </section>
-      <section class="card">
-        <h2>Fault Cases</h2>
-        <p>Record symptoms, error messages, diagnostic steps and confirmed results.</p>
-        <span class="tag">Troubleshooting</span>
-      </section>
-      <section class="card">
-        <h2>Similar Cases</h2>
-        <p>Find previous cases with similar symptoms, equipment models and test results.</p>
-        <span class="tag">Knowledge Base</span>
-      </section>
-    </div>
+    <!-- ==============================
+         MENU ĐIỀU HƯỚNG BÊN TRÁI
+         Bấm từng mục để chuyển khu vực làm việc
+         ============================== -->
 
-    <div class="notice">
-      <strong>Development status:</strong> Initial interface only.
-      Database storage, case search, user access and AI-assisted diagnosis
-      will be implemented in later stages.
-    </div>
-  </main>
+    <aside class="thanh-ben">
+        <div class="ten-phan-mem">Dental Service</div>
+        <div class="mo-ta-phan-mem">
+            Hệ thống quản lý kỹ thuật nha khoa
+        </div>
+
+        <div class="nhan-menu">Tổng quan</div>
+
+        <button class="muc-menu dang-chon"
+                data-trang="tong-quan">
+            ▦ &nbsp; Bảng điều khiển
+        </button>
+
+        <div class="nhan-menu">Quản lý dữ liệu</div>
+
+        <button class="muc-menu" data-trang="thiet-bi">
+            ▣ &nbsp; Thiết bị nha khoa
+        </button>
+
+        <button class="muc-menu" data-trang="yeu-cau">
+            ▤ &nbsp; Yêu cầu dịch vụ
+        </button>
+
+        <button class="muc-menu" data-trang="su-co">
+            ⚙ &nbsp; Hồ sơ sự cố
+        </button>
+
+        <div class="nhan-menu">Hỗ trợ kỹ thuật</div>
+
+        <button class="muc-menu" data-trang="ca-tuong-tu">
+            ⌕ &nbsp; Tra cứu ca tương tự
+        </button>
+
+        <button class="muc-menu" data-trang="kien-thuc">
+            ▧ &nbsp; Tài liệu kỹ thuật
+        </button>
+    </aside>
+
+
+    <!-- ==============================
+         KHU VỰC NỘI DUNG CHÍNH
+         Nội dung từng trang đặt bên trong đây
+         ============================== -->
+
+    <main class="noi-dung">
+
+        <header class="dau-trang">
+            <div>
+                <h1 id="tieu-de-trang">Bảng điều khiển</h1>
+                <div class="phu-de">
+                    Theo dõi thiết bị và hoạt động hỗ trợ kỹ thuật
+                </div>
+            </div>
+
+            <div class="nhan-phien-ban">
+                PHIÊN BẢN THỬ NGHIỆM
+            </div>
+        </header>
+
+
+        <!-- TRANG 1: TỔNG QUAN -->
+
+        <section class="trang dang-hien" id="tong-quan">
+
+            <div class="luoi-the">
+
+                <div class="the">
+                    <div class="ten-the">Tổng số thiết bị</div>
+                    <div class="so-lieu">0</div>
+                    <div class="ghi-chu-the">
+                        Thiết bị đã được ghi nhận trong hệ thống
+                    </div>
+                </div>
+
+                <div class="the">
+                    <div class="ten-the">Yêu cầu dịch vụ</div>
+                    <div class="so-lieu">0</div>
+                    <div class="ghi-chu-the">
+                        Yêu cầu lắp đặt, bảo trì và hỗ trợ
+                    </div>
+                </div>
+
+                <div class="the">
+                    <div class="ten-the">Sự cố đang xử lý</div>
+                    <div class="so-lieu">0</div>
+                    <div class="ghi-chu-the">
+                        Hồ sơ chưa hoàn tất xử lý
+                    </div>
+                </div>
+
+                <div class="the">
+                    <div class="ten-the">Ca đã xác nhận nguyên nhân</div>
+                    <div class="so-lieu">0</div>
+                    <div class="ghi-chu-the">
+                        Chỉ tính ca đã được kỹ sư xác nhận
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="khung">
+                <div class="tieu-de-khung">
+                    <h2>Các khu vực làm việc</h2>
+                </div>
+
+                <p class="phu-de">
+                    Chọn một mục ở menu bên trái để bắt đầu.
+                    Dữ liệu sẽ được bổ sung khi chúng ta xây dựng
+                    các chức năng quản lý.
+                </p>
+            </div>
+
+
+            <div class="khung">
+                <div class="tieu-de-khung">
+                    <h2>Hồ sơ sự cố gần đây</h2>
+                    <button class="nut nut-phu"
+                            data-chuyen-trang="su-co">
+                        Xem hồ sơ sự cố
+                    </button>
+                </div>
+
+                <div class="vung-bang">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mã hồ sơ</th>
+                                <th>Thiết bị</th>
+                                <th>Triệu chứng</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td colspan="4">
+                                    Chưa có dữ liệu. Đây là giao diện mẫu.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- TRANG 2: QUẢN LÝ THIẾT BỊ -->
+
+        <section class="trang" id="thiet-bi">
+            <div class="khung">
+                <div class="tieu-de-khung">
+                    <h2>Danh sách thiết bị nha khoa</h2>
+                    <button class="nut"
+                            onclick="thongBaoChuaCoChucNang()">
+                        + Thêm thiết bị
+                    </button>
+                </div>
+
+                <p>
+                    Tại đây sẽ quản lý tên phòng khám, địa chỉ,
+                    loại thiết bị, model, số serial, ngày lắp đặt,
+                    cấu hình máy tính và lịch sử bảo trì.
+                </p>
+
+                <p class="phu-de">
+                    Chức năng thêm, sửa, tìm kiếm và lưu thiết bị
+                    sẽ được lập trình ở bước tiếp theo.
+                </p>
+            </div>
+        </section>
+
+
+        <!-- TRANG 3: YÊU CẦU DỊCH VỤ -->
+
+        <section class="trang" id="yeu-cau">
+            <div class="khung">
+                <div class="tieu-de-khung">
+                    <h2>Quản lý yêu cầu dịch vụ</h2>
+                    <button class="nut"
+                            onclick="thongBaoChuaCoChucNang()">
+                        + Tạo yêu cầu
+                    </button>
+                </div>
+
+                <p>
+                    Quản lý yêu cầu cài đặt phần mềm, lắp đặt thiết bị,
+                    bảo trì định kỳ và kiểm tra tổng quát.
+                </p>
+
+                <p class="phu-de">
+                    Yêu cầu dịch vụ được quản lý riêng với hồ sơ sự cố.
+                    Một yêu cầu dịch vụ không đồng nghĩa với việc
+                    thiết bị đang có lỗi.
+                </p>
+            </div>
+        </section>
+
+
+        <!-- TRANG 4: HỒ SƠ SỰ CỐ -->
+
+        <section class="trang" id="su-co">
+            <div class="khung">
+                <div class="tieu-de-khung">
+                    <h2>Hồ sơ xử lý sự cố</h2>
+                    <button class="nut"
+                            onclick="thongBaoChuaCoChucNang()">
+                        + Tạo hồ sơ sự cố
+                    </button>
+                </div>
+
+                <p>
+                    Mỗi hồ sơ sẽ lưu phòng khám, thiết bị, ngày xảy ra,
+                    triệu chứng, mã lỗi, kết quả kiểm tra,
+                    hình ảnh hoặc video và lịch sử xử lý.
+                </p>
+
+                <p>
+                    <strong>Nguyên tắc:</strong>
+                    AI có thể đề xuất nguyên nhân và bước kiểm tra,
+                    nhưng kỹ sư là người xác nhận nguyên nhân cuối cùng.
+                </p>
+
+                <p class="phu-de">
+                    Chức năng lưu hồ sơ và cập nhật kết quả sẽ được
+                    xây dựng sau khi hoàn thành giao diện.
+                </p>
+            </div>
+        </section>
+
+
+        <!-- TRANG 5: TRA CỨU CA TƯƠNG TỰ -->
+
+        <section class="trang" id="ca-tuong-tu">
+            <div class="khung">
+                <div class="tieu-de-khung">
+                    <h2>Tra cứu ca sự cố tương tự</h2>
+                </div>
+
+                <p>
+                    Tìm các trường hợp trước đây có cùng model,
+                    triệu chứng, mã lỗi và kết quả kiểm tra.
+                </p>
+
+                <input class="o-tim-kiem"
+                       type="search"
+                       placeholder="Ví dụ: Bright CT, lỗi Panorama..."
+                       aria-label="Nhập thông tin cần tìm">
+
+                <p class="phu-de">
+                    Công cụ tìm kiếm sẽ được kết nối với dữ liệu hồ sơ
+                    khi hệ thống lưu trữ được xây dựng.
+                </p>
+            </div>
+        </section>
+
+
+        <!-- TRANG 6: TÀI LIỆU KỸ THUẬT -->
+
+        <section class="trang" id="kien-thuc">
+            <div class="khung">
+                <div class="tieu-de-khung">
+                    <h2>Thư viện kiến thức kỹ thuật</h2>
+                </div>
+
+                <p>
+                    Tập hợp tài liệu hãng, hướng dẫn xử lý lỗi,
+                    quy trình kiểm tra và các nguồn kiến thức tham khảo.
+                </p>
+
+                <p class="phu-de">
+                    Việc tích hợp NotebookLM hoặc công cụ AI khác
+                    sẽ được đánh giá và thực hiện ở giai đoạn sau.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+
+    <script>
+        // ==============================
+        // 9. CHUYỂN ĐỔI GIỮA CÁC TRANG
+        // Đoạn code này giúp menu hoạt động
+        // mà chưa cần tải lại website.
+        // ==============================
+
+        const cacNutMenu = document.querySelectorAll(".muc-menu");
+        const cacTrang = document.querySelectorAll(".trang");
+        const tieuDeTrang = document.getElementById("tieu-de-trang");
+
+        // Tên hiển thị tương ứng với từng trang
+        const tenCacTrang = {
+            "tong-quan": "Bảng điều khiển",
+            "thiet-bi": "Quản lý thiết bị nha khoa",
+            "yeu-cau": "Quản lý yêu cầu dịch vụ",
+            "su-co": "Hồ sơ sự cố",
+            "ca-tuong-tu": "Tra cứu ca tương tự",
+            "kien-thuc": "Tài liệu kỹ thuật"
+        };
+
+        // Hàm mở trang được chọn
+        function moTrang(maTrang) {
+            cacTrang.forEach(function(trang) {
+                trang.classList.toggle(
+                    "dang-hien",
+                    trang.id === maTrang
+                );
+            });
+
+            cacNutMenu.forEach(function(nut) {
+                nut.classList.toggle(
+                    "dang-chon",
+                    nut.dataset.trang === maTrang
+                );
+            });
+
+            // Cập nhật tiêu đề ở đầu trang
+            tieuDeTrang.textContent =
+                tenCacTrang[maTrang] || "Quản lý thiết bị nha khoa";
+        }
+
+        // Gắn sự kiện bấm cho từng mục menu
+        cacNutMenu.forEach(function(nut) {
+            nut.addEventListener("click", function() {
+                moTrang(nut.dataset.trang);
+            });
+        });
+
+        // Các nút điều hướng nằm bên trong nội dung
+        document.querySelectorAll("[data-chuyen-trang]")
+            .forEach(function(nut) {
+                nut.addEventListener("click", function() {
+                    moTrang(nut.dataset.chuyenTrang);
+                });
+            });
+
+        // Thông báo cho những nút chưa có chức năng thật
+        function thongBaoChuaCoChucNang() {
+            alert(
+                "Chức năng này chưa được lập trình. " +
+                "Chúng ta sẽ xây dựng ở bước tiếp theo."
+            );
+        }
+    </script>
+
 </body>
 </html>
